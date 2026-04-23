@@ -140,308 +140,142 @@ if ($org) {
   <title>Admin Tools - DealerFAI</title>
   <?php dealerfai_theme_head($theme ?? null); ?>
   <style nonce="<?= dealerfai_csp_nonce() ?>">
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f6f8;
-      margin: 0;
-      padding: 0;
-    }
-    header {
-      background: <?= htmlspecialchars($theme['color']) ?>;
-      color: white;
-      padding: 20px;
-      text-align: center;
-      position: relative;
-    }
-    header img {
-      max-width: 480px;
-      max-height: 180px;
-      height: auto;
-      display: block;
-      margin: 0 auto 10px;
-    }
-    nav {
-      background: <?= htmlspecialchars($theme['color']) ?>;
-      padding: 12px;
-      text-align: center;
-    }
-    nav a {
-      color: white;
-      margin: 0 20px;
-      text-decoration: none;
-      font-weight: bold;
-    }
-    .badge {
-      display: inline-block;
-      min-width: 18px;
-      padding: 2px 8px;
-      border-radius: 999px;
-      background: #d7263d;
-      color: #fff;
-      font-size: 12px;
-      font-weight: bold;
-      text-align: center;
-      margin-left: 6px;
-    }
-    .container {
-      max-width: 700px;
-      margin: auto;
-      padding: 40px;
-    }
-    .card {
-      background: white;
-      padding: 30px;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-    h2 {
-      margin-top: 0;
-      color: #0066cc;
-    }
-    .section {
-      margin-top: 28px;
-      padding-top: 18px;
-      border-top: 1px solid #e7edf3;
-    }
-    .section:first-of-type {
-      margin-top: 18px;
-      padding-top: 0;
-      border-top: 0;
-    }
-    .section-title {
-      margin: 0 0 12px 0;
-      color: #1b2c40;
-      font-size: 16px;
-      letter-spacing: 0.02em;
-      text-transform: uppercase;
-    }
-    .button-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px 14px;
-    }
-    .button {
-      display: inline-block;
-      background: #0066cc;
-      color: white;
-      padding: 12px 20px;
-      border-radius: 6px;
-      text-decoration: none;
-      font-size: 16px;
-      margin-top: 20px;
-      margin-right: 15px;
-    }
-    .button:hover {
-      background: #084c63;
-    }
-    .button.secondary {
-      background: #e6ebf2;
-      color: #1b2c40;
-      border: 1px solid #c7d0d8;
-    }
-    .section-note {
-      margin: 10px 0 0 0;
-      color: #6b7280;
-      font-size: 13px;
-    }
-    .queue-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-      gap: 10px;
-      margin-top: 10px;
-      margin-bottom: 14px;
-    }
-    .queue-tile {
-      border: 1px solid #d9e1e8;
-      border-radius: 8px;
-      padding: 10px 12px;
-      background: #f8fafc;
-    }
-    .queue-label {
-      font-size: 12px;
-      color: #596579;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-    .queue-value {
-      font-size: 20px;
-      font-weight: 700;
-      color: #13253a;
-      margin-top: 4px;
-    }
-    .queue-fails {
-      margin: 0;
-      padding-left: 18px;
-      color: #21334a;
-      font-size: 13px;
-    }
-    .queue-fails li {
-      margin-bottom: 6px;
-    }
-    .queue-empty {
-      margin: 0;
-      color: #5f6f82;
-      font-size: 13px;
-    }
-    .queue-filter-form {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 10px;
-      align-items: flex-end;
-    }
-    .queue-filter-control {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      min-width: 140px;
-    }
-    .queue-filter-control label {
-      color: #5b6677;
-      font-size: 12px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.02em;
-    }
-    .queue-filter-control select,
-    .queue-filter-control input[type="date"] {
-      border: 1px solid #cdd6df;
-      border-radius: 6px;
-      font-size: 13px;
-      padding: 7px 8px;
-      color: #1f2f44;
-      background: #fff;
-    }
-    .queue-filter-actions {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      margin-left: auto;
-    }
-    .queue-filter-btn {
-      border: 1px solid #0066cc;
-      background: #0066cc;
-      color: #fff;
-      border-radius: 6px;
-      padding: 8px 12px;
-      font-size: 13px;
-      text-decoration: none;
-      cursor: pointer;
-    }
-    .queue-filter-btn.secondary {
-      border-color: #c7d0d8;
-      background: #f3f6f9;
-      color: #334255;
-    }
-    .queue-filter-error {
-      margin: 6px 0 0 0;
-      color: #b42318;
-      font-size: 13px;
-    }
+    /* Specific page overrides */
+    .section { margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid #e2e8f0; }
+    .section:first-of-type { margin-top: 1rem; padding-top: 0; border-top: 0; }
+    .section-title { margin-bottom: 1.5rem; color: #64748b; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+    .tool-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
+    .tool-btn { background: white; border: 1px solid #e2e8f0; padding: 1.25rem; border-radius: var(--radius-md); text-decoration: none; color: #0f172a; font-weight: 600; transition: all 0.2s; box-shadow: var(--shadow-sm); display: flex; align-items: center; gap: 0.75rem; }
+    .tool-btn:hover { border-color: var(--brand-color); transform: translateY(-2px); box-shadow: var(--shadow-md); color: var(--brand-color); }
+    .tool-btn i { font-size: 1.1rem; color: #94a3b8; }
+    .tool-btn:hover i { color: var(--brand-color); }
+    .queue-tile { background: white; border: 1px solid #e2e8f0; padding: 1rem; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); }
+    .queue-label { font-size: 0.7rem; color: #64748b; text-transform: uppercase; font-weight: 700; letter-spacing: 0.025em; }
+    .queue-value { font-size: 1.5rem; font-weight: 700; color: #0f172a; margin-top: 0.25rem; }
   </style>
 </head>
-<body>
-  <header>
-    <?php if (!empty($theme['logo'])): ?>
-      <img src="<?= htmlspecialchars($theme['logo']) ?>" alt="Dealer Logo" style="max-height:60px;">
-    <?php else: ?>
-      <h1>DealerFAI Admin</h1>
-    <?php endif; ?>
-    <div class="logout">
-      <a href="admin_error_alerts.php" class="nav-link-white">Alerts<?php if ($adminAlertCount > 0): ?> <span class="badge"><?= $adminAlertCount ?></span><?php endif; ?></a>
-      <a href="logout.php" class="nav-link-white">Log Out</a>
+<body class="dashboard-wrapper">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header" style="padding: 1.5rem;">
+      <img src="dealerfai_logo_white.png" alt="DealerFAI" style="height: 35px; width: auto;">
     </div>
-  </header>
-  <nav>
-    <a href="dashboard.php">Dashboard</a>
-    <a href="view_deals.php">View Deals</a>
-    <a href="create_deal.php">Create Deal</a>
-    <a href="admin_error_alerts.php">Admin Alerts<?php if ($adminAlertCount > 0): ?> <span class="badge"><?= $adminAlertCount ?></span><?php endif; ?></a>
-    <a href="admin_tools.php">Admin Tools</a>
-  </nav>
-  <div class="container">
-    <div class="card">
-      <h2>Welcome, <?= htmlspecialchars($name) ?> (<?= htmlspecialchars($org) ?>)</h2>
-      <p>You are viewing the DealerFAI Admin Tools panel. Use the sections below to manage scoring, products, organizations, users, and system settings.</p>
+    <nav class="sidebar-nav" style="background: transparent; padding: 1.5rem 1rem;">
+      <a href="dashboard" class="sidebar-link">
+        <i class="fa-solid fa-gauge"></i> Dashboard
+      </a>
+      <a href="view_deals" class="sidebar-link">
+        <i class="fa-solid fa-file-invoice-dollar"></i> View Deals
+      </a>
+      <a href="create_deal" class="sidebar-link">
+        <i class="fa-solid fa-plus-circle"></i> Create Deal
+      </a>
+      
+      <?php if (in_array('Admin', $roles, true)): ?>
+        <div style="margin-top: 2rem; padding: 0 1rem; font-size: 0.75rem; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700;">Admin</div>
+        <a href="admin_scoring_log" class="sidebar-link">
+          <i class="fa-solid fa-list-check"></i> Scoring Log
+        </a>
+        <a href="manage_users" class="sidebar-link">
+          <i class="fa-solid fa-users"></i> Users
+        </a>
+        <a href="admin_organizations" class="sidebar-link">
+          <i class="fa-solid fa-building"></i> Organizations
+        </a>
+        <a href="admin_tools" class="sidebar-link active">
+          <i class="fa-solid fa-wrench"></i> Admin Tools
+        </a>
+      <?php endif; ?>
+    </nav>
+    <div style="padding: 1.5rem; border-top: 1px solid rgba(255,255,255,0.1);">
+      <p style="font-size: 0.75rem; color: rgba(255,255,255,0.4); margin: 0;">DealerFAI v2.0</p>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="main-container">
+    <header class="top-bar">
+      <div class="breadcrumb" style="font-weight: 600; color: #64748b;">
+        DealerFAI <i class="fa-solid fa-chevron-right" style="font-size: 0.75rem; margin: 0 0.5rem; opacity: 0.5;"></i> Admin Tools
+      </div>
+      <div style="display: flex; align-items: center; gap: 1.5rem;">
+        <a href="admin_error_alerts" style="position: relative; color: #64748b;">
+          <i class="fa-solid fa-bell" style="font-size: 1.25rem;"></i>
+          <?php if ($adminAlertCount > 0): ?>
+            <span style="position: absolute; top: -5px; right: -5px; background: #ef4444; color: white; font-size: 10px; padding: 2px 5px; border-radius: 10px; font-weight: 700;"><?= $adminAlertCount ?></span>
+          <?php endif; ?>
+        </a>
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <div style="text-align: right;">
+            <div style="font-size: 0.875rem; font-weight: 700; color: #0f172a;"><?= htmlspecialchars($_SESSION['full_name'] ?? 'User') ?></div>
+            <a href="logout" style="font-size: 0.75rem; color: #64748b; text-decoration: none;">Log Out</a>
+          </div>
+          <div style="width: 40px; height: 40px; background: var(--brand-color); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">
+            <?= strtoupper(substr($_SESSION['full_name'] ?? 'U', 0, 1)) ?>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-content">
+      <div style="margin-bottom: 2.5rem;">
+        <h1 class="text-gradient" style="margin-bottom: 0.5rem; display: inline-block;">Administrative Tools</h1>
+        <p class="text-muted">Manage system-wide configurations, product catalogs, and AI logic.</p>
+      </div>
 
       <div class="section">
-        <div class="section-title">Scoring & AI</div>
-	        <div class="button-group">
-	          <a class="button" href="admin_scoring_log.php">Scoring Log</a>
-	          <a class="button" href="view_scoring_log.php">Scoring Log File</a>
-		          <a class="button" href="admin_scoring_action_rules.php?prefill_target_type=accessory">Accessory Action Rules</a>
-		          <a class="button" href="admin_scoring_action_rules.php">Action Rules (Direct)</a>
-		          <a class="button" href="admin_product_overrides.php">Product Approved Facts</a>
-		          <a class="button" href="admin_ai_prompt_context.php">AI Prompt Data</a>
-		        </div>
-          <p class="section-note">Legacy Scoring Rules is being phased out and will be removed soon. Use Action Rules (Direct).</p>
-	      </div>
+        <div class="section-title">Scoring & AI Engine</div>
+        <div class="tool-grid">
+          <a class="tool-btn" href="admin_scoring_log"><i class="fa-solid fa-list-check"></i> Scoring Log</a>
+          <a class="tool-btn" href="view_scoring_log"><i class="fa-solid fa-file-code"></i> Scoring Log File</a>
+          <a class="tool-btn" href="admin_scoring_action_rules?prefill_target_type=accessory"><i class="fa-solid fa-gears"></i> Accessory Action Rules</a>
+          <a class="tool-btn" href="admin_scoring_action_rules"><i class="fa-solid fa-bolt"></i> Action Rules (Direct)</a>
+          <a class="tool-btn" href="admin_product_overrides"><i class="fa-solid fa-check-double"></i> Product Approved Facts</a>
+          <a class="tool-btn" href="admin_ai_prompt_context"><i class="fa-solid fa-brain"></i> AI Prompt Data</a>
+        </div>
+      </div>
 
       <div class="section">
         <div class="section-title">Products & Catalog</div>
-        <div class="button-group">
-          <a class="button" href="admin_products.php">All Products</a>
-          <a class="button" href="admin_accessories.php">Accessories</a>
-          <a class="button" href="admin_vehicles.php">Vehicles</a>
-          <a class="button" href="admin_store_products.php">Store Products</a>
-          <a class="button" href="admin_org_products.php">Organization Products</a>
-          <a class="button" href="admin_credit_app_questions.php">Credit App Questions</a>
-        </div>
-      </div>
-
-      <div class="section">
-        <div class="section-title">Organizations & Users</div>
-        <div class="button-group">
-          <a class="button" href="admin_organizations.php">Organizations</a>
-          <a class="button" href="manage_users.php">Manage Users</a>
-          <a class="button secondary" href="user_create.php">Create User</a>
-          <a class="button secondary" href="user_list.php">User List</a>
-        </div>
-      </div>
-
-      <div class="section">
-        <div class="section-title">Billing & Reporting</div>
-        <div class="button-group">
-          <a class="button" href="admin_billing.php">Billing</a>
-          <a class="button secondary" href="reporting_admin.php">Reporting</a>
+        <div class="tool-grid">
+          <a class="tool-btn" href="admin_products"><i class="fa-solid fa-boxes-stacked"></i> All Products</a>
+          <a class="tool-btn" href="admin_accessories"><i class="fa-solid fa-tags"></i> Accessories</a>
+          <a class="tool-btn" href="admin_vehicles"><i class="fa-solid fa-car"></i> Vehicles</a>
+          <a class="tool-btn" href="admin_store_products"><i class="fa-solid fa-store"></i> Store Products</a>
+          <a class="tool-btn" href="admin_org_products"><i class="fa-solid fa-building"></i> Org Products</a>
+          <a class="tool-btn" href="admin_credit_app_questions"><i class="fa-solid fa-question-circle"></i> Credit App Questions</a>
         </div>
       </div>
 
       <div class="section">
         <div class="section-title">System & Alerts</div>
-        <div class="button-group">
-          <a class="button" href="admin_error_alerts.php">Admin Alerts<?php if ($adminAlertCount > 0): ?> <span class="badge"><?= $adminAlertCount ?></span><?php endif; ?></a>
-          <a class="button secondary" href="security_log.php">🔐 Security Log</a>
+        <div class="tool-grid">
+          <a class="tool-btn" href="admin_error_alerts"><i class="fa-solid fa-bell"></i> System Alerts</a>
+          <a class="tool-btn" href="security_log"><i class="fa-solid fa-shield-halved"></i> Security Log</a>
+          <a class="tool-btn" href="admin_billing"><i class="fa-solid fa-credit-card"></i> Billing</a>
+          <a class="tool-btn" href="reporting_admin"><i class="fa-solid fa-chart-line"></i> Reporting</a>
         </div>
-        <div class="mt-14">
-          <h3 style="margin:0 0 8px 0; color:#1b2c40; font-size:15px;">AI Explanation Queue Health</h3>
+      </div>
+
+      <div class="section" style="margin-bottom: 2rem;">
+        <div class="section-title">AI Explanation Queue Health</div>
+        <div class="glass" style="padding: 1.5rem; border: 1px solid var(--border-color);">
           <?php if ($aiQueueEnabled): ?>
-            <form class="queue-filter-form" method="get" action="admin_tools.php">
-              <div class="queue-filter-control">
-                <label for="queue_date_field">Date Field</label>
-                <select id="queue_date_field" name="queue_date_field">
-                  <option value="updated" <?= $aiQueueDateField === 'updated_at' ? 'selected' : '' ?>>Updated</option>
-                  <option value="created" <?= $aiQueueDateField === 'created_at' ? 'selected' : '' ?>>Created</option>
-                </select>
-              </div>
-              <div class="queue-filter-control">
-                <label for="queue_range">Range</label>
-                <select id="queue_range" name="queue_range">
-                  <option value="today" <?= $aiQueueRange === 'today' ? 'selected' : '' ?>>Today</option>
-                  <option value="current_month" <?= $aiQueueRange === 'current_month' ? 'selected' : '' ?>>Current Month</option>
-                  <option value="last_month" <?= $aiQueueRange === 'last_month' ? 'selected' : '' ?>>Last Month</option>
-                </select>
-              </div>
-              <div class="queue-filter-actions">
-                <button type="submit" class="queue-filter-btn">Apply</button>
-                <a class="queue-filter-btn secondary" href="admin_tools.php">Reset</a>
-              </div>
+            <form class="filters" method="get" action="admin_tools.php" style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1.5rem;">
+              <select name="queue_date_field" class="form-control" style="max-width: 150px; margin: 0;">
+                <option value="updated" <?= $aiQueueDateField === 'updated_at' ? 'selected' : '' ?>>Updated At</option>
+                <option value="created" <?= $aiQueueDateField === 'created_at' ? 'selected' : '' ?>>Created At</option>
+              </select>
+              <select name="queue_range" class="form-control" style="max-width: 180px; margin: 0;">
+                <option value="today" <?= $aiQueueRange === 'today' ? 'selected' : '' ?>>Today</option>
+                <option value="current_month" <?= $aiQueueRange === 'current_month' ? 'selected' : '' ?>>Current Month</option>
+                <option value="last_month" <?= $aiQueueRange === 'last_month' ? 'selected' : '' ?>>Last Month</option>
+              </select>
+              <button type="submit" class="btn">Apply</button>
+              <a href="admin_tools.php" class="btn btn-secondary">Reset</a>
             </form>
-            <p class="section-note" class="mt-0">Showing: <?= htmlspecialchars($aiQueueFilterLabel) ?></p>
-            <?php if ($aiQueueFilterError !== ''): ?>
-              <p class="queue-filter-error"><?= htmlspecialchars($aiQueueFilterError) ?></p>
-            <?php endif; ?>
-            <div class="queue-grid">
+
+            <div class="metric-grid" style="margin-bottom: 1.5rem;">
               <div class="queue-tile">
                 <div class="queue-label">Pending</div>
                 <div class="queue-value"><?= (int)$aiQueueCounts['pending'] ?></div>
@@ -452,34 +286,49 @@ if ($org) {
               </div>
               <div class="queue-tile">
                 <div class="queue-label">Done</div>
-                <div class="queue-value"><?= (int)$aiQueueCounts['done'] ?></div>
+                <div class="queue-value" style="color: #10b981;"><?= (int)$aiQueueCounts['done'] ?></div>
               </div>
               <div class="queue-tile">
                 <div class="queue-label">Failed</div>
-                <div class="queue-value"><?= (int)$aiQueueCounts['failed'] ?></div>
+                <div class="queue-value" style="color: #ef4444;"><?= (int)$aiQueueCounts['failed'] ?></div>
               </div>
             </div>
+
             <?php if (!empty($aiQueueFailures)): ?>
-              <p class="section-note" style="margin-bottom:8px;">Most recent failed jobs:</p>
-              <ul class="queue-fails">
-                <?php foreach ($aiQueueFailures as $failure): ?>
-                  <li>
-                    #<?= (int)($failure['id'] ?? 0) ?>
-                    deal <?= (int)($failure['deal_id'] ?? 0) ?>
-                    / <?= htmlspecialchars((string)($failure['product_code'] ?? 'unknown')) ?>
-                    (attempts: <?= (int)($failure['attempts'] ?? 0) ?>)
-                    <br>
-                    <span style="color:#6a7788;"><?= htmlspecialchars((string)($failure['error_message'] ?? 'Unknown error')) ?></span>
-                  </li>
-                <?php endforeach; ?>
-              </ul>
+              <h4 style="font-size: 0.875rem; margin-bottom: 1rem;">Recent Failures</h4>
+              <div class="data-table-card">
+                <table>
+                  <thead>
+                    <tr style="background: #f1f5f9;">
+                      <th style="background: transparent; color: #475569; text-align: left;">Job ID</th>
+                      <th style="background: transparent; color: #475569; text-align: left;">Deal ID</th>
+                      <th style="background: transparent; color: #475569; text-align: left;">Product</th>
+                      <th style="background: transparent; color: #475569; text-align: left;">Error</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php foreach ($aiQueueFailures as $failure): ?>
+                      <tr>
+                        <td>#<?= (int)$failure['id'] ?></td>
+                        <td><?= (int)$failure['deal_id'] ?></td>
+                        <td><?= htmlspecialchars((string)$failure['product_code']) ?></td>
+                        <td style="color: #ef4444; font-size: 0.8rem;"><?= htmlspecialchars((string)$failure['error_message']) ?></td>
+                      </tr>
+                    <?php endforeach; ?>
+                  </tbody>
+                </table>
+              </div>
             <?php endif; ?>
           <?php else: ?>
-            <p class="queue-empty">AI queue table not available in this environment.</p>
+            <p class="text-muted">AI queue monitoring is not available in this environment.</p>
           <?php endif; ?>
         </div>
       </div>
-    </div>
+    </main>
+
+    <footer style="background: white; border-top: 1px solid #e2e8f0; color: #64748b; padding: 1.5rem; text-align: center; position: static;">
+      &copy; <?= date("Y") ?> DealerFAI. All rights reserved.
+    </footer>
   </div>
 </body>
 </html>
