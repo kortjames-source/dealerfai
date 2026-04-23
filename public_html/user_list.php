@@ -64,7 +64,7 @@ try {
 </head>
 <body>
 <header>
-  <img src="dealerfai_logo_modern.png" alt="DealerFAI Logo">
+  <img src="dealerfai_logo_blue.png" alt="DealerFAI Logo">
   <h1>DealerFAI</h1>
 </header>
 <div class="container">
