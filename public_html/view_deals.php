@@ -17,7 +17,7 @@ $roles = load_session_roles();
 $isAdmin = in_array('Admin', $roles, true);
 $adminAlertCount = $isAdmin ? get_admin_alert_count($db) : 0;
 
-$theme = dealerfai_get_theme_palette(null, ['color' => '#0a2e36']);
+$theme = dealerfai_get_theme_palette(null, ['color' => '#0066cc']);
 
 if ($org_id) {
   $stmt = $db->prepare("SELECT logo_url, theme_variant FROM organizations WHERE id = ?");
@@ -448,10 +448,10 @@ function render_deal_table(array $deals, bool $showOrgColumn, string $dateLabel,
 </head>
 <body class="dashboard-wrapper">
   <!-- Sidebar -->
-  <aside class="sidebar">
-    <div class="sidebar-header">
-      <img src="dealerfai_logo_white.png" alt="DealerFAI" style="height: 40px; filter: brightness(0) invert(1);">
-    </div>
+    <aside class="sidebar">
+      <div class="sidebar-header" style="padding: 1.5rem;">
+        <img src="dealerfai_logo_white.png" alt="DealerFAI" style="height: 35px; width: auto;">
+      </div>
     <nav class="sidebar-nav" style="background: transparent; padding: 1.5rem 1rem;">
       <a href="dashboard" class="sidebar-link">
         <i class="fa-solid fa-gauge"></i> Dashboard

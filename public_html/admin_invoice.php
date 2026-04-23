@@ -38,7 +38,7 @@ if (!$invoice) {
   exit;
 }
 
-$themeColor = $invoice['theme_variant'] === 'jlr' ? '#4a4a4a' : (in_array($invoice['theme_variant'], ['land_rover', 'jaguar'], true) ? '#1A1A1A' : '#0a6280');
+$themeColor = $invoice['theme_variant'] === 'jlr' ? '#4a4a4a' : (in_array($invoice['theme_variant'], ['land_rover', 'jaguar'], true) ? '#1A1A1A' : '#0066cc');
 $periodStart = $invoice['period_start'] . ' 00:00:00';
 $periodEnd = $invoice['period_end'] . ' 23:59:59';
 

@@ -222,15 +222,15 @@ if ($productId > 0 && $tableReady) {
   <?php dealerfai_theme_head(); ?>
   <style nonce="<?= dealerfai_csp_nonce() ?>">
     body { font-family: Arial, sans-serif; background: #f4f6f8; margin: 0; padding: 0; }
-    header { background: #0a2e36; color: white; padding: 20px; text-align: center; position: relative; }
-    nav { background: #0a2e36; padding: 12px; text-align: center; }
+    header { background: #0066cc; color: white; padding: 20px; text-align: center; position: relative; }
+    nav { background: #0066cc; padding: 12px; text-align: center; }
     nav a { color: white; margin: 0 20px; text-decoration: none; font-weight: bold; }
     .container { max-width: 1300px; margin: 20px auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
     table { width: 100%; border-collapse: collapse; margin-top: 16px; }
     th, td { padding: 10px; border-bottom: 1px solid #ddd; vertical-align: top; text-align: left; }
     th { background: #f1f4f8; }
     input[type="text"], input[type="number"], select { padding: 6px; border-radius: 4px; border: 1px solid #ccc; width: 100%; }
-    .btn { background: #0a6280; color: white; padding: 8px 14px; border: none; border-radius: 4px; cursor: pointer; }
+    .btn { background: #0066cc; color: white; padding: 8px 14px; border: none; border-radius: 4px; cursor: pointer; }
     .btn:hover { background: #094c63; }
     .success { color: green; margin-top: 10px; }
     .error { color: #c0392b; margin-top: 10px; }

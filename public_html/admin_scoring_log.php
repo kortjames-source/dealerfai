@@ -54,14 +54,14 @@ if ($isAdmin) {
   }
 }
 
-$theme = ['logo' => '', 'color' => '#0a2e36'];
+$theme = ['logo' => '', 'color' => '#0066cc'];
 if ($org_id) {
   $stmt = $db->prepare("SELECT logo_url, theme_variant FROM organizations WHERE id = ?");
   $stmt->execute([$org_id]);
   $org = $stmt->fetch(PDO::FETCH_ASSOC);
   if ($org) {
     $theme['logo'] = $org['logo_url'] ?? '';
-    $theme['color'] = $org['theme_variant'] === 'jlr' ? '#4a4a4a' : (in_array($org['theme_variant'], ['land_rover', 'jaguar'], true) ? '#1A1A1A' : '#0a6280');
+    $theme['color'] = $org['theme_variant'] === 'jlr' ? '#4a4a4a' : (in_array($org['theme_variant'], ['land_rover', 'jaguar'], true) ? '#1A1A1A' : '#0066cc');
   }
 }
 
@@ -217,7 +217,7 @@ unset($deal);
       padding:8px 14px;
       border:none;
       border-radius:4px;
-      background:#0a6280;
+      background:#0066cc;
       color:white;
       font-weight:bold;
       cursor:pointer;
@@ -237,7 +237,7 @@ unset($deal);
     }
     .deal-card h3 {
       margin:0 0 4px;
-      color:#0a6280;
+      color:#0066cc;
     }
     .product-row {
       border-top:1px solid #e1e8f1;

@@ -51,7 +51,7 @@ $csrfToken = dealerfai_csrf_get_token();
   <?php dealerfai_theme_head(); ?>
   <style nonce="<?= dealerfai_csp_nonce() ?>">
     body { font-family: Arial, sans-serif; background: #f4f6f8; margin: 0; padding: 0; }
-    header { background: #0a2e36; color: white; padding: 20px; text-align: center; position: relative; }
+    header { background: #0066cc; color: white; padding: 20px; text-align: center; position: relative; }
     nav {
       background: #004d61;
       display: flex;
@@ -71,7 +71,7 @@ $csrfToken = dealerfai_csrf_get_token();
     summary { font-weight: bold; font-size: 18px; cursor: pointer; }
     table { width: 100%; margin-top: 10px; border-collapse: collapse; }
     th, td { padding: 8px; border-bottom: 1px solid #ddd; text-align: left; }
-    .btn { background: #0a6280; color: white; padding: 6px 10px; text-decoration: none; border-radius: 4px; font-size: 13px; display: inline-block; }
+    .btn { background: #0066cc; color: white; padding: 6px 10px; text-decoration: none; border-radius: 4px; font-size: 13px; display: inline-block; }
     .btn:hover { background: #094c63; }
     .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
   </style>

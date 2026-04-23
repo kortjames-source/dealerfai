@@ -369,8 +369,8 @@ function format_display_value($value): string {
   <?php dealerfai_theme_head(); ?>
   <style nonce="<?= dealerfai_csp_nonce() ?>">
     body { font-family: Arial, sans-serif; background: #f4f6f8; margin: 0; padding: 0; }
-    header { background: #0a6280; color: white; padding: 20px; text-align: center; position: relative; }
-    nav { background: #0a6280; padding: 12px; text-align: center; }
+    header { background: #0066cc; color: white; padding: 20px; text-align: center; position: relative; }
+    nav { background: #0066cc; padding: 12px; text-align: center; }
     nav a { color: white; margin: 0 20px; text-decoration: none; font-weight: bold; }
     .container { max-width: 1200px; margin: 20px auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
     h2 { margin-top: 0; }
@@ -379,7 +379,7 @@ function format_display_value($value): string {
     .org-picker { display:flex; gap:12px; align-items:center; margin-bottom:20px; flex-wrap: wrap; }
     .org-picker label { font-weight: bold; }
     .org-picker select, .org-picker input { padding: 8px; border-radius: 4px; border: 1px solid #ccc; }
-    .org-picker button { padding: 8px 14px; border: none; border-radius: 4px; background: #0a6280; color: white; cursor: pointer; }
+    .org-picker button { padding: 8px 14px; border: none; border-radius: 4px; background: #0066cc; color: white; cursor: pointer; }
     .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
     .panel { border: 1px solid #e3e7ed; border-radius: 8px; padding: 14px; background: #fafbfc; }
     .panel h3 { margin-top: 0; }

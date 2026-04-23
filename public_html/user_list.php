@@ -37,7 +37,7 @@ try {
   <style nonce="<?= dealerfai_csp_nonce() ?>">
         body { font-family: "Segoe UI", sans-serif; background-color: #f4f6f8; margin: 0; }
         header {
-            background-color: #0a2e36;
+            background-color: #0066cc;
             color: white;
             padding: 30px 40px;
             text-align: center;
@@ -50,14 +50,14 @@ try {
             margin: 0 auto 10px;
         }
         .container { max-width: 1000px; margin: 40px auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-        h2 { color: #0a6280; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
+        h2 { color: #0066cc; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
-        th { background-color: #0a6280; color: white; }
+        th { background-color: #0066cc; color: white; }
         tr:hover { background-color: #f9f9f9; }
         .message { color: red; margin-bottom: 15px; }
         .admin-nav { margin-bottom: 20px; padding: 10px; background-color: #e9ecef; border-radius: 4px; }
-        .admin-nav a { margin-right: 15px; text-decoration: none; color: #0a6280; font-weight: bold; }
+        .admin-nav a { margin-right: 15px; text-decoration: none; color: #0066cc; font-weight: bold; }
         .admin-nav a:hover { text-decoration: underline; }
         .admin-nav a.active { color: #333; pointer-events: none; }
     </style>

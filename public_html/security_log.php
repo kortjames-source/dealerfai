@@ -93,7 +93,7 @@ $badgeMap = [
     *, *::before, *::after { box-sizing: border-box; }
     body { margin: 0; font-family: "Segoe UI", sans-serif; background: #f4f6f8; color: #111; }
     header {
-      background: #0a2e36; color: #fff; padding: 16px 28px;
+      background: #0066cc; color: #fff; padding: 16px 28px;
       display: flex; align-items: center; justify-content: space-between;
     }
     header h1 { margin: 0; font-size: 20px; }
@@ -105,7 +105,7 @@ $badgeMap = [
       font-size: 11px; font-weight: bold; margin-left: 5px; vertical-align: middle;
     }
     main { padding: 28px 32px; max-width: 1400px; margin: 0 auto; }
-    h2 { margin: 0 0 20px; color: #0a2e36; font-size: 22px; }
+    h2 { margin: 0 0 20px; color: #0066cc; font-size: 22px; }
 
     /* Filter bar */
     .filter-bar {
@@ -119,7 +119,7 @@ $badgeMap = [
       font-size: 13px; min-width: 160px;
     }
     .filter-bar button {
-      padding: 8px 18px; background: #0a6280; color: #fff; border: none;
+      padding: 8px 18px; background: #0066cc; color: #fff; border: none;
       border-radius: 5px; font-size: 13px; cursor: pointer; align-self: flex-end;
     }
     .filter-bar button:hover { background: #084f68; }
@@ -135,14 +135,14 @@ $badgeMap = [
       background: #fff; border-radius: 8px; padding: 14px 20px;
       box-shadow: 0 1px 4px rgba(0,0,0,0.07); flex: 1; min-width: 140px; max-width: 220px;
     }
-    .stat-card .num { font-size: 26px; font-weight: 700; color: #0a2e36; }
+    .stat-card .num { font-size: 26px; font-weight: 700; color: #0066cc; }
     .stat-card .lbl { font-size: 12px; color: #778; margin-top: 2px; }
 
     /* Table */
     .card { background: #fff; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); overflow: hidden; }
     table { width: 100%; border-collapse: collapse; font-size: 13px; }
     thead th {
-      background: #0a2e36; color: #fff; padding: 11px 14px;
+      background: #0066cc; color: #fff; padding: 11px 14px;
       text-align: left; font-weight: 600; white-space: nowrap;
     }
     tbody tr:nth-child(even) { background: #f8fafc; }
@@ -163,10 +163,10 @@ $badgeMap = [
     .pagination { display: flex; gap: 6px; margin-top: 18px; justify-content: center; flex-wrap: wrap; }
     .pagination a, .pagination span {
       padding: 6px 12px; border-radius: 5px; font-size: 13px;
-      border: 1px solid #ccd; text-decoration: none; color: #0a6280;
+      border: 1px solid #ccd; text-decoration: none; color: #0066cc;
     }
     .pagination a:hover { background: #eef4f8; }
-    .pagination span.current { background: #0a6280; color: #fff; border-color: #0a6280; }
+    .pagination span.current { background: #0066cc; color: #fff; border-color: #0066cc; }
     .pagination span.disabled { color: #aab; cursor: default; }
   </style>
 </head>
@@ -209,7 +209,7 @@ $badgeMap = [
       <div class="lbl">Successful Logins (24h)</div>
     </div>
     <div class="stat-card">
-      <div class="num" style="color:<?= $failures24h > 10 ? '#c0392b' : '#0a2e36' ?>"><?= $failures24h ?></div>
+      <div class="num" style="color:<?= $failures24h > 10 ? '#c0392b' : '#0066cc' ?>"><?= $failures24h ?></div>
       <div class="lbl">Auth Failures (24h)</div>
     </div>
     <div class="stat-card">

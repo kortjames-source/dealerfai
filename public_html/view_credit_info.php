@@ -38,14 +38,14 @@ if (!$isAdmin) {
     }
 }
 
-$theme = ['logo' => '', 'color' => '#0a6280'];
+$theme = ['logo' => '', 'color' => '#0066cc'];
 if ($org_id) {
     $stmt = $db->prepare("SELECT logo_url, theme_variant FROM organizations WHERE id = ?");
     $stmt->execute([$org_id]);
     $org = $stmt->fetch(PDO::FETCH_ASSOC);
     if ($org) {
         $theme['logo'] = $org['logo_url'] ?? '';
-        $theme['color'] = $org['theme_variant'] === 'jlr' ? '#4a4a4a' : (in_array($org['theme_variant'], ['land_rover', 'jaguar'], true) ? '#1A1A1A' : '#0a6280');
+        $theme['color'] = $org['theme_variant'] === 'jlr' ? '#4a4a4a' : (in_array($org['theme_variant'], ['land_rover', 'jaguar'], true) ? '#1A1A1A' : '#0066cc');
     }
 }
 

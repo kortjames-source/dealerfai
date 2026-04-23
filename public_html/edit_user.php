@@ -124,7 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['delete_user'])) {
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
     h2 {
-      color: #0a6280;
+      color: #0066cc;
       margin-top: 0;
     }
     label {
@@ -147,7 +147,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['delete_user'])) {
       font-weight: normal;
     }
     button {
-      background: #0a6280;
+      background: #0066cc;
       color: white;
       border: none;
       padding: 12px 20px;

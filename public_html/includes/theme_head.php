@@ -8,7 +8,7 @@
  *   <?php dealerfai_theme_head($theme); ?>
  *
  * The $theme array comes from dealerfai_get_theme_palette() in helpers/theme.php.
- * Pages that use a static "#0a2e36" header (login, mfa, etc.) may pass a minimal
+ * Pages that use a static "#0066cc" header (login, mfa, etc.) may pass a minimal
  * array or leave it null to use defaults.
  *
  * CSS variables set:

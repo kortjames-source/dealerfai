@@ -28,14 +28,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['resolve_id'])) {
 }
 
 $org_id = get_effective_organization();
-$theme = ['logo' => '', 'color' => '#0a2e36'];
+$theme = ['logo' => '', 'color' => '#0066cc'];
 if ($org_id) {
     $stmt = $db->prepare('SELECT logo_url, theme_variant FROM organizations WHERE id = ?');
     $stmt->execute([$org_id]);
     $org = $stmt->fetch(PDO::FETCH_ASSOC);
     if ($org) {
         $theme['logo'] = $org['logo_url'] ?? '';
-        $theme['color'] = $org['theme_variant'] === 'jlr' ? '#4a4a4a' : (in_array($org['theme_variant'], ['land_rover', 'jaguar'], true) ? '#1A1A1A' : '#0a6280');
+        $theme['color'] = $org['theme_variant'] === 'jlr' ? '#4a4a4a' : (in_array($org['theme_variant'], ['land_rover', 'jaguar'], true) ? '#1A1A1A' : '#0066cc');
     }
 }
 
@@ -156,7 +156,7 @@ $csrfToken = dealerfai_csrf_get_token();
       font-size: 14px;
     }
     th {
-      background: #0a2e36;
+      background: #0066cc;
       color: white;
       font-weight: 600;
     }
@@ -171,14 +171,14 @@ $csrfToken = dealerfai_csrf_get_token();
     }
     .message {
       font-weight: 600;
-      color: #0a6280;
+      color: #0066cc;
       margin-bottom: 6px;
     }
     .resolve-button {
       padding: 6px 12px;
       border-radius: 4px;
-      border: 1px solid #0a6280;
-      background: #0a6280;
+      border: 1px solid #0066cc;
+      background: #0066cc;
       color: white;
       cursor: pointer;
       font-size: 12px;

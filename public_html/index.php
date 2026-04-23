@@ -19,7 +19,7 @@ require_once __DIR__ . '/includes/theme_head.php';
       color: #111111;
     }
     header {
-      background-color: #0a2e36;
+      background-color: #0066cc;
       color: white;
       padding: 30px 40px;
       text-align: center;
@@ -69,10 +69,10 @@ require_once __DIR__ . '/includes/theme_head.php';
     }
     .feature h3 {
       margin-top: 0;
-      color: #0a6280;
+      color: #0066cc;
     }
     footer {
-      background-color: #0a2e36;
+      background-color: #0066cc;
       color: white;
       text-align: center;
       padding: 18px;
@@ -80,7 +80,7 @@ require_once __DIR__ . '/includes/theme_head.php';
     }
     .cta-button {
       display: inline-block;
-      background-color: #0a6280;
+      background-color: #0066cc;
       color: white;
       padding: 14px 28px;
       font-size: 16px;

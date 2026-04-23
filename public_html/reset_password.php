@@ -177,7 +177,7 @@ $csrfToken = dealerfai_csrf_get_token();
       background-color: #f4f6f8;
     }
     header {
-      background-color: #0a2e36;
+      background-color: #0066cc;
       color: white;
       padding: 30px 40px;
       text-align: center;
@@ -199,7 +199,7 @@ $csrfToken = dealerfai_csrf_get_token();
     }
     h2 {
       text-align: center;
-      color: #0a6280;
+      color: #0066cc;
     }
     form {
       display: flex;
@@ -220,7 +220,7 @@ $csrfToken = dealerfai_csrf_get_token();
     button {
       margin-top: 25px;
       padding: 12px;
-      background-color: #0a6280;
+      background-color: #0066cc;
       color: white;
       border: none;
       border-radius: 6px;
@@ -242,7 +242,7 @@ $csrfToken = dealerfai_csrf_get_token();
       margin-top: 20px;
     }
     .login-link a {
-      color: #0a6280;
+      color: #0066cc;
       text-decoration: none;
       font-weight: bold;
     }
@@ -250,7 +250,7 @@ $csrfToken = dealerfai_csrf_get_token();
       text-decoration: underline;
     }
     footer {
-      background-color: #0a2e36;
+      background-color: #0066cc;
       color: white;
       text-align: center;
       padding: 16px;

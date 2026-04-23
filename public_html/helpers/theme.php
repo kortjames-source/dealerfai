@@ -8,7 +8,7 @@ function dealerfai_get_theme_palette(?string $themeVariant, array $overrides = [
     $theme = [
         'variant' => $variant !== '' ? $variant : 'default',
         'logo' => '',
-        'color' => '#0a6280', // Default primary accent
+        'color' => '#0066cc', // Default primary accent
         'primary_color' => null,
         'page_background' => '#f8fafc',
         'header_background' => '#ffffff',

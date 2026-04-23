@@ -36,7 +36,7 @@ if (!$deal) {
 $dealId = (int)($deal['id'] ?? 0);
 $isLocked = !empty($deal['credit_app_locked']);
 
-$theme = dealerfai_get_theme_palette(null, ['color' => '#0a2e36']);
+$theme = dealerfai_get_theme_palette(null, ['color' => '#0066cc']);
 $orgId = (int)($deal['organization'] ?? 0);
 $accessoriesEnabled = true;
 if ($orgId > 0) {

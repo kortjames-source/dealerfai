@@ -15,7 +15,7 @@ $accessible_orgs = get_accessible_organizations();
 // Theme settings
 $org = get_effective_organization();
 $user_id = $_SESSION['user_id'];
-$theme = ['logo' => '', 'color' => '#0a2e36'];
+$theme = ['logo' => '', 'color' => '#0066cc'];
 
 if ($isAdmin && !empty($_SESSION['deal_draft']['organization'])) {
   $org = (int)$_SESSION['deal_draft']['organization'];
@@ -30,7 +30,7 @@ if ($org) {
   $orgData = $stmt->fetch(PDO::FETCH_ASSOC);
   if ($orgData) {
     $theme['logo'] = $orgData['logo_url'] ?? '';
-    $theme['color'] = $orgData['theme_variant'] === 'jlr' ? '#4a4a4a' : (in_array($orgData['theme_variant'], ['land_rover', 'jaguar'], true) ? '#1A1A1A' : '#0a6280');
+    $theme['color'] = $orgData['theme_variant'] === 'jlr' ? '#4a4a4a' : (in_array($orgData['theme_variant'], ['land_rover', 'jaguar'], true) ? '#1A1A1A' : '#0066cc');
   }
 }
 

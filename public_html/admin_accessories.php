@@ -916,8 +916,8 @@ if (!empty($accessories)) {
   <?php dealerfai_theme_head(); ?>
   <style nonce="<?= dealerfai_csp_nonce() ?>">
     body { font-family: Arial, sans-serif; background: #f4f6f8; margin: 0; padding: 0; }
-    header { background: #0a2e36; color: white; padding: 20px; text-align: center; position: relative; }
-    nav { background: #0a2e36; padding: 12px; text-align: center; }
+    header { background: #0066cc; color: white; padding: 20px; text-align: center; position: relative; }
+    nav { background: #0066cc; padding: 12px; text-align: center; }
     nav a { color: white; margin: 0 20px; text-decoration: none; font-weight: bold; }
     .container { max-width: 1200px; margin: 20px auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
     h2 { margin-top: 0; }
@@ -926,7 +926,7 @@ if (!empty($accessories)) {
     th { background: #f1f4f8; }
     input[type="text"], select, input[type="number"], textarea { padding: 6px; border-radius: 4px; border: 1px solid #ccc; width: 100%; }
     textarea { min-height: 70px; }
-    .btn { background: #0a6280; color: white; padding: 8px 14px; border: none; border-radius: 4px; cursor: pointer; }
+    .btn { background: #0066cc; color: white; padding: 8px 14px; border: none; border-radius: 4px; cursor: pointer; }
 	    .btn:hover { background: #094c63; }
 	    .muted { color: #667085; font-size: 0.9rem; margin-top: 4px; }
 	    .quick-picks { margin-top: 6px; display: flex; flex-wrap: wrap; gap: 6px; }
@@ -941,7 +941,7 @@ if (!empty($accessories)) {
 	      cursor: pointer;
 	    }
 	    .quick-pick-btn:hover { background: #eaf1f7; }
-	    .quick-pick-btn.is-active { border-color: #0a6280; background: #e1eff5; font-weight: 600; }
+	    .quick-pick-btn.is-active { border-color: #0066cc; background: #e1eff5; font-weight: 600; }
 	    .image-preview { display: block; margin-top: 8px; max-width: 220px; width: 100%; height: auto; border-radius: 10px; border: 1px solid #e2e8f0; background: #f1f5f9; }
 	    .image-preview.hidden { display: none; }
 	    .success { color: green; margin-top: 10px; }

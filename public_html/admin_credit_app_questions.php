@@ -243,8 +243,8 @@ usort($currentQuestions, function (array $a, array $b): int {
   <?php dealerfai_theme_head(); ?>
   <style nonce="<?= dealerfai_csp_nonce() ?>">
     body { font-family: Arial, sans-serif; background: #f4f6f8; margin: 0; padding: 0; }
-    header { background: #0a2e36; color: white; padding: 20px; text-align: center; position: relative; }
-    nav { background: #0a2e36; padding: 12px; text-align: center; }
+    header { background: #0066cc; color: white; padding: 20px; text-align: center; position: relative; }
+    nav { background: #0066cc; padding: 12px; text-align: center; }
     nav a { color: white; margin: 0 20px; text-decoration: none; font-weight: bold; }
     .container { max-width: 1100px; margin: 20px auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
     label { display: block; margin-top: 12px; font-weight: bold; }
@@ -252,7 +252,7 @@ usort($currentQuestions, function (array $a, array $b): int {
       width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px;
     }
     textarea { resize: vertical; }
-    .btn { background: #0a6280; color: white; padding: 10px 18px; border: none; border-radius: 4px; margin-top: 12px; cursor: pointer; font-size: 16px; text-decoration: none; display: inline-block; }
+    .btn { background: #0066cc; color: white; padding: 10px 18px; border: none; border-radius: 4px; margin-top: 12px; cursor: pointer; font-size: 16px; text-decoration: none; display: inline-block; }
     .btn.secondary { background: #6c757d; }
     .btn.danger { background: #6a1a1a; }
     .btn:hover { background: #094c63; }

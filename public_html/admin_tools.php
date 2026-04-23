@@ -121,14 +121,14 @@ try {
 } catch (PDOException $e) {
   $aiQueueEnabled = false;
 }
-$theme = ['logo' => '', 'color' => '#0a2e36'];
+$theme = ['logo' => '', 'color' => '#0066cc'];
 if ($org) {
   $stmt = $db->prepare("SELECT logo_url, theme_variant FROM organizations WHERE id = ?");
   $stmt->execute([$org]);
   $orgData = $stmt->fetch(PDO::FETCH_ASSOC);
   if ($orgData) {
     $theme['logo'] = $orgData['logo_url'] ?? '';
-    $theme['color'] = $orgData['theme_variant'] === 'jlr' ? '#4a4a4a' : (in_array($orgData['theme_variant'], ['land_rover', 'jaguar'], true) ? '#1A1A1A' : '#0a6280');
+    $theme['color'] = $orgData['theme_variant'] === 'jlr' ? '#4a4a4a' : (in_array($orgData['theme_variant'], ['land_rover', 'jaguar'], true) ? '#1A1A1A' : '#0066cc');
   }
 }
 ?>
@@ -196,7 +196,7 @@ if ($org) {
     }
     h2 {
       margin-top: 0;
-      color: #0a6280;
+      color: #0066cc;
     }
     .section {
       margin-top: 28px;
@@ -222,7 +222,7 @@ if ($org) {
     }
     .button {
       display: inline-block;
-      background: #0a6280;
+      background: #0066cc;
       color: white;
       padding: 12px 20px;
       border-radius: 6px;
@@ -319,8 +319,8 @@ if ($org) {
       margin-left: auto;
     }
     .queue-filter-btn {
-      border: 1px solid #0a6280;
-      background: #0a6280;
+      border: 1px solid #0066cc;
+      background: #0066cc;
       color: #fff;
       border-radius: 6px;
       padding: 8px 12px;

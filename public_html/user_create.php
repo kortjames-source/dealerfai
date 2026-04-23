@@ -83,7 +83,7 @@ if ($is_admin) {
       padding: 30px; border-radius: 8px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
-    h2 { color: #0a6280; margin-top: 0; }
+    h2 { color: #0066cc; margin-top: 0; }
     label { display: block; margin-top: 15px; font-weight: bold; }
     input, select {
       width: 100%; padding: 10px; margin-top: 5px;
@@ -92,7 +92,7 @@ if ($is_admin) {
     .checkbox-group { margin-top: 10px; }
     .checkbox-group label { display: block; font-weight: normal; }
     button {
-      background: #0a6280; color: white;
+      background: #0066cc; color: white;
       border: none; padding: 12px 20px; margin-top: 20px;
       font-size: 16px; border-radius: 4px; cursor: pointer;
     }

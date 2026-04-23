@@ -19,7 +19,7 @@ require_once __DIR__ . '/helpers/organization_question_config.php';
 
 // Load organization theme color and logo
 $org = $_SESSION['organization'];
-$theme = dealerfai_get_theme_palette(null, ['color' => '#0a2e36']);
+$theme = dealerfai_get_theme_palette(null, ['color' => '#0066cc']);
 
 if ($org) {
   $hasLeaseCapPercentColumn = organization_column_exists($db, 'lease_msrp_cap_percent');
@@ -1096,7 +1096,7 @@ try {
 }
 
 // Load dealer theme + MSRP cap settings
-$theme = dealerfai_get_theme_palette(null, ['color' => '#0a2e36']);
+$theme = dealerfai_get_theme_palette(null, ['color' => '#0066cc']);
 $themeVariant = '';
 $leaseCapEnabled = false;
 $leaseCapLimit = 0.0;

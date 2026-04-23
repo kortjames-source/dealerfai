@@ -456,7 +456,7 @@ if (!function_exists('rgba_from_hex')) {
     }
 }
 
-$brandColor = normalize_hex_color($theme['color'] ?? '#0a6280');
+$brandColor = normalize_hex_color($theme['color'] ?? '#0066cc');
 $productPanelBackground = rgba_from_hex($brandColor, 0.08);
 $productBorderColor = rgba_from_hex($brandColor, 0.18);
 $paymentHighlightBackground = rgba_from_hex($brandColor, 0.12);

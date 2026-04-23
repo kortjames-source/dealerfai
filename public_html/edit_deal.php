@@ -162,14 +162,14 @@ if (!$allowed) {
 
 // Load theme
 $org = $_SESSION['organization'];
-$theme = ['logo' => '', 'color' => '#0a6280'];
+$theme = ['logo' => '', 'color' => '#0066cc'];
 if ($org) {
     $orgStmt = $db->prepare("SELECT logo_url, theme_variant FROM organizations WHERE id = ?");
     $orgStmt->execute([$org]);
     $orgData = $orgStmt->fetch(PDO::FETCH_ASSOC);
     if ($orgData) {
         $theme['logo'] = $orgData['logo_url'] ?? '';
-        $theme['color'] = $orgData['theme_variant'] === 'jlr' ? '#4a4a4a' : (in_array($orgData['theme_variant'], ['land_rover', 'jaguar'], true) ? '#1A1A1A' : '#0a6280');
+        $theme['color'] = $orgData['theme_variant'] === 'jlr' ? '#4a4a4a' : (in_array($orgData['theme_variant'], ['land_rover', 'jaguar'], true) ? '#1A1A1A' : '#0066cc');
     }
 }
 

@@ -40,7 +40,7 @@ if ($isAdmin && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['context_o
 $csrfToken = dealerfai_csrf_get_token();
 
 $org_id = get_effective_organization();
-$theme = dealerfai_get_theme_palette(null, ['color' => '#0a2e36']);
+$theme = dealerfai_get_theme_palette(null, ['color' => '#0066cc']);
 
 if ($org_id) {
   $stmt = $db->prepare("SELECT logo_url, theme_variant FROM organizations WHERE id = ?");
@@ -72,155 +72,9 @@ if (!empty($accessible_orgs)) {
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <?php dealerfai_theme_head($theme ?? null); ?>
   <style nonce="<?= dealerfai_csp_nonce() ?>">
-    body {
-      margin: 0;
-      font-family: "Segoe UI", sans-serif;
-      background-color: <?= htmlspecialchars($theme['page_background']) ?>;
-      color: #111111;
-    }
-    header {
-      background-color: <?= htmlspecialchars($theme['header_background']) ?>;
-      color: <?= htmlspecialchars($theme['header_text']) ?>;
-      padding: 30px 40px;
-      text-align: center;
-      position: relative;
-    }
-    header img {
-      max-width: 480px;
-      max-height: 180px;
-      height: auto;
-      display: block;
-      margin: 0 auto 10px;
-    }
-    nav {
-      background-color: <?= htmlspecialchars($theme['nav_background']) ?>;
-      padding: 12px;
-      text-align: center;
-    }
-    nav a {
-      color: <?= htmlspecialchars($theme['nav_text']) ?>;
-      margin: 0 20px;
-      text-decoration: none;
-      font-weight: bold;
-    }
-    nav a:hover {
-      text-decoration: underline;
-    }
-    main {
-      padding: 40px;
-      text-align: center;
-    }
-    .card-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 25px;
-    }
-    .card {
-      background: white;
-      padding: 25px;
-      width: 260px;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-    .card h3 {
-      color: <?= htmlspecialchars($theme['color']) ?>;
-      margin-bottom: 10px;
-    }
-    .card p {
-      font-size: 14px;
-    }
-    footer {
-      background-color: <?= htmlspecialchars($theme['color']) ?>;
-      color: white;
-      text-align: center;
-      padding: 16px;
-      font-size: 14px;
-      position: fixed;
-      width: 100%;
-      bottom: 0;
-    }
-    .logout {
-      position: absolute;
-      right: 20px;
-      top: 20px;
-      display: flex;
-      gap: 12px;
-      align-items: center;
-    }
-    .logout a {
-      color: #ccc;
-      font-size: 14px;
-      text-decoration: none;
-    }
-    .logout a:hover {
-      color: white;
-    }
-    .admin-header-links {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      margin-top: 8px;
-      padding: 8px 0;
-    }
-    .admin-header-links a {
-      background: #093748;
-      color: white;
-      padding: 10px 16px;
-      border-radius: 4px;
-      font-size: 14px;
-      text-decoration: none;
-      font-weight: bold;
-      border: 1px solid rgba(255, 255, 255, 0.4);
-    }
-    .admin-header-links a:hover {
-      background: #074355;
-      border-color: #0a6280;
-    }
-    .badge {
-      display: inline-block;
-      min-width: 18px;
-      padding: 2px 8px;
-      border-radius: 999px;
-      background: #d7263d;
-      color: #fff;
-      font-size: 12px;
-      font-weight: bold;
-      text-align: center;
-      margin-left: 6px;
-    }
-    .org-switcher {
-      margin: 20px auto;
-      text-align: center;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-    .org-switcher select {
-      padding: 8px 12px;
-      border-radius: 4px;
-      border: 1px solid #ccc;
-      min-width: 220px;
-    }
-    .org-switcher button {
-      padding: 9px 16px;
-      border: none;
-      border-radius: 4px;
-      background-color: #1A1A1A;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .org-switcher button:hover {
-      opacity: 0.9;
-    }
-    .context-note {
-      text-align: center;
-      margin-top: 8px;
-      color: #1f3d5e;
-      font-weight: 600;
+    /* Specific page overrides */
+    .metric-grid {
+      margin-top: 1rem;
     }
   </style>
 </head>
@@ -228,8 +82,8 @@ if (!empty($accessible_orgs)) {
   <div class="dashboard-wrapper">
     <!-- Sidebar -->
     <aside class="sidebar">
-      <div class="sidebar-header">
-        <img src="dealerfai_logo_white.png" alt="DealerFAI" style="height: 40px; filter: brightness(0) invert(1);">
+      <div class="sidebar-header" style="padding: 1.5rem;">
+        <img src="dealerfai_logo_white.png" alt="DealerFAI" style="height: 35px; width: auto;">
       </div>
       <nav class="sidebar-nav" style="background: transparent; padding: 1.5rem 1rem;">
         <a href="dashboard" class="sidebar-link active">

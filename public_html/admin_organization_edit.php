@@ -416,8 +416,8 @@ $isCreditQuestionVisible = function (string $step, string $id) use ($creditQuest
 <?php dealerfai_theme_head(); ?>
   <style nonce="<?= dealerfai_csp_nonce() ?>">
     body { font-family: Arial, sans-serif; background: #f4f6f8; margin: 0; padding: 0; }
-    header { background: #0a2e36; color: white; padding: 20px; text-align: center; position: relative; }
-    nav { background: #0a2e36; padding: 12px; text-align: center; }
+    header { background: #0066cc; color: white; padding: 20px; text-align: center; position: relative; }
+    nav { background: #0066cc; padding: 12px; text-align: center; }
     nav a { color: white; margin: 0 20px; text-decoration: none; font-weight: bold; }
     .container { max-width: 820px; margin: 20px auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
     h2 { margin-top: 0; }
@@ -427,7 +427,7 @@ $isCreditQuestionVisible = function (string $step, string $id) use ($creditQuest
     }
     textarea { resize: vertical; }
     .btn {
-      background: #0a6280; color: white; padding: 10px 18px; border: none;
+      background: #0066cc; color: white; padding: 10px 18px; border: none;
       border-radius: 4px; margin-top: 20px; cursor: pointer; font-size: 16px;
       text-decoration: none; display: inline-block;
     }
@@ -603,8 +603,8 @@ $isCreditQuestionVisible = function (string $step, string $id) use ($creditQuest
 
     <label>Primary Brand Color</label>
     <div style="display:flex; gap:10px; align-items:center; margin-top:5px;">
-      <input type="color" name="primary_color" value="<?= htmlspecialchars($formPrimaryColor ?: '#0a6280') ?>" style="width:50px; height:38px; padding:2px; border:1px solid #ccc; cursor:pointer;">
-      <input type="text" id="primary_color_text" value="<?= htmlspecialchars($formPrimaryColor ?: '#0a6280') ?>" placeholder="#000000" style="flex:1; margin-top:0;">
+      <input type="color" name="primary_color" value="<?= htmlspecialchars($formPrimaryColor ?: '#0066cc') ?>" style="width:50px; height:38px; padding:2px; border:1px solid #ccc; cursor:pointer;">
+      <input type="text" id="primary_color_text" value="<?= htmlspecialchars($formPrimaryColor ?: '#0066cc') ?>" placeholder="#000000" style="flex:1; margin-top:0;">
     </div>
     <p class="note">This color will be used for buttons, links, and highlights across the site.</p>
     <script nonce="<?= dealerfai_csp_nonce() ?>">

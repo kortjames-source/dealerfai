@@ -127,7 +127,7 @@ $csrf = dealerfai_csrf_get_token();
   <?php dealerfai_theme_head(); ?>
   <style nonce="<?= dealerfai_csp_nonce() ?>">
     body { margin:0; font-family: "Segoe UI", sans-serif; background:#f4f6f8; }
-    header { background:#0a2e36; color:#fff; padding:24px; text-align:center; }
+    header { background:#0066cc; color:#fff; padding:24px; text-align:center; }
     main { max-width:520px; margin:30px auto; background:#fff; padding:26px; border-radius:10px; box-shadow:0 2px 10px rgba(0,0,0,0.08); }
     .help { color:#444; font-size:14px; line-height:1.4; }
     .secret { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; letter-spacing:1px; padding:10px 12px; background:#f7f7f7; border:1px solid #e2e2e2; border-radius:8px; display:inline-block; }
@@ -135,11 +135,11 @@ $csrf = dealerfai_csrf_get_token();
     .qr img { width:240px; height:240px; border:1px solid #e2e2e2; border-radius:8px; background:#fff; }
     label { display:block; margin-top:16px; font-weight:700; }
     input[type="text"] { width:100%; padding:12px 10px; font-size:18px; border:1px solid #ccc; border-radius:8px; }
-    button { margin-top:18px; padding:12px 16px; background:#0a6280; color:#fff; border:none; border-radius:8px; font-size:16px; cursor:pointer; }
+    button { margin-top:18px; padding:12px 16px; background:#0066cc; color:#fff; border:none; border-radius:8px; font-size:16px; cursor:pointer; }
     button:hover { background:#094c63; }
     .error { color:#b00020; margin-top:12px; font-weight:600; }
     .link { margin-top:12px; font-size:14px; }
-    .link a { color:#0a6280; }
+    .link a { color:#0066cc; }
   </style>
 </head>
 <body class="bg-ai">

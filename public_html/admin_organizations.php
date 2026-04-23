@@ -31,9 +31,9 @@ foreach ($orgs as $org) {
   <?php dealerfai_theme_head(); ?>
   <style nonce="<?= dealerfai_csp_nonce() ?>">
     body { font-family: Arial, sans-serif; background: #f4f6f8; margin: 0; padding: 0; }
-header { background: #0a2e36; color: white; padding: 20px; text-align: center; position: relative; }
+header { background: #0066cc; color: white; padding: 20px; text-align: center; position: relative; }
     nav {
-      background-color: #0a2e36;
+      background-color: #0066cc;
       padding: 12px;
       text-align: center;
     }
@@ -48,7 +48,7 @@ header { background: #0a2e36; color: white; padding: 20px; text-align: center; p
     table { width: 100%; border-collapse: collapse; margin-top: 20px; }
     th, td { padding: 10px; border-bottom: 1px solid #ddd; text-align: left; }
     .btn {
-      background: #0a6280; color: white; padding: 10px 18px; border: none;
+      background: #0066cc; color: white; padding: 10px 18px; border: none;
       border-radius: 4px; margin-top: 20px; cursor: pointer; font-size: 16px;
       text-decoration: none; display: inline-block;
     }
