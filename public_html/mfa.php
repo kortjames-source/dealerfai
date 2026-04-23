@@ -142,37 +142,55 @@ $csrf = dealerfai_csrf_get_token();
     .link a { color:#0a6280; }
   </style>
 </head>
-<body>
-  <header>
-    <h1>Multi-Factor Authentication</h1>
-  </header>
-  <main>
-    <p class="help">Enter the 6-digit code from your authenticator app.</p>
+<body class="bg-ai">
+  <div class="full-page-center">
+    <header class="clean-header">
+      <a href="index.php">
+        <img src="dealerfai_logo_blue.png" alt="DealerFAI Logo" style="height: 120px;">
+      </a>
+    </header>
 
-    <?php if ($isEnrollment): ?>
-      <details class="mt-14" open>
-        <summary style="cursor:pointer; font-weight:700;">Setup (first-time enrollment)</summary>
-        <p class="help">Use the setup key below in your authenticator app.</p>
-        <p class="help">Recommended apps: Google Authenticator, Authy, Microsoft Authenticator, 1Password, or Bitwarden.</p>
-        <p class="help">Add a new account in your authenticator app using this key:</p>
-        <div class="secret"><?= htmlspecialchars($secret) ?></div>
-        <div class="qr">
-          <img src="https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=<?= urlencode($otpauth) ?>" alt="MFA QR Code">
+    <main class="glass" style="margin-top: 0; width: 100%; max-width: 480px;">
+      <h2 class="text-gradient" style="margin-bottom: 1rem;">MFA Verification</h2>
+      <p class="text-muted text-center" style="margin-bottom: 2rem;">Secure your account with two-factor authentication.</p>
+
+      <?php if ($isEnrollment): ?>
+        <details class="mt-4 mb-4" style="background: rgba(255,255,255,0.4); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1rem;" open>
+          <summary style="cursor:pointer; font-weight:700; color: var(--brand-color);">First-Time Setup</summary>
+          <div style="padding-top: 1rem;">
+            <p class="help text-muted" style="font-size: 0.85rem; margin-bottom: 1rem;">Scan this QR code or enter the key manually in your authenticator app (Google Authenticator, Authy, etc).</p>
+            <div class="qr" style="display: flex; justify-content: center; margin-bottom: 1.5rem;">
+              <img src="https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=<?= urlencode($otpauth) ?>" alt="MFA QR Code" style="border-radius: 8px; border: 1px solid var(--border-color); width: 180px; height: 180px;">
+            </div>
+            <div class="text-center">
+              <label style="margin-top: 0; margin-bottom: 0.5rem;">Setup Key</label>
+              <div class="secret" style="background: white; border: 1px solid var(--border-color); padding: 0.5rem 1rem; border-radius: 4px; font-family: monospace; font-size: 0.9rem;"><?= htmlspecialchars($secret) ?></div>
+            </div>
+          </div>
+        </details>
+      <?php endif; ?>
+
+      <?php if ($error): ?>
+        <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
+      <?php endif; ?>
+
+      <form method="post" autocomplete="one-time-code" style="margin-top: 1rem;">
+        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrf) ?>">
+        <div class="form-group">
+          <label for="code">Enter 6-Digit Code</label>
+          <input id="code" name="code" type="text" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" placeholder="000000" style="text-align: center; font-size: 2rem; letter-spacing: 0.5rem; font-weight: 700;" required autofocus>
         </div>
-        <p class="help link">Some apps support link import on mobile: <a href="<?= htmlspecialchars($otpauth) ?>">Open setup link</a></p>
-      </details>
-    <?php endif; ?>
+        <button type="submit" style="width: 100%; margin-top: 2rem;">Verify & Continue</button>
+      </form>
 
-    <?php if ($error): ?>
-      <div class="error"><?= htmlspecialchars($error) ?></div>
-    <?php endif; ?>
+      <div class="text-center mt-4">
+        <a href="login.php" class="text-muted" style="font-size: 0.9rem;">Back to Login</a>
+      </div>
+    </main>
 
-    <form method="post" autocomplete="one-time-code" class="mt-12">
-      <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrf) ?>">
-      <label for="code">Authentication Code</label>
-      <input id="code" name="code" type="text" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" placeholder="123456" required>
-      <button type="submit">Verify</button>
-    </form>
-  </main>
+    <footer style="background: transparent; color: rgba(255,255,255,0.7); border: none; margin-top: 2rem; padding: 1rem;">
+      &copy; <?php echo date("Y"); ?> DealerFAI. All rights reserved.
+    </footer>
+  </div>
 </body>
 </html>

@@ -170,36 +170,41 @@ $csrfToken = dealerfai_csrf_get_token();
     }
   </style>
 </head>
-<body>
+<body class="bg-ai">
+  <div class="full-page-center">
+    <header class="clean-header">
+      <a href="index.php">
+        <img src="dealerfai_logo_blue.png" alt="DealerFAI Logo" style="height: 120px;">
+      </a>
+    </header>
 
-<header>
-  <img src="dealerfai_logo_blue.png" alt="DealerFAI Logo">
-  <h1>DealerFAI</h1>
-</header>
+    <main class="glass" style="margin-top: 0; width: 100%; max-width: 480px;">
+      <h2 class="text-gradient" style="margin-bottom: 1rem;">Update Password</h2>
+      <p class="text-muted text-center" style="margin-bottom: 2rem;">Please set a new secure password to continue.</p>
 
-<main>
-  <h2>Reset Your Password</h2>
-  <?php if ($error): ?>
-    <div class="message error"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></div>
-  <?php elseif ($success): ?>
-    <div class="message success"><?= htmlspecialchars($success, ENT_QUOTES, 'UTF-8') ?></div>
-  <?php endif; ?>
+      <?php if ($error): ?>
+        <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
+      <?php elseif ($success): ?>
+        <div class="alert alert-success"><?= htmlspecialchars($success) ?></div>
+      <?php endif; ?>
 
-  <form method="post">
-    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken, ENT_QUOTES, 'UTF-8') ?>">
-    <label for="new_password">New Password</label>
-    <input type="password" name="new_password" id="new_password" required pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[\W_]).{8,}$" title="At least 8 characters, including a letter, number, and special character.">
+      <form method="post">
+        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken) ?>">
+        <div class="form-group">
+          <label for="new_password">New Password</label>
+          <input type="password" name="new_password" id="new_password" placeholder="••••••••" required autofocus pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[\W_]).{8,}$" title="At least 8 characters, including a letter, number, and special character.">
+        </div>
+        <div class="form-group" style="margin-top: 1rem;">
+          <label for="confirm_password">Confirm Password</label>
+          <input type="password" name="confirm_password" id="confirm_password" placeholder="••••••••" required>
+        </div>
+        <button type="submit" style="width: 100%; margin-top: 2rem;">Update & Login</button>
+      </form>
+    </main>
 
-    <label for="confirm_password">Confirm Password</label>
-    <input type="password" name="confirm_password" id="confirm_password" required>
-
-    <button type="submit">Update Password</button>
-  </form>
-</main>
-
-<footer>
-  &copy; <?= date("Y") ?> DealerFAI. All rights reserved.
-</footer>
-
+    <footer style="background: transparent; color: rgba(255,255,255,0.7); border: none; margin-top: 2rem; padding: 1rem;">
+      &copy; <?php echo date("Y"); ?> DealerFAI. All rights reserved.
+    </footer>
+  </div>
 </body>
 </html>

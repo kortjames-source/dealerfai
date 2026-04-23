@@ -259,39 +259,45 @@ $csrfToken = dealerfai_csrf_get_token();
     }
   </style>
 </head>
-<body>
+<body class="bg-ai">
+  <div class="full-page-center">
+    <header class="clean-header">
+      <a href="index.php">
+        <img src="dealerfai_logo_blue.png" alt="DealerFAI Logo" style="height: 120px;">
+      </a>
+    </header>
 
-<header>
-  <img src="dealerfai_logo_blue.png" alt="DealerFAI Logo">
-  <h1>DealerFAI</h1>
-</header>
+    <main class="glass" style="margin-top: 0; width: 100%; max-width: 480px;">
+      <h2 class="text-gradient" style="margin-bottom: 1rem;">Reset Password</h2>
+      <p class="text-muted text-center" style="margin-bottom: 2rem;">Enter your email to receive a temporary password.</p>
 
-<main>
-  <h2>Reset Password</h2>
-  <?php if ($error): ?>
-    <div class="message error"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></div>
-  <?php endif; ?>
-  <?php if ($success): ?>
-    <div class="message success"><?= htmlspecialchars($success, ENT_QUOTES, 'UTF-8') ?></div>
-  <?php endif; ?>
+      <?php if ($error): ?>
+        <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
+      <?php endif; ?>
 
-  <?php if (!$success): ?>
-    <form method="post">
-      <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken, ENT_QUOTES, 'UTF-8') ?>">
-      <label for="email">Email</label>
-      <input type="email" name="email" id="email" required>
-      <button type="submit">Email me a temporary password</button>
-    </form>
-  <?php endif; ?>
+      <?php if ($success): ?>
+        <div class="alert alert-success"><?= htmlspecialchars($success) ?></div>
+      <?php endif; ?>
 
-  <div class="login-link">
-    <a href="login.php">Back to Login</a>
+      <?php if (!$success): ?>
+        <form method="post">
+          <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken) ?>">
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" name="email" id="email" placeholder="you@example.com" required autofocus>
+          </div>
+          <button type="submit" style="width: 100%; margin-top: 2rem;">Send Temporary Password</button>
+        </form>
+      <?php endif; ?>
+
+      <div class="text-center mt-4">
+        <a href="login.php" class="text-muted" style="font-size: 0.9rem;">Back to Login</a>
+      </div>
+    </main>
+
+    <footer style="background: transparent; color: rgba(255,255,255,0.7); border: none; margin-top: 2rem; padding: 1rem;">
+      &copy; <?php echo date("Y"); ?> DealerFAI. All rights reserved.
+    </footer>
   </div>
-</main>
-
-<footer>
-  &copy; <?= date("Y") ?> DealerFAI. All rights reserved.
-</footer>
-
 </body>
 </html>
