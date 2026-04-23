@@ -475,6 +475,7 @@ details[open] summary::before { transform: rotate(90deg); }
 .clean-header img {
   margin-bottom: 0;
   max-width: 240px;
+  mix-blend-mode: multiply; /* Removes white background on light backgrounds */
 }
 
 .clean-header h1 {

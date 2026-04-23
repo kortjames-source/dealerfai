@@ -97,7 +97,7 @@ require_once __DIR__ . '/includes/theme_head.php';
   <nav class="glass" style="position: sticky; top: 0; z-index: 1000; border-radius: 0; border-top: none; border-left: none; border-right: none;">
     <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 2rem;">
       <a href="index.php">
-        <img src="dealerfai_logo.png" alt="DealerFAI Logo" style="height: 40px;">
+        <img src="dealerfai_logo_modern.png" alt="DealerFAI Logo" style="height: 60px;">
       </a>
       <div>
         <a href="login.php" class="btn btn-secondary btn-sm">Sign In</a>
@@ -147,7 +147,7 @@ require_once __DIR__ . '/includes/theme_head.php';
   </main>
 
   <footer style="background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(10px); color: white; padding: 4rem 2rem; text-align: center; margin-top: 4rem;">
-    <img src="dealerfai_logo.png" alt="DealerFAI Logo" style="height: 40px; margin-bottom: 1.5rem; filter: brightness(0) invert(1);">
+    <img src="dealerfai_logo_modern.png" alt="DealerFAI Logo" style="height: 60px; margin-bottom: 1.5rem; filter: brightness(0) invert(1);">
     <p style="opacity: 0.6; max-width: 500px; margin: 0 auto 2rem;">
       DealerFAI is a premium platform designed for the modern automotive industry. 
       Built with security and scalability at its core.

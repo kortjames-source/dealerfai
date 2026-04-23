@@ -136,7 +136,7 @@ $timeoutNotice = (isset($_GET['reason']) && $_GET['reason'] === 'timeout');
   <div class="full-page-center">
     <header class="clean-header">
       <a href="index.php">
-        <img src="dealerfai_logo.png" alt="DealerFAI Logo">
+        <img src="dealerfai_logo_modern.png" alt="DealerFAI Logo" style="height: 80px;">
       </a>
     </header>
 
