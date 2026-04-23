@@ -116,9 +116,7 @@ if (!empty($accessible_orgs)) {
         <?php endif; ?>
       </nav>
       <div style="padding: 1.5rem; border-top: 1px solid rgba(255,255,255,0.1);">
-        <a href="logout" class="sidebar-link" style="margin-bottom: 0; color: #ef4444;">
-          <i class="fa-solid fa-right-from-bracket"></i> Log Out
-        </a>
+        <p style="font-size: 0.75rem; color: rgba(255,255,255,0.4); margin: 0;">DealerFAI v2.0</p>
       </div>
     </aside>
 
@@ -140,7 +138,7 @@ if (!empty($accessible_orgs)) {
           <div style="display: flex; align-items: center; gap: 0.75rem;">
             <div style="text-align: right;">
               <div style="font-size: 0.875rem; font-weight: 700; color: #0f172a;"><?= htmlspecialchars($_SESSION['full_name'] ?? 'User') ?></div>
-              <div style="font-size: 0.75rem; color: #64748b;"><?= htmlspecialchars($_SESSION['email'] ?? '') ?></div>
+              <a href="logout" style="font-size: 0.75rem; color: #64748b; text-decoration: none;">Log Out</a>
             </div>
             <div style="width: 40px; height: 40px; background: var(--brand-color); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">
               <?= strtoupper(substr($_SESSION['full_name'] ?? 'U', 0, 1)) ?>

@@ -221,229 +221,10 @@ function render_deal_table(array $deals, bool $showOrgColumn, string $dateLabel,
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <?php dealerfai_theme_head($theme ?? null); ?>
   <style nonce="<?= dealerfai_csp_nonce() ?>">
-    body {
-      margin: 0;
-      font-family: "Segoe UI", sans-serif;
-      background-color: <?= htmlspecialchars($theme['page_background']) ?>;
-      color: #111111;
-    }
-    header {
-      background-color: <?= htmlspecialchars($theme['header_background']) ?>;
-      color: <?= htmlspecialchars($theme['header_text']) ?>;
-      padding: 30px 40px;
-      text-align: center;
-      position: relative;
-    }
-    header img {
-      max-width: 480px;
-      max-height: 180px;
-      height: auto;
-      display: block;
-      margin: 0 auto 10px;
-    }
-    nav {
-      background-color: <?= htmlspecialchars($theme['nav_background']) ?>;
-      padding: 12px;
-      text-align: center;
-    }
-    nav a {
-      color: <?= htmlspecialchars($theme['nav_text']) ?>;
-      margin: 0 20px;
-      text-decoration: none;
-      font-weight: bold;
-    }
-    nav a:hover {
-      text-decoration: underline;
-    }
-    .context-note {
-      text-align: center;
-      color: #1f3d5e;
-      font-weight: 600;
-      margin-top: 10px;
-    }
-    .filters {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      align-items: center;
-      justify-content: center;
-      margin: 10px 0 20px;
-    }
-    .filters input,
-    .filters select {
-      padding: 10px 12px;
-      border-radius: 6px;
-      border: 1px solid #c7d0d8;
-      min-width: 200px;
-    }
-    .filters button,
-    .filters a {
-      padding: 10px 16px;
-      border-radius: 6px;
-      border: none;
-      cursor: pointer;
-      font-weight: 600;
-      text-decoration: none;
-    }
-    .filters button {
-      background-color: <?= htmlspecialchars($theme['color']) ?>;
-      color: white;
-    }
-    .filters a {
-      background: #e5e9ee;
-      color: #203040;
-    }
-    main {
-      padding: 30px 40px;
-    }
-    h2 {
-      color: <?= htmlspecialchars($theme['color']) ?>;
-      text-align: center;
-      margin-bottom: 10px;
-    }
-    h3 {
-      color: <?= htmlspecialchars($theme['color']) ?>;
-      margin-top: 30px;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: white;
-      margin-top: 20px;
-      box-shadow: 0 1px 6px rgba(0,0,0,0.1);
-    }
-    th, td {
-      padding: 14px;
-      border-bottom: 1px solid #ddd;
-      text-align: center;
-    }
-    th {
-      background-color: <?= htmlspecialchars($theme['color']) ?>;
-      color: white;
-    }
-    tr:hover {
-      background-color: #f1f8fb;
-    }
-    .btn-link {
-      background-color: <?= htmlspecialchars($theme['color']) ?>;
-      color: white;
-      padding: 8px 12px;
-      text-decoration: none;
-      border-radius: 4px;
-      font-weight: bold;
-      border: none;
-      cursor: pointer;
-      display: inline-block;
-    }
-    .btn-link:hover {
-      opacity: 0.9;
-    }
-    .btn-delivered {
-      background-color: #1f6f7a;
-    }
-    .btn-cancel {
-      background-color: #c82333;
-    }
-    .actions-cell {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 8px;
-    }
-    .inline-form {
-      margin: 0;
-    }
-    details {
-      margin-top: 20px;
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 1px 6px rgba(0,0,0,0.08);
-      padding: 10px 16px;
-    }
-    details > summary {
-      cursor: pointer;
-      font-weight: 700;
-      color: <?= htmlspecialchars($theme['color']) ?>;
-      padding: 6px 0;
-    }
-    details[open] {
-      padding-bottom: 20px;
-    }
-    dialog#deliver-dialog {
-      border: none;
-      border-radius: 12px;
-      padding: 0;
-      width: min(420px, 92vw);
-      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.2);
-    }
-    dialog#deliver-dialog::backdrop {
-      background: rgba(0, 0, 0, 0.35);
-    }
-    .dialog-header {
-      background: <?= htmlspecialchars($theme['color']) ?>;
-      color: white;
-      padding: 16px 20px;
-      font-weight: 700;
-    }
-    .dialog-body {
-      padding: 18px 20px;
-      display: grid;
-      gap: 12px;
-    }
-    .dialog-body label {
-      font-weight: 600;
-      color: #203040;
-    }
-    .dialog-body input[type="date"] {
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid #c7d0d8;
-      width: 100%;
-    }
-    .dialog-actions {
-      padding: 14px 20px 20px;
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-      background: #f4f6f8;
-    }
-    footer {
-      background-color: <?= htmlspecialchars($theme['color']) ?>;
-      color: white;
-      text-align: center;
-      padding: 16px;
-      font-size: 14px;
-      margin-top: 60px;
-      position: relative;
-    }
-    .logout {
-      position: absolute;
-      right: 20px;
-      top: 20px;
-      display: flex;
-      gap: 12px;
-      align-items: center;
-    }
-    .logout a {
-      color: #ccc;
-      font-size: 14px;
-      text-decoration: none;
-    }
-    .logout a:hover {
-      color: white;
-    }
-    .badge {
-      display: inline-block;
-      min-width: 18px;
-      padding: 2px 8px;
-      border-radius: 999px;
-      background: #d7263d;
-      color: #fff;
-      font-size: 12px;
-      font-weight: bold;
-      text-align: center;
-      margin-left: 6px;
-    }
+    /* Specific page overrides */
+    table th { background: var(--brand-color); }
+    .btn-delivered { background-color: #10b981; }
+    .btn-cancel { background-color: #ef4444; }
   </style>
 </head>
 <body class="dashboard-wrapper">
@@ -483,9 +264,7 @@ function render_deal_table(array $deals, bool $showOrgColumn, string $dateLabel,
       <?php endif; ?>
     </nav>
     <div style="padding: 1.5rem; border-top: 1px solid rgba(255,255,255,0.1);">
-      <a href="logout" class="sidebar-link" style="margin-bottom: 0; color: #ef4444;">
-        <i class="fa-solid fa-right-from-bracket"></i> Log Out
-      </a>
+      <p style="font-size: 0.75rem; color: rgba(255,255,255,0.4); margin: 0;">DealerFAI v2.0</p>
     </div>
   </aside>
 
@@ -499,7 +278,7 @@ function render_deal_table(array $deals, bool $showOrgColumn, string $dateLabel,
         <div style="display: flex; align-items: center; gap: 0.75rem;">
           <div style="text-align: right;">
             <div style="font-size: 0.875rem; font-weight: 700; color: #0f172a;"><?= htmlspecialchars($_SESSION['full_name'] ?? 'User') ?></div>
-            <div style="font-size: 0.75rem; color: #64748b;"><?= htmlspecialchars($_SESSION['email'] ?? '') ?></div>
+            <a href="logout" style="font-size: 0.75rem; color: #64748b; text-decoration: none;">Log Out</a>
           </div>
           <div style="width: 40px; height: 40px; background: var(--brand-color); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">
             <?= strtoupper(substr($_SESSION['full_name'] ?? 'U', 0, 1)) ?>
