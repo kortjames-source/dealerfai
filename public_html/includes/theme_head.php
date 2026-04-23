@@ -24,10 +24,10 @@ if (!function_exists('dealerfai_theme_head')) {
     function dealerfai_theme_head(?array $theme = null): void
     {
         $defaults = [
-            'color'             => '#0a6280',
-            'page_background'   => '#f8fafc',
-            'header_background' => '#ffffff',
-            'header_text'       => '#1e293b',
+            'color'             => '#0066cc', // Modern AI Blue
+            'page_background'   => 'transparent', // Let the bg image show through
+            'header_background' => 'rgba(255, 255, 255, 0.5)',
+            'header_text'       => '#0f172a',
             'nav_background'    => '#ffffff',
             'nav_text'          => '#475569',
             'card_background'   => '#ffffff',
