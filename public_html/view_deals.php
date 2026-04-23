@@ -17,7 +17,7 @@ $roles = load_session_roles();
 $isAdmin = in_array('Admin', $roles, true);
 $adminAlertCount = $isAdmin ? get_admin_alert_count($db) : 0;
 
-$theme = dealerfai_get_theme_palette(null, ['color' => '#0a2e36']);
+$theme = dealerfai_get_theme_palette(null, ['color' => '#0066cc']);
 
 if ($org_id) {
   $stmt = $db->prepare("SELECT logo_url, theme_variant FROM organizations WHERE id = ?");
@@ -28,9 +28,9 @@ if ($org_id) {
   }
 }
 
-$orgFilterId = isset($_GET['org']) && $_GET['org'] !== '' ? (int) $_GET['org'] : null;
-$searchQuery = trim((string) ($_GET['q'] ?? ''));
-$monthFilter = trim((string) ($_GET['month'] ?? ''));
+$orgFilterId = isset($_GET['org']) && $_GET['org'] !== '' ? (int)$_GET['org'] : null;
+$searchQuery = trim((string)($_GET['q'] ?? ''));
+$monthFilter = trim((string)($_GET['month'] ?? ''));
 if (!preg_match('/^\d{4}-\d{2}$/', $monthFilter)) {
   $monthFilter = date('Y-m');
 }
@@ -115,7 +115,7 @@ $runDealQuery = static function (array $extraWhere, array $extraParams, string $
   if (!empty($where)) {
     $sql .= " WHERE " . implode(' AND ', $where);
   }
-  $sql .= " ORDER BY {$orderBy} DESC LIMIT " . (int) $maxRowsPerSection;
+  $sql .= " ORDER BY {$orderBy} DESC LIMIT " . (int)$maxRowsPerSection;
   $stmt = $db->prepare($sql);
   $stmt->execute($params);
   return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -151,9 +151,9 @@ function format_deal_date(?string $dateValue): string
 
 function build_vehicle_display(array $deal): string
 {
-  $year = trim((string) ($deal['vehicle_year'] ?? ''));
-  $make = trim((string) ($deal['vehicle_make_name'] ?? ''));
-  $model = trim((string) ($deal['vehicle_model_name'] ?? ''));
+  $year = trim((string)($deal['vehicle_year'] ?? ''));
+  $make = trim((string)($deal['vehicle_make_name'] ?? ''));
+  $model = trim((string)($deal['vehicle_model_name'] ?? ''));
   $label = trim($year . ' ' . $make . ' ' . $model);
   return preg_replace('/\s+/', ' ', $label) ?: '—';
 }
@@ -190,17 +190,15 @@ function render_deal_table(array $deals, bool $showOrgColumn, string $dateLabel,
         <?php endif; ?>
         <td><?= htmlspecialchars($deal['deal_type'] ?? '') ?></td>
         <td><?= htmlspecialchars(build_vehicle_display($deal)) ?></td>
-        <td>$<?= number_format((float) $deal['sale_price'], 2) ?></td>
+        <td>$<?= number_format((float)$deal['sale_price'], 2) ?></td>
         <td><?= htmlspecialchars(format_deal_date($deal[$dateField] ?? null)) ?></td>
-        <td><a class="btn-link" href="view_deal?id=<?= (int) $deal['id'] ?>">Details</a></td>
+        <td><a class="btn-link" href="view_deal?id=<?= (int)$deal['id'] ?>">Details</a></td>
         <?php if ($showActions): ?>
           <td>
             <div class="actions-cell">
-              <button type="button" class="btn-link btn-delivered btn-delivered-trigger"
-                data-deal-id="<?= (int) $deal['id'] ?>">Delivered</button>
-              <form action="update_deal_status" method="POST" class="inline-form"
-                onsubmit="return confirm('Cancel this deal?');">
-                <input type="hidden" name="deal_id" value="<?= (int) $deal['id'] ?>">
+              <button type="button" class="btn-link btn-delivered btn-delivered-trigger" data-deal-id="<?= (int)$deal['id'] ?>">Delivered</button>
+              <form action="update_deal_status" method="POST" class="inline-form" onsubmit="return confirm('Cancel this deal?');">
+                <input type="hidden" name="deal_id" value="<?= (int)$deal['id'] ?>">
                 <input type="hidden" name="status" value="cancelled">
                 <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken) ?>">
                 <button type="submit" class="btn-link btn-cancel">Cancel</button>
@@ -216,372 +214,147 @@ function render_deal_table(array $deals, bool $showOrgColumn, string $dateLabel,
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <?php include __DIR__ . "/includes/head_favicon.php"; ?>
-  <meta charset="UTF-8">
+<meta charset="UTF-8">
   <title>View Deals - DealerFAI</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <?php dealerfai_theme_head($theme ?? null); ?>
   <style nonce="<?= dealerfai_csp_nonce() ?>">
-    body {
-      margin: 0;
-      font-family: "Segoe UI", sans-serif;
-      background-color:
-        <?= htmlspecialchars($theme['page_background']) ?>
-      ;
-      color: #111111;
-    }
-
-    header {
-      background-color:
-        <?= htmlspecialchars($theme['header_background']) ?>
-      ;
-      color:
-        <?= htmlspecialchars($theme['header_text']) ?>
-      ;
-      padding: 30px 40px;
-      text-align: center;
-      position: relative;
-    }
-
-    header img {
-      max-width: 480px;
-      max-height: 180px;
-      height: auto;
-      display: block;
-      margin: 0 auto 10px;
-    }
-
-    nav {
-      background-color:
-        <?= htmlspecialchars($theme['nav_background']) ?>
-      ;
-      padding: 12px;
-      text-align: center;
-    }
-
-    nav a {
-      color:
-        <?= htmlspecialchars($theme['nav_text']) ?>
-      ;
-      margin: 0 20px;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    nav a:hover {
-      text-decoration: underline;
-    }
-
-    .context-note {
-      text-align: center;
-      color: #1f3d5e;
-      font-weight: 600;
-      margin-top: 10px;
-    }
-
-    .filters {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      align-items: center;
-      justify-content: center;
-      margin: 10px 0 20px;
-    }
-
-    .filters input,
-    .filters select {
-      padding: 10px 12px;
-      border-radius: 6px;
-      border: 1px solid #c7d0d8;
-      min-width: 200px;
-    }
-
-    .filters button,
-    .filters a {
-      padding: 10px 16px;
-      border-radius: 6px;
-      border: none;
-      cursor: pointer;
-      font-weight: 600;
-      text-decoration: none;
-    }
-
-    .filters button {
-      background-color:
-        <?= htmlspecialchars($theme['color']) ?>
-      ;
-      color: white;
-    }
-
-    .filters a {
-      background: #e5e9ee;
-      color: #203040;
-    }
-
-    main {
-      padding: 30px 40px;
-    }
-
-    h2 {
-      color:
-        <?= htmlspecialchars($theme['color']) ?>
-      ;
-      text-align: center;
-      margin-bottom: 10px;
-    }
-
-    h3 {
-      color:
-        <?= htmlspecialchars($theme['color']) ?>
-      ;
-      margin-top: 30px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: white;
-      margin-top: 20px;
-      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    th,
-    td {
-      padding: 14px;
-      border-bottom: 1px solid #ddd;
-      text-align: center;
-    }
-
-    th {
-      background-color:
-        <?= htmlspecialchars($theme['color']) ?>
-      ;
-      color: white;
-    }
-
-    tr:hover {
-      background-color: #f1f8fb;
-    }
-
-    .btn-link {
-      background-color:
-        <?= htmlspecialchars($theme['color']) ?>
-      ;
-      color: white;
-      padding: 8px 12px;
-      text-decoration: none;
-      border-radius: 4px;
-      font-weight: bold;
-      border: none;
-      cursor: pointer;
-      display: inline-block;
-    }
-
-    .btn-link:hover {
-      opacity: 0.9;
-    }
-
-    .btn-delivered {
-      background-color: #1f6f7a;
-    }
-
-    .btn-cancel {
-      background-color: #c82333;
-    }
-
-    .actions-cell {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 8px;
-    }
-
-    .inline-form {
-      margin: 0;
-    }
-
-    details {
-      margin-top: 20px;
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
-      padding: 10px 16px;
-    }
-
-    details>summary {
-      cursor: pointer;
-      font-weight: 700;
-      color:
-        <?= htmlspecialchars($theme['color']) ?>
-      ;
-      padding: 6px 0;
-    }
-
-    details[open] {
-      padding-bottom: 20px;
-    }
-
-    dialog#deliver-dialog {
-      border: none;
-      border-radius: 12px;
-      padding: 0;
-      width: min(420px, 92vw);
-      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.2);
-    }
-
-    dialog#deliver-dialog::backdrop {
-      background: rgba(0, 0, 0, 0.35);
-    }
-
-    .dialog-header {
-      background:
-        <?= htmlspecialchars($theme['color']) ?>
-      ;
-      color: white;
-      padding: 16px 20px;
-      font-weight: 700;
-    }
-
-    .dialog-body {
-      padding: 18px 20px;
-      display: grid;
-      gap: 12px;
-    }
-
-    .dialog-body label {
-      font-weight: 600;
-      color: #203040;
-    }
-
-    .dialog-body input[type="date"] {
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid #c7d0d8;
-      width: 100%;
-    }
-
-    .dialog-actions {
-      padding: 14px 20px 20px;
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-      background: #f4f6f8;
-    }
-
-    footer {
-      background-color:
-        <?= htmlspecialchars($theme['color']) ?>
-      ;
-      color: white;
-      text-align: center;
-      padding: 16px;
-      font-size: 14px;
-      margin-top: 60px;
-      position: relative;
-    }
-
-    .logout {
-      position: absolute;
-      right: 20px;
-      top: 20px;
-      display: flex;
-      gap: 12px;
-      align-items: center;
-    }
-
-    .logout a {
-      color: #ccc;
-      font-size: 14px;
-      text-decoration: none;
-    }
-
-    .logout a:hover {
-      color: white;
-    }
-
-    .badge {
-      display: inline-block;
-      min-width: 18px;
-      padding: 2px 8px;
-      border-radius: 999px;
-      background: #d7263d;
-      color: #fff;
-      font-size: 12px;
-      font-weight: bold;
-      text-align: center;
-      margin-left: 6px;
-    }
+    /* Specific page overrides */
+    table th { background: var(--brand-color); }
+    .btn-delivered { background-color: #10b981; }
+    .btn-cancel { background-color: #ef4444; }
   </style>
 </head>
-
-<body>
-  <header>
-    <?php if (!empty($theme['logo'])): ?>
-      <img src="<?= htmlspecialchars($theme['logo']) ?>" alt="Dealer Logo"
-        style="max-height:60px; margin:auto; display:block;">
-    <?php else: ?>
-      <h1>DealerFAI</h1>
-    <?php endif; ?>
-    <div class="logout">
+<body class="dashboard-wrapper">
+  <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header" style="padding: 1.5rem;">
+        <img src="dealerfai_logo_white.png" alt="DealerFAI" style="height: 35px; width: auto;">
+      </div>
+    <nav class="sidebar-nav" style="background: transparent; padding: 1.5rem 1rem;">
+      <a href="dashboard" class="sidebar-link">
+        <i class="fa-solid fa-gauge"></i> Dashboard
+      </a>
+      <a href="view_deals" class="sidebar-link active">
+        <i class="fa-solid fa-file-invoice-dollar"></i> View Deals
+      </a>
+      <a href="create_deal" class="sidebar-link">
+        <i class="fa-solid fa-plus-circle"></i> Create Deal
+      </a>
+      
       <?php if ($isAdmin): ?>
-        <a href="admin_error_alerts">Alerts<?php if ($adminAlertCount > 0): ?> <span
-              class="badge"><?= $adminAlertCount ?></span><?php endif; ?></a>
+        <div style="margin-top: 2rem; padding: 0 1rem; font-size: 0.75rem; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700;">Admin</div>
+        <a href="admin_scoring_log" class="sidebar-link">
+          <i class="fa-solid fa-list-check"></i> Scoring Log
+        </a>
+        <a href="manage_users" class="sidebar-link">
+          <i class="fa-solid fa-users"></i> Users
+        </a>
+        <a href="admin_organizations" class="sidebar-link">
+          <i class="fa-solid fa-building"></i> Organizations
+        </a>
       <?php endif; ?>
-      <a href="logout">Log Out</a>
+
+      <?php if (in_array('General Manager', $roles) || $isAdmin): ?>
+        <a href="admin_tools" class="sidebar-link">
+          <i class="fa-solid fa-wrench"></i> Admin Tools
+        </a>
+      <?php endif; ?>
+    </nav>
+    <div style="padding: 1.5rem; border-top: 1px solid rgba(255,255,255,0.1);">
+      <p style="font-size: 0.75rem; color: rgba(255,255,255,0.4); margin: 0;">DealerFAI v2.0</p>
     </div>
-  </header>
+  </aside>
 
-  <nav>
-    <a href="dashboard">Dashboard</a>
-    <a href="view_deals">View Deals</a>
-    <a href="create_deal">Create Deal</a>
-    <?php if ($isAdmin): ?>
-      <a href="admin_scoring_log">Scoring Log</a>
-    <?php endif; ?>
-    <?php if (in_array('General Manager', $roles, true) || $isAdmin): ?>
-      <a href="admin_tools">Admin Tools</a>
-    <?php endif; ?>
-  </nav>
+  <!-- Main Content -->
+  <div class="main-container">
+    <header class="top-bar">
+      <div class="breadcrumb" style="font-weight: 600; color: #64748b;">
+        DealerFAI <i class="fa-solid fa-chevron-right" style="font-size: 0.75rem; margin: 0 0.5rem; opacity: 0.5;"></i> Deals
+      </div>
+      <div style="display: flex; align-items: center; gap: 1.5rem;">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <div style="text-align: right;">
+            <div style="font-size: 0.875rem; font-weight: 700; color: #0f172a;"><?= htmlspecialchars($_SESSION['full_name'] ?? 'User') ?></div>
+            <a href="logout" style="font-size: 0.75rem; color: #64748b; text-decoration: none;">Log Out</a>
+          </div>
+          <div style="width: 40px; height: 40px; background: var(--brand-color); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">
+            <?= strtoupper(substr($_SESSION['full_name'] ?? 'U', 0, 1)) ?>
+          </div>
+        </div>
+      </div>
+    </header>
 
-  <main>
-    <h2>Your Deals</h2>
-    <?php if ($contextOrgName): ?>
-      <p class="context-note">Now showing <?= htmlspecialchars($contextOrgName) ?> deals.</p>
-    <?php endif; ?>
+    <main class="page-content">
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2rem;">
+        <div>
+          <h1 class="text-gradient" style="margin-bottom: 0.5rem; display: inline-block;">Deals Inventory</h1>
+          <p class="text-muted">Manage and track your customer deals across the platform.</p>
+        </div>
+        <a href="create_deal" class="btn btn-primary"><i class="fa-solid fa-plus" style="margin-right: 0.5rem;"></i> New Deal</a>
+      </div>
 
-    <form class="filters" method="get" action="view_deals">
-      <?php if ($isAdmin && !empty($organizationOptions)): ?>
-        <select name="org">
-          <option value="">All Stores</option>
-          <?php foreach ($organizationOptions as $orgOption): ?>
-            <option value="<?= (int) $orgOption['id'] ?>" <?= ($orgFilterId === (int) $orgOption['id']) ? 'selected' : '' ?>>
-              <?= htmlspecialchars($orgOption['name']) ?>
-            </option>
-          <?php endforeach; ?>
-        </select>
+      <?php if ($contextOrgName): ?>
+        <p class="context-note">Now showing <?= htmlspecialchars($contextOrgName) ?> deals.</p>
       <?php endif; ?>
-      <input type="text" name="q" placeholder="Search deal #, phone, email, or customer"
-        value="<?= htmlspecialchars($searchQuery) ?>">
-      <input type="month" name="month" value="<?= htmlspecialchars($monthFilter) ?>">
-      <button type="submit">Search</button>
-      <a href="view_deals">Clear</a>
-    </form>
 
-    <h3>Active Deals</h3>
-    <?php render_deal_table($activeDeals, $showOrgColumn, 'Created Date', 'created_at', false, $_SESSION['csrf_token']); ?>
+      <div class="glass" style="padding: 1.5rem; margin-bottom: 2.5rem; border: 1px solid var(--border-color);">
+        <form class="filters" method="get" action="view_deals" style="display: flex; gap: 1rem; align-items: center; justify-content: flex-start; margin: 0;">
+          <?php if ($isAdmin && !empty($organizationOptions)): ?>
+            <select name="org" class="form-control" style="min-width: 200px; margin: 0;">
+              <option value="">All Stores</option>
+              <?php foreach ($organizationOptions as $orgOption): ?>
+                <option value="<?= (int)$orgOption['id'] ?>" <?= ($orgFilterId === (int)$orgOption['id']) ? 'selected' : '' ?>>
+                  <?= htmlspecialchars($orgOption['name']) ?>
+                </option>
+              <?php endforeach; ?>
+            </select>
+          <?php endif; ?>
+          <div style="flex: 1; position: relative;">
+            <i class="fa-solid fa-search" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #94a3b8;"></i>
+            <input type="text" name="q" class="form-control" placeholder="Search deal #, phone, email, or customer" value="<?= htmlspecialchars($searchQuery) ?>" style="padding-left: 2.5rem; margin: 0;">
+          </div>
+          <input type="month" name="month" class="form-control" value="<?= htmlspecialchars($monthFilter) ?>" style="max-width: 200px; margin: 0;">
+          <button type="submit" class="btn">Filter</button>
+          <a href="view_deals" class="btn btn-secondary">Clear</a>
+        </form>
+      </div>
 
-    <details>
-      <summary>Booked Deals (<?= count($bookedDeals) ?>) · <?= htmlspecialchars($monthLabel) ?></summary>
-      <?php render_deal_table($bookedDeals, $showOrgColumn, 'Delivered Date', 'delivered_date', false, $_SESSION['csrf_token']); ?>
-    </details>
+      <div class="data-table-card">
+        <div class="data-table-header">
+          <h3 style="margin: 0;">Active Deals</h3>
+        </div>
+        <div style="overflow-x: auto;">
+          <?php render_deal_table($activeDeals, $showOrgColumn, 'Created Date', 'created_at', false, $_SESSION['csrf_token']); ?>
+        </div>
+      </div>
 
-    <details>
-      <summary>Cancelled Deals (<?= count($cancelledDeals) ?>) · <?= htmlspecialchars($monthLabel) ?></summary>
-      <?php render_deal_table($cancelledDeals, $showOrgColumn, 'Cancelled Date', 'cancelled_date', false, $_SESSION['csrf_token']); ?>
-    </details>
-  </main>
+      <div class="data-table-card" style="margin-top: 2rem;">
+        <details style="box-shadow: none; border-radius: 0; padding: 0;">
+          <summary style="padding: 1.5rem; border-bottom: 1px solid #e2e8f0; list-style: none; display: flex; align-items: center; gap: 0.5rem;">
+            <i class="fa-solid fa-chevron-down" style="font-size: 0.75rem;"></i>
+            <h3 style="margin: 0; display: inline-block;">Booked Deals (<?= count($bookedDeals) ?>) · <?= htmlspecialchars($monthLabel) ?></h3>
+          </summary>
+          <div style="overflow-x: auto;">
+            <?php render_deal_table($bookedDeals, $showOrgColumn, 'Delivered Date', 'delivered_date', false, $_SESSION['csrf_token']); ?>
+          </div>
+        </details>
+      </div>
+
+      <div class="data-table-card" style="margin-top: 2rem;">
+        <details style="box-shadow: none; border-radius: 0; padding: 0;">
+          <summary style="padding: 1.5rem; border-bottom: 1px solid #e2e8f0; list-style: none; display: flex; align-items: center; gap: 0.5rem;">
+            <i class="fa-solid fa-chevron-down" style="font-size: 0.75rem;"></i>
+            <h3 style="margin: 0; display: inline-block;">Cancelled Deals (<?= count($cancelledDeals) ?>) · <?= htmlspecialchars($monthLabel) ?></h3>
+          </summary>
+          <div style="overflow-x: auto;">
+            <?php render_deal_table($cancelledDeals, $showOrgColumn, 'Cancelled Date', 'cancelled_date', false, $_SESSION['csrf_token']); ?>
+          </div>
+        </details>
+      </div>
+    </main>
 
   <dialog id="deliver-dialog">
     <div class="dialog-header">Mark Deal as Delivered</div>
@@ -636,5 +409,4 @@ function render_deal_table(array $deals, bool $showOrgColumn, string $dateLabel,
     });
   </script>
 </body>
-
 </html>

@@ -23,7 +23,7 @@ $normalizeOrgIds = static function (array $orgs): array {
       continue;
     }
     if (is_string($org) && ctype_digit($org)) {
-      $org = (int) $org;
+      $org = (int)$org;
     }
     if (is_int($org)) {
       $normalized[] = $org;
@@ -37,20 +37,20 @@ $orgNames = [];
 if ($isAdmin) {
   $orgStmt = $db->query("SELECT id, name FROM organizations ORDER BY name ASC");
   while ($row = $orgStmt->fetch(PDO::FETCH_ASSOC)) {
-    $orgNames[(int) $row['id']] = $row['name'];
+    $orgNames[(int)$row['id']] = $row['name'];
   }
   $accessible_orgs = array_keys($orgNames);
 } elseif (!empty($accessible_orgs)) {
   $orgStmt = $db->prepare("SELECT id, name FROM organizations WHERE id IN (" . implode(',', array_fill(0, count($accessible_orgs), '?')) . ")");
   $orgStmt->execute($accessible_orgs);
   while ($row = $orgStmt->fetch(PDO::FETCH_ASSOC)) {
-    $orgNames[(int) $row['id']] = $row['name'];
+    $orgNames[(int)$row['id']] = $row['name'];
   }
 } elseif ($org_id) {
   $orgStmt = $db->prepare("SELECT id, name FROM organizations WHERE id = ?");
   $orgStmt->execute([$org_id]);
   if ($row = $orgStmt->fetch(PDO::FETCH_ASSOC)) {
-    $orgNames[(int) $row['id']] = $row['name'];
+    $orgNames[(int)$row['id']] = $row['name'];
   }
 }
 
@@ -65,7 +65,7 @@ if ($org_id) {
   }
 }
 
-$selectedOrgParam = isset($_GET['org']) ? (int) $_GET['org'] : null;
+$selectedOrgParam = isset($_GET['org']) ? (int)$_GET['org'] : null;
 if ($orgContextId) {
   $selectedOrg = $orgContextId;
 } elseif ($selectedOrgParam && ($isAdmin ? array_key_exists($selectedOrgParam, $orgNames) : in_array($selectedOrgParam, $accessible_orgs, true))) {
@@ -80,7 +80,7 @@ if (empty($target_orgs)) {
   $target_orgs = [$org_id ?: 0];
 }
 
-$dealFilter = isset($_GET['deal_id']) ? (int) $_GET['deal_id'] : null;
+$dealFilter = isset($_GET['deal_id']) ? (int)$_GET['deal_id'] : null;
 
 $params = [];
 $whereClauses = [];
@@ -150,7 +150,7 @@ foreach ($rows as $row) {
 
 foreach ($grouped as &$deal) {
   usort($deal['products'], function (array $a, array $b): int {
-    return (int) $b['match_score'] <=> (int) $a['match_score'];
+    return (int)$b['match_score'] <=> (int)$a['match_score'];
   });
 }
 unset($deal);
@@ -158,10 +158,9 @@ unset($deal);
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <?php include __DIR__ . "/includes/head_favicon.php"; ?>
-  <meta charset="UTF-8">
+<meta charset="UTF-8">
   <title>Admin Scoring Log</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <?php dealerfai_theme_head($theme ?? null); ?>
@@ -172,17 +171,13 @@ unset($deal);
       background-color: #f4f6f8;
       color: #111111;
     }
-
     header {
-      background-color:
-        <?= htmlspecialchars($theme['color']) ?>
-      ;
+      background-color: <?= htmlspecialchars($theme['color']) ?>;
       color: white;
       padding: 30px 40px;
       text-align: center;
       position: relative;
     }
-
     header img {
       max-width: 480px;
       max-height: 180px;
@@ -190,94 +185,78 @@ unset($deal);
       display: block;
       margin: 0 auto 10px;
     }
-
     nav {
-      background-color:
-        <?= htmlspecialchars($theme['color']) ?>
-      ;
+      background-color: <?= htmlspecialchars($theme['color']) ?>;
       padding: 12px;
       text-align: center;
     }
-
     nav a {
       color: white;
       margin: 0 20px;
       text-decoration: none;
       font-weight: bold;
     }
-
     main {
       padding: 30px 40px;
     }
-
     .filter-bar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      justify-content: center;
-      margin-bottom: 20px;
-      align-items: center;
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      justify-content:center;
+      margin-bottom:20px;
+      align-items:center;
     }
-
     .filter-bar select,
     .filter-bar input {
-      padding: 8px 10px;
-      border-radius: 4px;
-      border: 1px solid #ccc;
+      padding:8px 10px;
+      border-radius:4px;
+      border:1px solid #ccc;
     }
-
     .filter-bar button {
-      padding: 8px 14px;
-      border: none;
-      border-radius: 4px;
-      background: #0066cc;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
+      padding:8px 14px;
+      border:none;
+      border-radius:4px;
+      background:#0066cc;
+      color:white;
+      font-weight:bold;
+      cursor:pointer;
     }
-
     .context-note {
-      text-align: center;
-      color: #1f3d5e;
-      font-weight: 600;
-      margin-bottom: 20px;
+      text-align:center;
+      color:#1f3d5e;
+      font-weight:600;
+      margin-bottom:20px;
     }
-
     .deal-card {
-      background: white;
-      border-radius: 10px;
-      padding: 18px;
-      margin-bottom: 24px;
-      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+      background:white;
+      border-radius:10px;
+      padding:18px;
+      margin-bottom:24px;
+      box-shadow:0 2px 12px rgba(0,0,0,0.1);
     }
-
     .deal-card h3 {
-      margin: 0 0 4px;
-      color: #0066cc;
+      margin:0 0 4px;
+      color:#0066cc;
     }
-
     .product-row {
-      border-top: 1px solid #e1e8f1;
-      padding: 12px 0;
+      border-top:1px solid #e1e8f1;
+      padding:12px 0;
     }
-
     .product-row:first-of-type {
-      border-top: none;
+      border-top:none;
     }
-
     .product-name {
-      font-weight: 600;
-      margin: 0;
+      font-weight:600;
+      margin:0;
     }
-
     .product-meta {
-      font-size: 0.9rem;
-      color: #555;
-      margin: 2px 0;
+      font-size:0.9rem;
+      color:#555;
+      margin:2px 0;
     }
   </style>
 </head>
-
 <body>
   <header>
     <?php if (!empty($theme['logo'])): ?>
@@ -286,9 +265,7 @@ unset($deal);
       <h1>DealerFAI Admin</h1>
     <?php endif; ?>
     <div style="position:absolute; top:24px; right:32px; display:flex; gap:12px; align-items:center;">
-      <a href="admin_error_alerts.php"
-        style="color:#fff; text-decoration:none;">Alerts<?php if ($adminAlertCount > 0): ?> <span
-            style="display:inline-block; min-width:18px; padding:2px 8px; border-radius:999px; background:#d7263d; color:#fff; font-size:12px; font-weight:bold; text-align:center; margin-left:6px;"><?= $adminAlertCount ?></span><?php endif; ?></a>
+      <a href="admin_error_alerts.php" style="color:#fff; text-decoration:none;">Alerts<?php if ($adminAlertCount > 0): ?> <span style="display:inline-block; min-width:18px; padding:2px 8px; border-radius:999px; background:#d7263d; color:#fff; font-size:12px; font-weight:bold; text-align:center; margin-left:6px;"><?= $adminAlertCount ?></span><?php endif; ?></a>
       <a href="logout.php" style="color:#fff; text-decoration:none;">Log Out</a>
     </div>
   </header>
@@ -319,8 +296,7 @@ unset($deal);
       </label>
       <label>
         Deal ID:
-        <input type="number" name="deal_id" value="<?= htmlspecialchars($_GET['deal_id'] ?? '') ?>" min="1"
-          placeholder="123">
+        <input type="number" name="deal_id" value="<?= htmlspecialchars($_GET['deal_id'] ?? '') ?>" min="1" placeholder="123">
       </label>
       <button type="submit">Apply filters</button>
     </form>
@@ -330,14 +306,14 @@ unset($deal);
       <?php foreach ($ord as $dealId): ?>
         <?php $deal = $grouped[$dealId]; ?>
         <?php
-        $displayScoredAt = '';
-        if (!empty($deal['latest_scored_at'])) {
-          try {
-            $displayScoredAt = (new DateTime($deal['latest_scored_at']))->format('d-m-Y H:i');
-          } catch (Exception $e) {
-            $displayScoredAt = $deal['latest_scored_at'];
+          $displayScoredAt = '';
+          if (!empty($deal['latest_scored_at'])) {
+            try {
+              $displayScoredAt = (new DateTime($deal['latest_scored_at']))->format('d-m-Y H:i');
+            } catch (Exception $e) {
+              $displayScoredAt = $deal['latest_scored_at'];
+            }
           }
-        }
         ?>
         <details class="deal-card">
           <summary>
@@ -367,5 +343,4 @@ unset($deal);
     <?php endif; ?>
   </main>
 </body>
-
 </html>
