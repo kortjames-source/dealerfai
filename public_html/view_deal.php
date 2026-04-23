@@ -1109,7 +1109,6 @@ if (!empty($orgData)) {
     $capPercent = $isLeaseDeal ? $leaseCapPercent : ($isFinanceDeal ? $financeCapPercent : null);
 $capPercentDisplay = $capPercent;
     }
-}
 
     $creditAppLocked = !empty($deal['credit_app_locked']);
 $isLeaseDeal = strcasecmp((string)($deal['deal_type'] ?? ''), 'Lease') === 0;
