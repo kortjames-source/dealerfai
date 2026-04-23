@@ -109,7 +109,7 @@ require_once __DIR__ . '/includes/theme_head.php';
   <main style="padding-top: 2rem;">
     <section class="hero-box glass text-center" style="padding: 4rem 2rem 6rem;">
       <div style="margin-bottom: 2rem;">
-        <img src="dealerfai_logo_modern.png" alt="DealerFAI Logo" style="height: 140px; filter: brightness(0) invert(1);">
+        <img src="dealerfai_logo_modern.png" alt="DealerFAI Logo" style="height: 120px;">
       </div>
       <h1 class="text-gradient" style="font-size: 3.5rem; margin-bottom: 1rem; line-height: 1.1;">Intelligent Deal Management</h1>
       <p class="text-muted" style="font-size: 1.25rem; max-width: 700px; margin: 0 auto 2.5rem;">
@@ -150,7 +150,7 @@ require_once __DIR__ . '/includes/theme_head.php';
   </main>
 
   <footer style="background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(10px); color: white; padding: 4rem 2rem; text-align: center; margin-top: 4rem;">
-    <img src="dealerfai_logo_modern.png" alt="DealerFAI Logo" style="height: 100px; margin-bottom: 1.5rem; filter: brightness(0) invert(1);">
+    <img src="dealerfai_logo_modern.png" alt="DealerFAI Logo" style="height: 80px; margin-bottom: 1.5rem; filter: contrast(1.1);">
     <p style="opacity: 0.6; max-width: 500px; margin: 0 auto 2rem;">
       DealerFAI is a premium platform designed for the modern automotive industry. 
       Built with security and scalability at its core.
