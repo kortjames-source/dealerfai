@@ -247,223 +247,297 @@ if ($hasBusinessesTable && $org) {
     }
   </style>
 </head>
-<body>
-
-<header>
-  <?php if (!empty($theme['logo'])): ?>
-    <img src="<?= htmlspecialchars($theme['logo']) ?>" alt="Dealer Logo">
-  <?php else: ?>
-    <h1>DealerFAI</h1>
-  <?php endif; ?>
-  <div class="logout">
-    <?php if ($isAdmin): ?>
-      <a href="admin_error_alerts.php">Alerts<?php if ($adminAlertCount > 0): ?> <span class="badge"><?= $adminAlertCount ?></span><?php endif; ?></a>
-    <?php endif; ?>
-    <a href="logout.php">Log Out</a>
-  </div>
-</header>
-
-<nav>
-  <a href="dashboard">Dashboard</a>
-  <a href="view_deals">View Deals</a>
-  <a href="create_deal">Create Deal</a>
-  <?php if (in_array('General Manager', $_SESSION['roles']) || in_array('Admin', $_SESSION['roles'])): ?>
-    <a href="admin_tools">Admin Tools</a>
-  <?php endif; ?>
-</nav>
-
-<main>
-<form method="post" id="create-deal-form">
-  <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken, ENT_QUOTES, 'UTF-8') ?>">
-  <div class="card">
-    <h2>Create Deal – Step 1 of 3</h2>
-
-    <?php if ($isAdmin && !empty($orgOptions)): ?>
-      <label for="organization">Store</label>
-      <select name="organization" id="organization" onchange="switchOrganization()" required>
-        <?php foreach ($orgOptions as $orgOption): ?>
-          <option value="<?= $orgOption['id'] ?>" <?= ($orgOption['id'] == $org) ? 'selected' : '' ?>>
-            <?= htmlspecialchars($orgOption['name']) ?>
-          </option>
-        <?php endforeach; ?>
-      </select>
-    <?php endif; ?>
-
-    <input type="hidden" name="action" id="form_action" value="">
-
-    <label>Deal Number</label>
-    <input type="text" name="deal_number" value="<?= htmlspecialchars($_SESSION['deal_draft']['deal_number'] ?? '') ?>" required>
-
-    <label>Customer Number</label>
-    <input type="text" name="customer_number" value="<?= htmlspecialchars($_SESSION['deal_draft']['customer_number'] ?? '') ?>">
-
-    <label>Customer Name</label>
-    <input type="text" id="customer_name" name="customer_name" value="<?= htmlspecialchars($_SESSION['deal_draft']['customer_name'] ?? '') ?>" required>
-
-    <label>Phone Number</label>
-    <input type="text" name="customer_phone" value="<?= htmlspecialchars($_SESSION['deal_draft']['customer_phone'] ?? '') ?>">
-
-    <label>Email</label>
-    <input type="email" name="customer_email" value="<?= htmlspecialchars($_SESSION['deal_draft']['customer_email'] ?? '') ?>">
-
-    <label>Customer Type</label>
-    <?php $selectedCustomerType = normalize_customer_type($_SESSION['deal_draft']['customer_type'] ?? 'personal'); ?>
-    <select name="customer_type" id="customer_type" onchange="toggleCustomerTypeUi()" required>
-      <option value="personal" <?= $selectedCustomerType === 'personal' ? 'selected' : '' ?>>Personal</option>
-      <option value="professional" <?= $selectedCustomerType === 'professional' ? 'selected' : '' ?>>Professional (Business Buyer)</option>
-      <option value="commercial" <?= $selectedCustomerType === 'commercial' ? 'selected' : '' ?>>Commercial (Business)</option>
-    </select>
-
-    <div id="business_block" style="display:none; margin-top: 10px; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; background: #f8fafc;">
-      <div style="font-weight: 700; margin-bottom: 6px;">Business Buyer</div>
-
-      <?php if ($hasBusinessesTable): ?>
-        <label for="business_id">Select Existing Business (optional)</label>
-        <select name="business_id" id="business_id" onchange="toggleBusinessNameRequired()">
-          <option value="">-- New Business --</option>
-          <?php foreach ($businesses as $biz): ?>
-            <option value="<?= (int)$biz['id'] ?>" <?= (int)($_SESSION['deal_draft']['business_id'] ?? 0) === (int)$biz['id'] ? 'selected' : '' ?>>
-              <?= htmlspecialchars((string)$biz['name']) ?>
-            </option>
-          <?php endforeach; ?>
-        </select>
+<body class="dashboard-wrapper">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header" style="padding: 1.5rem;">
+      <img src="dealerfai_logo_white.png" alt="DealerFAI" style="height: 35px; width: auto;">
+    </div>
+    <nav class="sidebar-nav" style="background: transparent; padding: 1.5rem 1rem;">
+      <a href="dashboard" class="sidebar-link">
+        <i class="fa-solid fa-gauge"></i> Dashboard
+      </a>
+      <a href="view_deals" class="sidebar-link">
+        <i class="fa-solid fa-file-invoice-dollar"></i> View Deals
+      </a>
+      <a href="create_deal" class="sidebar-link active">
+        <i class="fa-solid fa-plus-circle"></i> Create Deal
+      </a>
+      
+      <?php if ($isAdmin): ?>
+        <div style="margin-top: 2rem; padding: 0 1rem; font-size: 0.75rem; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700;">Admin</div>
+        <a href="admin_scoring_log" class="sidebar-link">
+          <i class="fa-solid fa-list-check"></i> Scoring Log
+        </a>
+        <a href="manage_users" class="sidebar-link">
+          <i class="fa-solid fa-users"></i> Users
+        </a>
+        <a href="admin_organizations" class="sidebar-link">
+          <i class="fa-solid fa-building"></i> Organizations
+        </a>
+        <a href="admin_tools" class="sidebar-link">
+          <i class="fa-solid fa-wrench"></i> Admin Tools
+        </a>
       <?php endif; ?>
+    </nav>
+    <div style="padding: 1.5rem; border-top: 1px solid rgba(255,255,255,0.1);">
+      <p style="font-size: 0.75rem; color: rgba(255,255,255,0.4); margin: 0;">DealerFAI v2.0</p>
+    </div>
+  </aside>
 
-      <label for="business_name">Business Name</label>
-      <input type="text" name="business_name" id="business_name" value="<?= htmlspecialchars($_SESSION['deal_draft']['business_name'] ?? '') ?>">
-
-      <div style="font-size: 12px; color: #475467; margin-top: 6px;">
-        For Professional/Commercial deals we can collect more business details from the customer during the application.
+  <!-- Main Content -->
+  <div class="main-container">
+    <header class="top-bar">
+      <div class="breadcrumb" style="font-weight: 600; color: #64748b;">
+        DealerFAI <i class="fa-solid fa-chevron-right" style="font-size: 0.75rem; margin: 0 0.5rem; opacity: 0.5;"></i> Create Deal
       </div>
-    </div>
+      <div style="display: flex; align-items: center; gap: 1.5rem;">
+        <?php if ($isAdmin): ?>
+          <a href="admin_error_alerts" style="position: relative; color: #64748b;">
+            <i class="fa-solid fa-bell" style="font-size: 1.25rem;"></i>
+            <?php if ($adminAlertCount > 0): ?>
+              <span style="position: absolute; top: -5px; right: -5px; background: #ef4444; color: white; font-size: 10px; padding: 2px 5px; border-radius: 10px; font-weight: 700;"><?= $adminAlertCount ?></span>
+            <?php endif; ?>
+          </a>
+        <?php endif; ?>
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <div style="text-align: right;">
+            <div style="font-size: 0.875rem; font-weight: 700; color: #0f172a;"><?= htmlspecialchars($_SESSION['full_name'] ?? 'User') ?></div>
+            <a href="logout" style="font-size: 0.75rem; color: #64748b; text-decoration: none;">Log Out</a>
+          </div>
+          <div style="width: 40px; height: 40px; background: var(--brand-color); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">
+            <?= strtoupper(substr($_SESSION['full_name'] ?? 'U', 0, 1)) ?>
+          </div>
+        </div>
+      </div>
+    </header>
 
-    <label>
-      <input type="checkbox" id="co_app_required" name="co_app_required" value="1" <?= !empty($_SESSION['deal_draft']['co_app_required']) ? 'checked' : '' ?> onchange="toggleCoSignerUi()">
-      Add Co-Signer
-    </label>
-    <div id="co_app_name_wrap" class="d-none">
-      <label for="co_app_name">Co-Signer Name</label>
-      <input type="text" id="co_app_name" name="co_app_name" value="<?= htmlspecialchars($_SESSION['deal_draft']['co_app_name'] ?? '') ?>">
-    </div>
-    
-    <label>Province</label>
-<select name="province" required>
-  <option value="">-- Please select a province --</option>
-  <?php
-    $provinces = ['AB','BC','MB','NB','NL','NS','NT','NU','ON','PE','QC','SK','YT'];
-    foreach ($provinces as $code):
-      $selected = ($_SESSION['deal_draft']['province'] ?? '') === $code ? 'selected' : '';
-      echo "<option value='$code' $selected>$code</option>";
-    endforeach;
-  ?>
-</select>
+    <main class="page-content" style="max-width: 800px;">
+      <div style="margin-bottom: 2rem;">
+        <h1 class="text-gradient" style="margin-bottom: 0.5rem; display: inline-block;">Create New Deal</h1>
+        <p class="text-muted">Start by entering the primary customer and deal information.</p>
+      </div>
 
-    <label>Assign Finance Manager</label>
-    <select name="finance_manager_id">
-      <option value="">-- None --</option>
-      <?php foreach ($financeManagers as $fm): ?>
-        <option value="<?= $fm['id'] ?>"
-          <?= ($fm['id'] == ($_SESSION['deal_draft']['finance_manager_id'] ?? '')) ? 'selected' : '' ?>>
-          <?= htmlspecialchars($fm['full_name']) ?>
-        </option>
-      <?php endforeach; ?>
-    </select>
+      <div style="display: flex; gap: 0.5rem; margin-bottom: 2rem;">
+        <div style="width: 12px; height: 12px; border-radius: 50%; background: var(--brand-color);"></div>
+        <div style="width: 12px; height: 12px; border-radius: 50%; background: #e2e8f0;"></div>
+        <div style="width: 12px; height: 12px; border-radius: 50%; background: #e2e8f0;"></div>
+      </div>
 
-    <label>Assign Sales Manager</label>
-    <select name="sales_manager_id">
-      <option value="">-- None --</option>
-      <?php foreach ($salesManagers as $sm): ?>
-        <option value="<?= $sm['id'] ?>"
-          <?= ($sm['id'] == ($_SESSION['deal_draft']['sales_manager_id'] ?? '')) ? 'selected' : '' ?>>
-          <?= htmlspecialchars($sm['full_name']) ?>
-        </option>
-      <?php endforeach; ?>
-    </select>
+      <form method="post" id="create-deal-form">
+        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken, ENT_QUOTES, 'UTF-8') ?>">
+        <div class="card" style="margin: 0; max-width: 100%;">
+          <h3 style="margin-top: 0; margin-bottom: 1.5rem; font-size: 1.125rem; font-weight: 800; color: #0f172a; border-bottom: 1px solid #f1f5f9; padding-bottom: 0.75rem;">Step 1: Customer Details</h3>
 
-    <label>Assign Sales Advisor</label>
-    <select name="sales_advisor_id">
-      <option value="">-- None --</option>
-      <?php foreach ($salesAdvisors as $sa): ?>
-        <option value="<?= $sa['id'] ?>"
-          <?= ($sa['id'] == ($_SESSION['deal_draft']['sales_advisor_id'] ?? '')) ? 'selected' : '' ?>>
-          <?= htmlspecialchars($sa['full_name']) ?>
-        </option>
-      <?php endforeach; ?>
-    </select>
+          <?php if ($isAdmin && !empty($orgOptions)): ?>
+            <div style="margin-bottom: 1.5rem;">
+              <label for="organization" style="margin-top: 0;">Store Location</label>
+              <select name="organization" id="organization" onchange="switchOrganization()" required>
+                <?php foreach ($orgOptions as $orgOption): ?>
+                  <option value="<?= $orgOption['id'] ?>" <?= ($orgOption['id'] == $org) ? 'selected' : '' ?>>
+                    <?= htmlspecialchars($orgOption['name']) ?>
+                  </option>
+                <?php endforeach; ?>
+              </select>
+            </div>
+          <?php endif; ?>
 
-    <button type="submit" class="btn">Next Step →</button>
+          <input type="hidden" name="action" id="form_action" value="">
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+            <div style="margin-bottom: 1rem;">
+              <label for="deal_number">Deal Number</label>
+              <input type="text" name="deal_number" id="deal_number" value="<?= htmlspecialchars($_SESSION['deal_draft']['deal_number'] ?? '') ?>" required>
+            </div>
+            <div style="margin-bottom: 1rem;">
+              <label for="customer_number">Customer Number (Optional)</label>
+              <input type="text" name="customer_number" id="customer_number" value="<?= htmlspecialchars($_SESSION['deal_draft']['customer_number'] ?? '') ?>">
+            </div>
+          </div>
+
+          <div style="margin-bottom: 1.5rem;">
+            <label for="customer_name" id="customer_name_label">Customer Name</label>
+            <input type="text" id="customer_name" name="customer_name" value="<?= htmlspecialchars($_SESSION['deal_draft']['customer_name'] ?? '') ?>" required>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+            <div style="margin-bottom: 1rem;">
+              <label for="customer_phone">Phone Number</label>
+              <input type="tel" name="customer_phone" id="customer_phone" value="<?= htmlspecialchars($_SESSION['deal_draft']['customer_phone'] ?? '') ?>">
+            </div>
+            <div style="margin-bottom: 1rem;">
+              <label for="customer_email">Email Address</label>
+              <input type="email" name="customer_email" id="customer_email" value="<?= htmlspecialchars($_SESSION['deal_draft']['customer_email'] ?? '') ?>">
+            </div>
+          </div>
+
+          <div style="margin-bottom: 1.5rem;">
+            <label for="customer_type">Customer Type</label>
+            <?php $selectedCustomerType = normalize_customer_type($_SESSION['deal_draft']['customer_type'] ?? 'personal'); ?>
+            <select name="customer_type" id="customer_type" onchange="toggleCustomerTypeUi()" required>
+              <option value="personal" <?= $selectedCustomerType === 'personal' ? 'selected' : '' ?>>Personal</option>
+              <option value="professional" <?= $selectedCustomerType === 'professional' ? 'selected' : '' ?>>Professional (Business Buyer)</option>
+              <option value="commercial" <?= $selectedCustomerType === 'commercial' ? 'selected' : '' ?>>Commercial (Business)</option>
+            </select>
+          </div>
+
+          <div id="business_block" style="display:none; margin-bottom: 1.5rem; padding: 1.25rem; border-radius: var(--radius-md); background: #f8fafc; border: 1px solid #e2e8f0;">
+            <div style="font-weight: 700; color: #1e293b; margin-bottom: 1rem; font-size: 0.875rem;">Business Details</div>
+
+            <?php if ($hasBusinessesTable): ?>
+              <div style="margin-bottom: 1rem;">
+                <label for="business_id">Select Existing Business</label>
+                <select name="business_id" id="business_id" onchange="toggleBusinessNameRequired()">
+                  <option value="">-- New Business --</option>
+                  <?php foreach ($businesses as $biz): ?>
+                    <option value="<?= (int)$biz['id'] ?>" <?= (int)($_SESSION['deal_draft']['business_id'] ?? 0) === (int)$biz['id'] ? 'selected' : '' ?>>
+                      <?= htmlspecialchars((string)$biz['name']) ?>
+                    </option>
+                  <?php endforeach; ?>
+                </select>
+              </div>
+            <?php endif; ?>
+
+            <div style="margin-bottom: 0;">
+              <label for="business_name">Business Name</label>
+              <input type="text" name="business_name" id="business_name" value="<?= htmlspecialchars($_SESSION['deal_draft']['business_name'] ?? '') ?>">
+            </div>
+          </div>
+
+          <div style="margin-bottom: 1.5rem;">
+            <label style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer; user-select: none;">
+              <input type="checkbox" id="co_app_required" name="co_app_required" value="1" <?= !empty($_SESSION['deal_draft']['co_app_required']) ? 'checked' : '' ?> onchange="toggleCoSignerUi()" style="width: auto; margin-top: 0;">
+              <span>Include a Co-Signer on this deal</span>
+            </label>
+          </div>
+
+          <div id="co_app_name_wrap" style="display: none; margin-bottom: 1.5rem;">
+            <label for="co_app_name">Co-Signer Name</label>
+            <input type="text" id="co_app_name" name="co_app_name" value="<?= htmlspecialchars($_SESSION['deal_draft']['co_app_name'] ?? '') ?>">
+          </div>
+          
+          <div style="margin-bottom: 1.5rem;">
+            <label for="province">Province / Territory</label>
+            <select name="province" id="province" required>
+              <option value="">-- Select Province --</option>
+              <?php
+                $provinces = ['AB','BC','MB','NB','NL','NS','NT','NU','ON','PE','QC','SK','YT'];
+                foreach ($provinces as $code):
+                  $selected = ($_SESSION['deal_draft']['province'] ?? '') === $code ? 'selected' : '';
+                  echo "<option value='$code' $selected>$code</option>";
+                endforeach;
+              ?>
+            </select>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-top: 2rem; border-top: 1px solid #f1f5f9; padding-top: 1.5rem;">
+            <div>
+              <label for="finance_manager_id">Finance Manager</label>
+              <select name="finance_manager_id" id="finance_manager_id">
+                <option value="">-- Not Assigned --</option>
+                <?php foreach ($financeManagers as $fm): ?>
+                  <option value="<?= $fm['id'] ?>" <?= ($fm['id'] == ($_SESSION['deal_draft']['finance_manager_id'] ?? '')) ? 'selected' : '' ?>>
+                    <?= htmlspecialchars($fm['full_name']) ?>
+                  </option>
+                <?php endforeach; ?>
+              </select>
+            </div>
+            <div>
+              <label for="sales_manager_id">Sales Manager</label>
+              <select name="sales_manager_id" id="sales_manager_id">
+                <option value="">-- Not Assigned --</option>
+                <?php foreach ($salesManagers as $sm): ?>
+                  <option value="<?= $sm['id'] ?>" <?= ($sm['id'] == ($_SESSION['deal_draft']['sales_manager_id'] ?? '')) ? 'selected' : '' ?>>
+                    <?= htmlspecialchars($sm['full_name']) ?>
+                  </option>
+                <?php endforeach; ?>
+              </select>
+            </div>
+            <div>
+              <label for="sales_advisor_id">Sales Advisor</label>
+              <select name="sales_advisor_id" id="sales_advisor_id">
+                <option value="">-- Not Assigned --</option>
+                <?php foreach ($salesAdvisors as $sa): ?>
+                  <option value="<?= $sa['id'] ?>" <?= ($sa['id'] == ($_SESSION['deal_draft']['sales_advisor_id'] ?? '')) ? 'selected' : '' ?>>
+                    <?= htmlspecialchars($sa['full_name']) ?>
+                  </option>
+                <?php endforeach; ?>
+              </select>
+            </div>
+          </div>
+
+          <div style="margin-top: 2.5rem; text-align: right;">
+            <button type="submit" class="btn btn-primary" style="min-width: 200px;">Save & Next Step <i class="fa-solid fa-arrow-right" style="margin-left: 0.5rem;"></i></button>
+          </div>
+        </div>
+      </form>
+    </main>
+
+    <footer style="background: white; border-top: 1px solid #e2e8f0; color: #64748b; padding: 1.5rem; text-align: center; position: static;">
+      &copy; <?= date("Y") ?> DealerFAI. All rights reserved.
+    </footer>
   </div>
-</form>
-</main>
 
-<footer>
-  &copy; <?= date("Y") ?> DealerFAI. All rights reserved.
-</footer>
-
-<script nonce="<?= dealerfai_csp_nonce() ?>">
-  function switchOrganization() {
-    const action = document.getElementById('form_action');
-    const form = document.getElementById('create-deal-form');
-    if (action) {
-      action.value = 'switch_org';
-    }
-    if (form) {
-      form.noValidate = true;
-      form.submit();
-    }
-  }
-
-  function toggleCustomerTypeUi() {
-    const type = document.getElementById('customer_type')?.value || 'personal';
-    const block = document.getElementById('business_block');
-    const nameLabel = document.querySelector('label[for="customer_name"]') || null;
-    const customerName = document.getElementById('customer_name');
-    if (block) {
-      block.style.display = (type === 'personal') ? 'none' : 'block';
-    }
-    if (nameLabel) {
-      nameLabel.textContent = (type === 'personal') ? 'Customer Name' : 'Primary Contact Name';
-    }
-    if (customerName) {
-      customerName.placeholder = (type === 'personal') ? '' : 'Primary contact at the business';
-    }
-    toggleBusinessNameRequired();
-  }
-
-  function toggleBusinessNameRequired() {
-    const type = document.getElementById('customer_type')?.value || 'personal';
-    const bizName = document.getElementById('business_name');
-    const bizId = document.getElementById('business_id');
-    if (!bizName) return;
-    const hasExisting = bizId && bizId.value;
-    if (type !== 'personal' && !hasExisting) {
-      bizName.required = true;
-    } else {
-      bizName.required = false;
-    }
-  }
-
-  function toggleCoSignerUi() {
-    const requiredCheckbox = document.getElementById('co_app_required');
-    const wrap = document.getElementById('co_app_name_wrap');
-    const nameInput = document.getElementById('co_app_name');
-    const enabled = !!(requiredCheckbox && requiredCheckbox.checked);
-    if (wrap) {
-      wrap.style.display = enabled ? 'block' : 'none';
-    }
-    if (nameInput) {
-      nameInput.required = enabled;
-      if (!enabled) {
-        nameInput.value = '';
+  <script nonce="<?= dealerfai_csp_nonce() ?>">
+    function switchOrganization() {
+      const action = document.getElementById('form_action');
+      const form = document.getElementById('create-deal-form');
+      if (action) { action.value = 'switch_org'; }
+      if (form) {
+        form.noValidate = true;
+        form.submit();
       }
     }
-  }
 
-  document.addEventListener('DOMContentLoaded', function () {
-    toggleCustomerTypeUi();
-    toggleCoSignerUi();
-  });
-</script>
+    function toggleCustomerTypeUi() {
+      const type = document.getElementById('customer_type')?.value || 'personal';
+      const block = document.getElementById('business_block');
+      const nameLabel = document.getElementById('customer_name_label');
+      const customerName = document.getElementById('customer_name');
+      if (block) {
+        block.style.display = (type === 'personal') ? 'none' : 'block';
+      }
+      if (nameLabel) {
+        nameLabel.textContent = (type === 'personal') ? 'Customer Name' : 'Primary Contact Name';
+      }
+      if (customerName) {
+        customerName.placeholder = (type === 'personal') ? '' : 'Primary contact at the business';
+      }
+      toggleBusinessNameRequired();
+    }
 
+    function toggleBusinessNameRequired() {
+      const type = document.getElementById('customer_type')?.value || 'personal';
+      const bizName = document.getElementById('business_name');
+      const bizId = document.getElementById('business_id');
+      if (!bizName) return;
+      const hasExisting = bizId && bizId.value;
+      if (type !== 'personal' && !hasExisting) {
+        bizName.required = true;
+      } else {
+        bizName.required = false;
+      }
+    }
+
+    function toggleCoSignerUi() {
+      const requiredCheckbox = document.getElementById('co_app_required');
+      const wrap = document.getElementById('co_app_name_wrap');
+      const nameInput = document.getElementById('co_app_name');
+      const enabled = !!(requiredCheckbox && requiredCheckbox.checked);
+      if (wrap) {
+        wrap.style.display = enabled ? 'block' : 'none';
+      }
+      if (nameInput) {
+        nameInput.required = enabled;
+        if (!enabled) { nameInput.value = ''; }
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      toggleCustomerTypeUi();
+      toggleCoSignerUi();
+    });
+  </script>
 </body>
 </html>
+
