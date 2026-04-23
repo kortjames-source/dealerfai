@@ -6,7 +6,8 @@ require_once __DIR__ . '/includes/csrf.php';
 require_once __DIR__ . '/helpers/session_utils.php';
 
 $roles = load_session_roles();
-if (!in_array('Admin', $roles, true)) {
+$isAdmin = in_array('Admin', $roles, true);
+if (!$isAdmin) {
     http_response_code(403);
     echo 'Unauthorized';
     exit;
