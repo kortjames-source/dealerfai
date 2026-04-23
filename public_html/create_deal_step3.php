@@ -822,38 +822,20 @@ if (!$formError) {
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <?php dealerfai_theme_head(); ?>
   <style nonce="<?= dealerfai_csp_nonce() ?>">
-    body { margin: 0; font-family: "Segoe UI", sans-serif; background: #f4f6f8; color: #111111; }
-    .container { max-width: 700px; margin: 40px auto; padding: 30px; background: #fff; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-    h2 { margin-top: 0; }
-    label { display: block; margin-top: 15px; font-weight: bold; }
-    input, select {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-    .btn {
-      background: #0066cc;
-      color: white;
-      padding: 12px 20px;
-      border: none;
-      border-radius: 4px;
-      margin-top: 20px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    .btn:hover { opacity: 0.9; }
-    .btn-back { background: #999; margin-right: 10px; }
-    .section { margin-top: 30px; border-top: 1px solid #ddd; padding-top: 20px; }
-    .error { background: #f8d7da; color: #721c24; padding: 10px 12px; border-radius: 6px; margin-bottom: 15px; }
-    .included-row { display: grid; grid-template-columns: 20px 1fr 160px; gap: 12px; align-items: center; margin-top: 10px; }
-    .included-row label { margin: 0; font-weight: 600; }
-    .included-row input[type="checkbox"] { margin: 0; justify-self: center; }
-    .included-price { width: 160px; }
-    .included-hint { color: #555; font-size: 13px; margin: 8px 0 0; }
+    /* Specific page overrides */
+    .form-section { background: white; padding: 2rem; border-radius: var(--radius-lg); border: 1px solid #e2e8f0; box-shadow: var(--shadow-sm); }
+    .form-group { margin-bottom: 1.5rem; }
+    .form-group label { display: block; font-size: 0.875rem; font-weight: 700; color: #475569; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.025em; }
+    .form-control { width: 100%; padding: 0.75rem 1rem; border: 1px solid #cbd5e1; border-radius: var(--radius-md); font-size: 1rem; transition: border-color 0.2s; }
+    .form-control:focus { border-color: var(--brand-color); outline: none; box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1); }
+    .step-indicator { display: flex; gap: 0.5rem; margin-bottom: 2rem; }
+    .step-dot { flex: 1; height: 4px; background: #e2e8f0; border-radius: 2px; }
+    .step-dot.active { background: var(--brand-color); }
+    .section-header { margin: 2.5rem 0 1.5rem; padding-bottom: 0.75rem; border-bottom: 2px solid #f1f5f9; font-weight: 800; color: #0f172a; display: flex; align-items: center; gap: 0.75rem; }
+    .included-grid { display: grid; gap: 0.75rem; margin-top: 1rem; }
+    .included-item { display: grid; grid-template-columns: auto 1fr auto; gap: 1rem; align-items: center; padding: 1rem; background: #f8fafc; border-radius: var(--radius-md); border: 1px solid #e2e8f0; }
     .finance-only, .residual-only { display: none; }
-    .nav-link-white { color: white; text-decoration: none; margin: 0 10px; font-size: 14px; }
+    .error-box { background: #fef2f2; border: 1px solid #fee2e2; color: #991b1b; padding: 1rem; border-radius: var(--radius-md); margin-bottom: 1.5rem; font-weight: 600; display: flex; align-items: center; gap: 0.75rem; }
   </style>
   <script nonce="<?= dealerfai_csp_nonce() ?>">
     function toggleFields() {
@@ -861,15 +843,13 @@ if (!$formError) {
       if (!dealTypeEl) return;
       const type = dealTypeEl.value;
       const financeEls = document.querySelectorAll('.finance-only');
-      for (let i = 0; i < financeEls.length; i++) {
-        if (type === 'Cash') financeEls[i].style.setProperty('display', 'none', 'important');
-        else financeEls[i].style.setProperty('display', 'block', 'important');
-      }
-      const residualEl = document.querySelector('.residual-only');
-      if (residualEl) {
-        if (type === 'Lease') residualEl.style.setProperty('display', 'block', 'important');
-        else residualEl.style.setProperty('display', 'none', 'important');
-      }
+      financeEls.forEach(el => {
+        el.style.display = (type === 'Cash') ? 'none' : 'block';
+      });
+      const residualEls = document.querySelectorAll('.residual-only');
+      residualEls.forEach(el => {
+        el.style.display = (type === 'Lease') ? 'block' : 'none';
+      });
       const msrp = document.getElementById('msrp');
       const residual = document.getElementById('residual');
       if (msrp) msrp.required = (type === 'Lease');
@@ -891,226 +871,288 @@ if (!$formError) {
         if (!Number.isFinite(residualVal)) return;
         residualPercent.value = ((residualVal / msrpVal) * 100).toFixed(2);
       } else if (source === 'msrp') {
-        if (residualPercent.value !== '') {
-          syncResidualFields('percent');
-        } else if (residual.value !== '') {
-          syncResidualFields('amount');
-        }
+        if (residualPercent.value !== '') syncResidualFields('percent');
+        else if (residual.value !== '') syncResidualFields('amount');
       }
     }
     function toggleIncludedProtections() {
       const toggle = document.getElementById('include_included_protections');
       const panel = document.getElementById('included-protections-panel');
-      if (!toggle || !panel) return;
-      panel.style.display = toggle.checked ? 'block' : 'none';
+      if (toggle && panel) panel.style.display = toggle.checked ? 'block' : 'none';
     }
     function toggleIncludedAccessories() {
       const toggle = document.getElementById('include_included_accessories');
       const panel = document.getElementById('included-accessories-panel');
-      if (!toggle || !panel) return;
-      panel.style.display = toggle.checked ? 'block' : 'none';
+      if (toggle && panel) panel.style.display = toggle.checked ? 'block' : 'none';
     }
     function bindIncludedRows() {
-      const rows = document.querySelectorAll('.included-row');
-      for (let i = 0; i < rows.length; i++) {
-        const row = rows[i];
+      const rows = document.querySelectorAll('.included-item');
+      rows.forEach(row => {
         const checkbox = row.querySelector('.included-checkbox');
         const priceInput = row.querySelector('.included-price');
-        if (!checkbox || !priceInput) continue;
+        if (!checkbox || !priceInput) return;
         const sync = () => {
           priceInput.disabled = !checkbox.checked;
           priceInput.required = checkbox.checked;
+          row.style.background = checkbox.checked ? '#f0f9ff' : '#f8fafc';
+          row.style.borderColor = checkbox.checked ? '#bae6fd' : '#e2e8f0';
         };
         checkbox.addEventListener('change', sync);
         sync();
-      }
+      });
     }
     window.addEventListener("DOMContentLoaded", () => {
       toggleFields();
       toggleIncludedProtections();
       toggleIncludedAccessories();
       bindIncludedRows();
-      const dealTypeEl = document.getElementById('deal_type');
-      if (dealTypeEl) dealTypeEl.addEventListener('change', toggleFields);
-      const msrp = document.getElementById('msrp');
-      const residual = document.getElementById('residual');
-      const residualPercent = document.getElementById('residual_percent');
-      if (msrp) msrp.addEventListener('input', () => syncResidualFields('msrp'));
-      if (residual) residual.addEventListener('input', () => syncResidualFields('amount'));
-      if (residualPercent) residualPercent.addEventListener('input', () => syncResidualFields('percent'));
-      const toggle = document.getElementById('include_included_protections');
-      if (toggle) {
-        toggle.addEventListener('change', toggleIncludedProtections);
-      }
-      const accessoryToggle = document.getElementById('include_included_accessories');
-      if (accessoryToggle) {
-        accessoryToggle.addEventListener('change', toggleIncludedAccessories);
-      }
+      document.getElementById('deal_type')?.addEventListener('change', toggleFields);
+      document.getElementById('msrp')?.addEventListener('input', () => syncResidualFields('msrp'));
+      document.getElementById('residual')?.addEventListener('input', () => syncResidualFields('amount'));
+      document.getElementById('residual_percent')?.addEventListener('input', () => syncResidualFields('percent'));
+      document.getElementById('include_included_protections')?.addEventListener('change', toggleIncludedProtections);
+      document.getElementById('include_included_accessories')?.addEventListener('change', toggleIncludedAccessories);
     });
   </script>
 </head>
-<body>
+<body class="dashboard-wrapper">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header" style="padding: 1.5rem;">
+      <img src="dealerfai_logo_white.png" alt="DealerFAI" style="height: 35px; width: auto;">
+    </div>
+    <nav class="sidebar-nav" style="background: transparent; padding: 1.5rem 1rem;">
+      <a href="dashboard" class="sidebar-link">
+        <i class="fa-solid fa-gauge"></i> Dashboard
+      </a>
+      <a href="view_deals" class="sidebar-link">
+        <i class="fa-solid fa-file-invoice-dollar"></i> View Deals
+      </a>
+      <a href="create_deal" class="sidebar-link active">
+        <i class="fa-solid fa-plus-circle"></i> Create Deal
+      </a>
+      
+      <?php if ($isAdmin): ?>
+        <div style="margin-top: 2rem; padding: 0 1rem; font-size: 0.75rem; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700;">Admin</div>
+        <a href="admin_scoring_log" class="sidebar-link">
+          <i class="fa-solid fa-list-check"></i> Scoring Log
+        </a>
+        <a href="manage_users" class="sidebar-link">
+          <i class="fa-solid fa-users"></i> Users
+        </a>
+        <a href="admin_organizations" class="sidebar-link">
+          <i class="fa-solid fa-building"></i> Organizations
+        </a>
+        <a href="admin_tools" class="sidebar-link">
+          <i class="fa-solid fa-wrench"></i> Admin Tools
+        </a>
+      <?php endif; ?>
+    </nav>
+    <div style="padding: 1.5rem; border-top: 1px solid rgba(255,255,255,0.1);">
+      <p style="font-size: 0.75rem; color: rgba(255,255,255,0.4); margin: 0;">DealerFAI v2.0</p>
+    </div>
+  </aside>
 
-<header style="background-color: <?= htmlspecialchars($theme['color']) ?>; color:white; padding:30px 40px; text-align:center; position:relative;">
-  <?php if (!empty($theme['logo'])): ?>
-    <img src="<?= htmlspecialchars($theme['logo']) ?>" alt="Dealer Logo" style="max-height:60px;">
-  <?php else: ?>
-    <h1>DealerFAI</h1>
-  <?php endif; ?>
-  <div style="position:absolute; right:20px; top:20px; display:flex; gap:12px; align-items:center;">
-    <?php if ($isAdmin): ?>
-      <a href="admin_error_alerts" style="color:#fff; font-size:14px; text-decoration:none; font-weight:bold;">Alerts<?php if ($adminAlertCount > 0): ?> <span style="display:inline-block; min-width:18px; padding:2px 8px; border-radius:999px; background:#d7263d; color:#fff; font-size:12px; font-weight:bold; text-align:center; margin-left:6px;"><?= $adminAlertCount ?></span><?php endif; ?></a>
-    <?php endif; ?>
-    <a href="logout" style="color:#ccc; font-size:14px; text-decoration:none;">Log Out</a>
+  <!-- Main Content -->
+  <div class="main-container">
+    <header class="top-bar">
+      <div class="breadcrumb" style="font-weight: 600; color: #64748b;">
+        DealerFAI <i class="fa-solid fa-chevron-right" style="font-size: 0.75rem; margin: 0 0.5rem; opacity: 0.5;"></i> Create Deal
+      </div>
+      <div style="display: flex; align-items: center; gap: 1.5rem;">
+        <?php if ($isAdmin): ?>
+          <a href="admin_error_alerts" style="position: relative; color: #64748b;">
+            <i class="fa-solid fa-bell" style="font-size: 1.25rem;"></i>
+            <?php if ($adminAlertCount > 0): ?>
+              <span style="position: absolute; top: -5px; right: -5px; background: #ef4444; color: white; font-size: 10px; padding: 2px 5px; border-radius: 10px; font-weight: 700;"><?= $adminAlertCount ?></span>
+            <?php endif; ?>
+          </a>
+        <?php endif; ?>
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <div style="text-align: right;">
+            <div style="font-size: 0.875rem; font-weight: 700; color: #0f172a;"><?= htmlspecialchars($_SESSION['full_name'] ?? 'User') ?></div>
+            <a href="logout" style="font-size: 0.75rem; color: #64748b; text-decoration: none;">Log Out</a>
+          </div>
+          <div style="width: 40px; height: 40px; background: var(--brand-color); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">
+            <?= strtoupper(substr($_SESSION['full_name'] ?? 'U', 0, 1)) ?>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-content" style="max-width: 800px;">
+      <div style="margin-bottom: 2rem;">
+        <h1 class="text-gradient" style="margin-bottom: 0.5rem; display: inline-block;">Financial Terms</h1>
+        <p class="text-muted">Finalize the deal structure and included items.</p>
+      </div>
+
+      <div class="step-indicator">
+        <div class="step-dot active"></div>
+        <div class="step-dot active"></div>
+        <div class="step-dot active"></div>
+      </div>
+
+      <form method="post" class="form-section">
+        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken, ENT_QUOTES, 'UTF-8') ?>">
+        
+        <?php if (!empty($formError)): ?>
+          <div class="error-box"><i class="fa-solid fa-circle-exclamation"></i> <?= htmlspecialchars($formError) ?></div>
+        <?php endif; ?>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+          <div class="form-group">
+            <label for="deal_type">Deal Type</label>
+            <select name="deal_type" id="deal_type" class="form-control" required>
+              <option value="Cash">Cash Purchase</option>
+              <option value="Finance">Finance Deal</option>
+              <option value="Lease">Lease Agreement</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="sale_price">Sale Price ($)</label>
+            <input type="number" name="sale_price" id="sale_price" class="form-control" step="0.01" placeholder="0.00" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="documentation_fee">Documentation Fee ($)</label>
+          <input type="number" name="documentation_fee" id="documentation_fee" class="form-control" step="0.01" min="0" placeholder="0.00">
+        </div>
+
+        <div class="finance-only" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+          <div class="form-group">
+            <label for="term">Term (Months)</label>
+            <input type="number" name="term" id="term" class="form-control" min="0" placeholder="e.g. 60">
+          </div>
+
+          <div class="form-group">
+            <label for="interest_rate">Interest Rate (%)</label>
+            <input type="number" name="interest_rate" id="interest_rate" class="form-control" step="0.01" placeholder="0.00">
+          </div>
+        </div>
+
+        <div class="finance-only form-group">
+          <label for="ppsa_fee">PPSA Fee ($)</label>
+          <input type="number" name="ppsa_fee" id="ppsa_fee" class="form-control" step="0.01" min="0" placeholder="0.00">
+        </div>
+
+        <div class="residual-only" style="padding: 1.5rem; background: #f8fafc; border-radius: var(--radius-md); border: 1px solid #e2e8f0; margin-bottom: 1.5rem;">
+          <div style="font-weight: 700; margin-bottom: 1rem; color: #1e293b; font-size: 0.875rem;">LEASE DETAILS</div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+            <div class="form-group" style="margin-bottom: 0;">
+              <label for="msrp">MSRP ($)</label>
+              <input type="number" name="msrp" id="msrp" class="form-control" step="0.01" min="0" value="<?= htmlspecialchars((string)($draft['msrp'] ?? '')) ?>">
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label for="residual">Residual ($)</label>
+              <input type="number" name="residual" id="residual" class="form-control" step="0.01" min="0" value="<?= htmlspecialchars((string)($draft['residual'] ?? '')) ?>">
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label for="residual_percent">Residual %</label>
+              <input type="number" name="residual_percent" id="residual_percent" class="form-control" step="0.01" min="0" max="100" value="<?= htmlspecialchars((string)$residualPercentValue) ?>">
+            </div>
+          </div>
+        </div>
+
+        <div class="finance-only" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+          <div class="form-group">
+            <label for="down_payment">Down Payment ($)</label>
+            <input type="number" name="down_payment" class="form-control" step="0.01" placeholder="0.00">
+          </div>
+
+          <div class="form-group">
+            <label for="payment_frequency">Payment Frequency</label>
+            <select name="payment_frequency" class="form-control">
+              <option value="Monthly">Monthly</option>
+              <option value="Semi-Monthly">Semi-Monthly</option>
+              <option value="Bi-Weekly">Bi-Weekly</option>
+              <option value="Weekly">Weekly</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="section-header">
+          <i class="fa-solid fa-shield-halved"></i> Included Protections
+        </div>
+        <div class="form-group">
+          <label style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer; text-transform: none; color: #1e293b;">
+            <input type="checkbox" id="include_included_protections" name="include_included_protections" value="1" style="width: auto; margin: 0;" <?= $includeIncluded ? ' checked' : '' ?>>
+            Add protections already included in this deal
+          </label>
+        </div>
+        <div id="included-protections-panel" style="display: none;">
+          <div class="included-grid">
+            <?php if (empty($productCatalog)): ?>
+              <p class="text-muted" style="font-size: 0.875rem;">No products available.</p>
+            <?php else: ?>
+              <?php foreach ($productCatalog as $code => $product): ?>
+                <div class="included-item">
+                  <input type="checkbox" class="included-checkbox" name="included_protections[]" value="<?= htmlspecialchars($code) ?>" <?= in_array($code, $includedSelections, true) ? ' checked' : '' ?>>
+                  <div style="font-weight: 600; color: #1e293b;"><?= htmlspecialchars($product['name']) ?></div>
+                  <input class="form-control included-price" type="number" step="0.01" min="0" name="included_protection_prices[<?= htmlspecialchars($code) ?>]" value="<?= htmlspecialchars((string)($includedPrices[$code] ?? '')) ?>" style="width: 140px;" placeholder="<?= $product['default_price'] !== null ? htmlspecialchars(number_format($product['default_price'], 2)) : '0.00' ?>">
+                </div>
+              <?php endforeach; ?>
+            <?php endif; ?>
+          </div>
+        </div>
+
+        <div class="section-header">
+          <i class="fa-solid fa-car-rear"></i> Included Accessories
+        </div>
+        <div class="form-group">
+          <label style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer; text-transform: none; color: #1e293b;">
+            <input type="checkbox" id="include_included_accessories" name="include_included_accessories" value="1" style="width: auto; margin: 0;" <?= $includeIncludedAccessories ? ' checked' : '' ?>>
+            Add accessories already included in this deal
+          </label>
+        </div>
+        <div id="included-accessories-panel" style="display: none;">
+          <div class="included-grid">
+            <?php if (empty($accessoryCatalog)): ?>
+              <p class="text-muted" style="font-size: 0.875rem;">No accessories available for this vehicle.</p>
+            <?php else: ?>
+              <?php foreach ($accessoryCatalog as $id => $accessory): ?>
+                <div class="included-item">
+                  <input type="checkbox" class="included-checkbox" name="included_accessories[]" value="<?= (int)$id ?>" <?= in_array((string)$id, array_map('strval', $includedAccessorySelections), true) ? ' checked' : '' ?>>
+                  <div style="font-weight: 600; color: #1e293b;"><?= htmlspecialchars($accessory['name']) ?></div>
+                  <input class="form-control included-price" type="number" step="0.01" min="0" name="included_accessory_prices[<?= (int)$id ?>]" value="<?= htmlspecialchars((string)($includedAccessoryPrices[$id] ?? '')) ?>" style="width: 140px;" placeholder="<?= $accessory['base_price'] !== null ? htmlspecialchars(number_format($accessory['base_price'], 2)) : '0.00' ?>">
+                </div>
+              <?php endforeach; ?>
+            <?php endif; ?>
+          </div>
+        </div>
+
+        <div class="section-header">
+          <i class="fa-solid fa-right-left"></i> Trade-In Information
+        </div>
+        <div class="form-group">
+          <label for="trade_info">Trade-In Description</label>
+          <input type="text" name="trade_info" id="trade_info" class="form-control" placeholder="Year, Make, Model, Trim">
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+          <div class="form-group">
+            <label for="trade_value">Trade Allowance ($)</label>
+            <input type="number" name="trade_value" class="form-control" step="0.01" placeholder="0.00">
+          </div>
+          <div class="form-group">
+            <label for="lien_amount">Lien Payout ($)</label>
+            <input type="number" name="lien_amount" class="form-control" step="0.01" placeholder="0.00">
+          </div>
+        </div>
+
+        <div style="margin-top: 2.5rem; display: flex; justify-content: space-between;">
+          <a href="create_deal_step2" class="btn btn-secondary" style="padding: 1rem 2rem;"><i class="fa-solid fa-arrow-left" style="margin-right: 0.75rem;"></i> Back</a>
+          <button type="submit" class="btn btn-primary" style="padding: 1rem 3rem; font-weight: 700; background: var(--success-color);">Complete & Create Deal <i class="fa-solid fa-check" style="margin-left: 0.75rem;"></i></button>
+        </div>
+      </form>
+    </main>
+
+    <footer style="background: white; border-top: 1px solid #e2e8f0; color: #64748b; padding: 1.5rem; text-align: center; position: static;">
+      &copy; <?= date("Y") ?> DealerFAI. All rights reserved.
+    </footer>
   </div>
-</header>
-
-<nav style="background-color: <?= htmlspecialchars($theme['color']) ?>; padding:12px; text-align:center;">
-  <a href="dashboard" class="nav-link-white">Dashboard</a>
-  <a href="view_deals" class="nav-link-white">View Deals</a>
-  <a href="create_deal" class="nav-link-white">Create Deal</a>
-  <?php if (in_array('General Manager', $roles, true) || $isAdmin): ?>
-    <a href="admin_tools" class="nav-link-white">Admin Tools</a>
-  <?php endif; ?>
-</nav>
-
-<div class="container">
-  <h2>Step 3 of 3: Deal Type & Financials</h2>
-  <form method="post">
-      <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken, ENT_QUOTES, 'UTF-8') ?>">
-    <?php if (!empty($formError)): ?>
-      <div class="error"><?= htmlspecialchars($formError) ?></div>
-    <?php endif; ?>
-
-    <label for="deal_type">Deal Type</label>
-    <select name="deal_type" id="deal_type" required>
-      <option value="Cash">Cash</option>
-      <option value="Finance">Finance</option>
-      <option value="Lease">Lease</option>
-    </select>
-
-    <label for="sale_price">Sale Price</label>
-    <input type="number" name="sale_price" id="sale_price" step="0.01" required>
-
-    <label for="documentation_fee">Documentation</label>
-    <input type="number" name="documentation_fee" id="documentation_fee" step="0.01" min="0">
-
-    <div class="finance-only">
-      <label for="term">Term (Months)</label>
-      <input type="number" name="term" id="term" min="0">
-
-      <label for="interest_rate">Interest Rate (%)</label>
-      <input type="number" name="interest_rate" id="interest_rate" step="0.01">
-    </div>
-
-    <div class="finance-only">
-      <label for="ppsa_fee">PPSA</label>
-      <input type="number" name="ppsa_fee" id="ppsa_fee" step="0.01" min="0">
-    </div>
-
-    <div class="residual-only">
-      <label for="msrp">MSRP (Lease Only)</label>
-      <input type="number" name="msrp" id="msrp" step="0.01" min="0" value="<?= htmlspecialchars((string)($draft['msrp'] ?? '')) ?>">
-
-      <label for="residual">Residual (Lease Only)</label>
-      <input type="number" name="residual" id="residual" step="0.01" min="0" value="<?= htmlspecialchars((string)($draft['residual'] ?? '')) ?>">
-
-      <?php
-        $residualPercentValue = '';
-        if (!empty($draft['msrp']) && !empty($draft['residual'])) {
-          $residualPercentValue = number_format(((float)$draft['residual'] / (float)$draft['msrp']) * 100, 2, '.', '');
-        }
-      ?>
-      <label for="residual_percent">Residual % (Lease Only)</label>
-      <input type="number" name="residual_percent" id="residual_percent" step="0.01" min="0" max="100"
-        value="<?= htmlspecialchars((string)$residualPercentValue) ?>">
-    </div>
-
-    <div class="finance-only">
-      <label for="down_payment">Down Payment</label>
-      <input type="number" name="down_payment" step="0.01">
-
-      <label for="payment_frequency">Payment Frequency</label>
-      <select name="payment_frequency">
-        <option value="Monthly">Monthly</option>
-        <option value="Semi-Monthly">Semi-Monthly</option>
-        <option value="Bi-Weekly">Bi-Weekly</option>
-        <option value="Weekly">Weekly</option>
-      </select>
-
-    </div>
-
-    <div class="section">
-      <h3>Included Protections</h3>
-      <label>
-        <input type="checkbox" id="include_included_protections" name="include_included_protections" value="1"<?= $includeIncluded ? ' checked' : '' ?>>
-        Add included protections
-      </label>
-      <div id="included-protections-panel" style="display: none;">
-        <p class="included-hint">Select protections already included in the deal and enter the sold price.</p>
-        <?php if (empty($productCatalog)): ?>
-          <p class="included-hint">No products available.</p>
-        <?php else: ?>
-          <?php foreach ($productCatalog as $code => $product): ?>
-            <div class="included-row">
-              <input type="checkbox" class="included-checkbox" name="included_protections[]" value="<?= htmlspecialchars($code) ?>"<?= in_array($code, $includedSelections, true) ? ' checked' : '' ?>>
-              <label><?= htmlspecialchars($product['name']) ?></label>
-              <input class="included-price" type="number" step="0.01" min="0"
-                name="included_protection_prices[<?= htmlspecialchars($code) ?>]"
-                value="<?= htmlspecialchars((string)($includedPrices[$code] ?? '')) ?>"
-                placeholder="<?= $product['default_price'] !== null ? htmlspecialchars(number_format($product['default_price'], 2)) : '' ?>">
-            </div>
-          <?php endforeach; ?>
-        <?php endif; ?>
-      </div>
-    </div>
-
-    <div class="section">
-      <h3>Included Accessories</h3>
-      <label>
-        <input type="checkbox" id="include_included_accessories" name="include_included_accessories" value="1"<?= $includeIncludedAccessories ? ' checked' : '' ?>>
-        Add included accessories
-      </label>
-      <div id="included-accessories-panel" style="display: none;">
-        <p class="included-hint">Select accessories already included in the deal and enter the sold price.</p>
-        <?php if (empty($accessoryCatalog)): ?>
-          <p class="included-hint">No accessories available.</p>
-        <?php else: ?>
-          <?php foreach ($accessoryCatalog as $id => $accessory): ?>
-            <div class="included-row">
-              <input type="checkbox" class="included-checkbox"
-                name="included_accessories[]"
-                value="<?= (int)$id ?>"
-                <?= in_array((string)$id, array_map('strval', $includedAccessorySelections), true) ? ' checked' : '' ?>>
-              <label><?= htmlspecialchars($accessory['name']) ?></label>
-              <input class="included-price" type="number" step="0.01" min="0"
-                name="included_accessory_prices[<?= (int)$id ?>]"
-                value="<?= htmlspecialchars((string)($includedAccessoryPrices[$id] ?? '')) ?>"
-                placeholder="<?= $accessory['base_price'] !== null ? htmlspecialchars(number_format($accessory['base_price'], 2)) : '' ?>">
-            </div>
-          <?php endforeach; ?>
-        <?php endif; ?>
-      </div>
-    </div>
-
-    <div class="section">
-      <h3>Trade-In (Optional)</h3>
-      <label for="trade_info">Trade Info</label>
-      <input type="text" name="trade_info" id="trade_info">
-
-      <label for="trade_value">Trade Value</label>
-      <input type="number" name="trade_value" step="0.01">
-
-      <label for="lien_amount">Lien Amount</label>
-      <input type="number" name="lien_amount" step="0.01">
-    </div>
-
-    <div class="mt-30">
-      <a href="create_deal_step2" class="btn btn-back">← Back</a>
-      <button type="submit" class="btn">Create Deal</button>
-    </div>
-  </form>
-</div>
+</body>
+</html>
 
 </body>
 </html>
