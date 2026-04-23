@@ -38,3 +38,7 @@ public_html/test_step3_visual.php
 # Project specific
 DO_NOT_UPLOAD_HERE/
 vendor/
+
+# Temporary Files
+scratch/
+secure/db.sqlite
