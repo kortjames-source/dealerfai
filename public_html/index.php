@@ -101,7 +101,7 @@ require_once __DIR__ . '/includes/theme_head.php';
       </a>
       <div>
         <a href="login.php" class="btn btn-secondary btn-sm">Sign In</a>
-        <a href="mailto:admin@dealerfai.com" class="btn btn-sm" style="margin-left: 1rem;">Contact Admin</a>
+        <a href="mailto:admin@dealerfai.com" class="btn btn-sm" style="margin-left: 1rem;">Get Support</a>
       </div>
     </div>
   </nav>
