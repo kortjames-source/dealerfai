@@ -93,42 +93,68 @@ require_once __DIR__ . '/includes/theme_head.php';
     }
   </style>
 </head>
-<body>
-  <header>
-    <img src="dealerfai_logo.png" alt="DealerFAI Logo">
-    <h1>DealerFAI</h1>
-    <p>Smarter Vehicle Deal Management & Product Protection Platform</p>
-  </header>
-  <nav>
-    <a href="login.php">Login</a>
-    <a href="mailto:support@dealerfai.com">Contact Support</a>
-  </nav>
-  <section>
-    <h2>Smarter Tools for Every Dealership</h2>
-    <p>DealerFAI is your intelligent portal for creating, managing, and optimizing deals and protection product recommendations with precision.</p>
-    <a class="cta-button" href="login.php">Start Now</a>
-
-    <div class="features">
-      <div class="feature">
-        <h3>Deal Creation</h3>
-        <p>Capture key deal details including vehicle info, financials, and assignments with ease.</p>
-      </div>
-      <div class="feature">
-        <h3>AI Product Logic</h3>
-        <p>Serve your customers better with smart protection suggestions backed by logic and region-specific data.</p>
-      </div>
-      <div class="feature">
-        <h3>Analytics Dashboard</h3>
-        <p>Review performance, gross profit, and take rates by store, user, or product line.</p>
-      </div>
-      <div class="feature">
-        <h3>Secure Application</h3>
-        <p>Send application links or complete forms at the desk – all encrypted and assigned to a deal.</p>
+<body class="bg-ai">
+  <nav class="glass" style="position: sticky; top: 0; z-index: 1000; border-radius: 0; border-top: none; border-left: none; border-right: none;">
+    <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 2rem;">
+      <a href="index.php">
+        <img src="dealerfai_logo.png" alt="DealerFAI Logo" style="height: 40px;">
+      </a>
+      <div>
+        <a href="login.php" class="btn btn-secondary btn-sm">Sign In</a>
+        <a href="mailto:support@dealerfai.com" class="btn btn-sm" style="margin-left: 1rem;">Get Support</a>
       </div>
     </div>
-  </section>
-  <footer>
-    &copy; <?php echo date("Y"); ?> DealerFAI. All rights reserved.
+  </nav>
+
+  <main style="padding-top: 2rem;">
+    <section class="hero-box glass text-center" style="padding: 6rem 2rem;">
+      <h1 class="text-gradient" style="font-size: 3.5rem; margin-bottom: 1rem; line-height: 1.1;">Intelligent Deal Management</h1>
+      <p class="text-muted" style="font-size: 1.25rem; max-width: 700px; margin: 0 auto 2.5rem;">
+        Empower your dealership with AI-driven protection logic and precision deal structuring. 
+        The modern standard for profit optimization and customer transparency.
+      </p>
+      <div class="flex justify-center gap-4">
+        <a href="login.php" class="btn" style="padding: 1rem 2.5rem; font-size: 1.125rem;">Launch Portal</a>
+        <a href="#features" class="btn btn-secondary" style="padding: 1rem 2.5rem; font-size: 1.125rem;">Explore Features</a>
+      </div>
+    </section>
+
+    <section id="features" style="padding: 4rem 0;">
+      <h2 class="text-center" style="margin-bottom: 3rem;">Engineered for Performance</h2>
+      <div class="features" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem;">
+        <div class="feature glass card" style="margin: 0; text-align: left;">
+          <div style="font-size: 2rem; margin-bottom: 1rem;">⚡️</div>
+          <h3 class="mt-0">Dynamic Deal Flow</h3>
+          <p class="text-muted">Capture and structure deals with intuitive inputs, automated calculations, and multi-user collaboration.</p>
+        </div>
+        <div class="feature glass card" style="margin: 0; text-align: left;">
+          <div style="font-size: 2rem; margin-bottom: 1rem;">🤖</div>
+          <h3 class="mt-0">AI Protection Logic</h3>
+          <p class="text-muted">Proprietary algorithms suggest the best protection products based on regional data and vehicle profiles.</p>
+        </div>
+        <div class="feature glass card" style="margin: 0; text-align: left;">
+          <div style="font-size: 2rem; margin-bottom: 1rem;">📊</div>
+          <h3 class="mt-0">Advanced Analytics</h3>
+          <p class="text-muted">Real-time insights into gross profit, take rates, and agent performance across all your store locations.</p>
+        </div>
+        <div class="feature glass card" style="margin: 0; text-align: left;">
+          <div style="font-size: 2rem; margin-bottom: 1rem;">🛡️</div>
+          <h3 class="mt-0">Secure Applications</h3>
+          <p class="text-muted">Encryption-first approach to customer data and application links, ensuring compliance at every step.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer style="background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(10px); color: white; padding: 4rem 2rem; text-align: center; margin-top: 4rem;">
+    <img src="dealerfai_logo.png" alt="DealerFAI Logo" style="height: 40px; margin-bottom: 1.5rem; filter: brightness(0) invert(1);">
+    <p style="opacity: 0.6; max-width: 500px; margin: 0 auto 2rem;">
+      DealerFAI is a premium platform designed for the modern automotive industry. 
+      Built with security and scalability at its core.
+    </p>
+    <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem; font-size: 0.875rem; opacity: 0.5;">
+      &copy; <?php echo date("Y"); ?> DealerFAI. All rights reserved.
+    </div>
   </footer>
 </body>
 </html>

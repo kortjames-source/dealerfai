@@ -132,36 +132,47 @@ $timeoutNotice = (isset($_GET['reason']) && $_GET['reason'] === 'timeout');
     }
   </style>
 </head>
-<body>
-  <header>
-    <img src="dealerfai_logo.png" alt="DealerFAI Logo">
-    <h1>DealerFAI</h1>
-  </header>
+<body class="bg-ai">
+  <div class="full-page-center">
+    <header class="clean-header">
+      <a href="index.php">
+        <img src="dealerfai_logo.png" alt="DealerFAI Logo">
+      </a>
+    </header>
 
-  <main>
-    <h2>Login to Your Account</h2>
-    <?php if (!empty($error)) echo "<div class='error'>" . htmlspecialchars($error, ENT_QUOTES, 'UTF-8') . "</div>"; ?>
-    <?php if ($timeoutNotice): ?>
-      <div class="error">Your session has expired due to inactivity. Please log in again.</div>
-    <?php endif; ?>
-    <form method="post">
-      <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken, ENT_QUOTES, 'UTF-8') ?>">
-      <label for="email">Email</label>
-      <input type="email" name="email" required>
+    <main class="glass" style="margin-top: 0; width: 100%; max-width: 420px;">
+      <h2 class="text-gradient" style="margin-bottom: 1.5rem;">Welcome Back</h2>
+      <p class="text-muted text-center" style="margin-bottom: 2rem; margin-top: -1rem;">Login to your AI-powered portal</p>
+      
+      <?php if (!empty($error)) echo "<div class='alert alert-danger'>" . htmlspecialchars($error, ENT_QUOTES, 'UTF-8') . "</div>"; ?>
+      <?php if ($timeoutNotice): ?>
+        <div class="alert alert-warning">Your session has expired. Please log in again.</div>
+      <?php endif; ?>
+      
+      <form method="post">
+        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken, ENT_QUOTES, 'UTF-8') ?>">
+        
+        <div class="form-group">
+          <label for="email">Work Email</label>
+          <input type="email" name="email" id="email" placeholder="name@company.com" required autofocus>
+        </div>
 
-      <label for="password">Password</label>
-      <input type="password" name="password" required>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" name="password" id="password" placeholder="••••••••" required>
+        </div>
 
-      <div class="forgot-link">
-        <a href="reset_password.php">Forgot your password?</a>
-      </div>
+        <div class="forgot-link" style="text-align: right; margin-top: 0.5rem;">
+          <a href="reset_password.php" class="text-muted" style="font-size: 0.85rem;">Forgot password?</a>
+        </div>
 
-      <button type="submit">Login</button>
-    </form>
-  </main>
+        <button type="submit" style="width: 100%; margin-top: 2rem;">Sign In to DealerFAI</button>
+      </form>
+    </main>
 
-  <footer>
-    &copy; <?php echo date("Y"); ?> DealerFAI. All rights reserved.
-  </footer>
+    <footer style="background: transparent; color: rgba(255,255,255,0.7); border: none; margin-top: 2rem; padding: 1rem;">
+      &copy; <?php echo date("Y"); ?> DealerFAI. All rights reserved.
+    </footer>
+  </div>
 </body>
 </html>

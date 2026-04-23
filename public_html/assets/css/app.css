@@ -12,7 +12,10 @@
   --bg-subtle: #f8fafc;
   --text-main: #0f172a;
   --text-muted: #64748b;
-  --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.3);
+  --glass-blur: 12px;
 }
 
 body {
@@ -402,4 +405,69 @@ details[open] summary::before { transform: rotate(90deg); }
   border-radius: 999px;
   font-size: 0.75rem;
   font-weight: 700;
+}
+
+/* ─── Modern UI Utilities ────────────────────────────────────────────────────── */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+}
+
+.bg-ai {
+  background-image: url('/assets/img/ai_bg.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+.full-page-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, var(--brand-color) 0%, #1e293b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-box {
+  padding: 5rem 2rem;
+  border-radius: var(--radius-lg);
+  margin-bottom: 3rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-box::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(circle at 50% 0%, var(--accent-glow) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* ─── Header Overrides for Landing/Login ───────────────────────────────────── */
+.clean-header {
+  background: transparent;
+  border: none;
+  padding: 2rem;
+}
+
+.clean-header img {
+  margin-bottom: 0;
+  max-width: 240px;
+}
+
+.clean-header h1 {
+  display: none; /* Hide redundant text if logo has it */
 }
