@@ -444,31 +444,89 @@ $isCreditQuestionVisible = function (string $step, string $id) use ($creditQuest
     .question-toggle { display: block; margin-top: 8px; font-weight: normal; }
   </style>
 </head>
-<body>
-<header>
-  <h1>DealerFAI Admin</h1>
-  <div class="logout">
-    <a href="admin_error_alerts.php" class="nav-link-white">Alerts<?php if ($adminAlertCount > 0): ?> <span style="display:inline-block; min-width:18px; padding:2px 8px; border-radius:999px; background:#d7263d; color:#fff; font-size:12px; font-weight:bold; text-align:center; margin-left:6px;"><?= $adminAlertCount ?></span><?php endif; ?></a>
-    <a href="logout.php" class="nav-link-white">Log Out</a>
-  </div>
-</header>
-<nav>
-  <a href="dashboard.php">Dashboard</a>
-  <a href="view_deals.php">View Deals</a>
-  <a href="create_deal.php">Create Deal</a>
-  <a href="admin_tools.php">Admin Tools</a>
-</nav>
+<body class="dashboard-wrapper">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header" style="padding: 1.5rem;">
+      <img src="dealerfai_logo_white.png" alt="DealerFAI" style="height: 35px; width: auto;">
+    </div>
+    <nav class="sidebar-nav" style="background: transparent; padding: 1.5rem 1rem;">
+      <a href="dashboard" class="sidebar-link">
+        <i class="fa-solid fa-gauge"></i> Dashboard
+      </a>
+      <a href="view_deals" class="sidebar-link">
+        <i class="fa-solid fa-file-invoice-dollar"></i> View Deals
+      </a>
+      <a href="create_deal" class="sidebar-link">
+        <i class="fa-solid fa-plus-circle"></i> Create Deal
+      </a>
+      
+      <?php if ($isAdmin): ?>
+        <div style="margin-top: 2rem; padding: 0 1rem; font-size: 0.75rem; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700;">Admin</div>
+        <a href="admin_scoring_log" class="sidebar-link">
+          <i class="fa-solid fa-list-check"></i> Scoring Log
+        </a>
+        <a href="manage_users" class="sidebar-link">
+          <i class="fa-solid fa-users"></i> Users
+        </a>
+        <a href="admin_organizations" class="sidebar-link active">
+          <i class="fa-solid fa-building"></i> Organizations
+        </a>
+        <a href="admin_tools" class="sidebar-link">
+          <i class="fa-solid fa-wrench"></i> Admin Tools
+        </a>
+      <?php endif; ?>
+    </nav>
+    <div style="padding: 1.5rem; border-top: 1px solid rgba(255,255,255,0.1);">
+      <p style="font-size: 0.75rem; color: rgba(255,255,255,0.4); margin: 0;">DealerFAI v2.0</p>
+    </div>
+  </aside>
 
-<div class="container">
-  <h2><?= $orgId > 0 ? 'Edit Organization' : 'Add Organization' ?></h2>
-  <a class="btn" href="admin_organizations.php">← Back to organizations</a>
-  <?php if ($orgId > 0): ?>
-    <a class="btn secondary" href="admin_credit_app_questions.php?org_id=<?= (int)$orgId ?>">Manage Credit App Questions</a>
-  <?php endif; ?>
+  <!-- Main Content -->
+  <div class="main-container">
+    <header class="top-bar">
+      <div class="breadcrumb" style="font-weight: 600; color: #64748b;">
+        DealerFAI <i class="fa-solid fa-chevron-right" style="font-size: 0.75rem; margin: 0 0.5rem; opacity: 0.5;"></i> <a href="admin_organizations" style="color: inherit; text-decoration: none;">Organizations</a> <i class="fa-solid fa-chevron-right" style="font-size: 0.75rem; margin: 0 0.5rem; opacity: 0.5;"></i> <?= $orgId > 0 ? 'Edit' : 'Add' ?>
+      </div>
+      <div style="display: flex; align-items: center; gap: 1.5rem;">
+        <?php if ($isAdmin): ?>
+          <a href="admin_error_alerts" style="position: relative; color: #64748b;">
+            <i class="fa-solid fa-bell" style="font-size: 1.25rem;"></i>
+            <?php if ($adminAlertCount > 0): ?>
+              <span style="position: absolute; top: -5px; right: -5px; background: #ef4444; color: white; font-size: 10px; padding: 2px 5px; border-radius: 10px; font-weight: 700;"><?= $adminAlertCount ?></span>
+            <?php endif; ?>
+          </a>
+        <?php endif; ?>
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <div style="text-align: right;">
+            <div style="font-size: 0.875rem; font-weight: 700; color: #0f172a;"><?= htmlspecialchars($_SESSION['full_name'] ?? 'User') ?></div>
+            <a href="logout" style="font-size: 0.75rem; color: #64748b; text-decoration: none;">Log Out</a>
+          </div>
+          <div style="width: 40px; height: 40px; background: var(--brand-color); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">
+            <?= strtoupper(substr($_SESSION['full_name'] ?? 'U', 0, 1)) ?>
+          </div>
+        </div>
+      </div>
+    </header>
 
-  <?php foreach ($errors as $error): ?>
-    <p class="error"><?= htmlspecialchars($error) ?></p>
-  <?php endforeach; ?>
+    <main class="page-content" style="max-width: 900px;">
+      <div style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <h1 class="text-gradient" style="margin-bottom: 0.5rem; display: inline-block;"><?= $orgId > 0 ? 'Edit Organization' : 'Add Organization' ?></h1>
+          <p class="text-muted">Configure store settings, branding, and billing.</p>
+        </div>
+        <div style="display: flex; gap: 1rem;">
+          <a class="btn btn-outline" href="admin_organizations.php" style="padding: 0.5rem 1rem; font-size: 0.875rem;">← Back</a>
+          <?php if ($orgId > 0): ?>
+            <a class="btn btn-primary" href="admin_credit_app_questions.php?org_id=<?= (int)$orgId ?>" style="padding: 0.5rem 1rem; font-size: 0.875rem;">Manage Credit App Questions</a>
+          <?php endif; ?>
+        </div>
+      </div>
+
+      <?php foreach ($errors as $error): ?>
+        <div class="alert alert-danger" style="margin-bottom: 1.5rem;"><?= htmlspecialchars($error) ?></div>
+      <?php endforeach; ?>
+
 
   <form method="post" enctype="multipart/form-data">
     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken) ?>">
@@ -663,9 +721,13 @@ $isCreditQuestionVisible = function (string $step, string $id) use ($creditQuest
     <div class="actions">
       <button type="submit" class="btn"><?= $orgId > 0 ? 'Save changes' : 'Create organization' ?></button>
     </div>
-  </form>
-</div>
-<script nonce="<?= dealerfai_csp_nonce() ?>">
+    </form>
+    </main>
+    <footer style="background: white; border-top: 1px solid #e2e8f0; color: #64748b; padding: 1.5rem; text-align: center; position: static;">
+      &copy; <?= date("Y") ?> DealerFAI. All rights reserved.
+    </footer>
+  </div>
+  <script nonce="<?= dealerfai_csp_nonce() ?>">
   (function initLogoPreview() {
     const input = document.querySelector('input[type="file"][name="logo_file"]');
     const preview = document.getElementById('logo-file-preview');
@@ -698,6 +760,6 @@ $isCreditQuestionVisible = function (string $step, string $id) use ($creditQuest
       });
     }
   })();
-</script>
+  </script>
 </body>
 </html>

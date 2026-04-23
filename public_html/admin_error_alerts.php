@@ -212,99 +212,167 @@ $csrfToken = dealerfai_csrf_get_token();
     }
   </style>
 </head>
-<body>
-<header class="pos-relative">
-  <?php if (!empty($theme['logo'])): ?>
-    <img src="<?= htmlspecialchars($theme['logo']) ?>" alt="Dealer Logo">
-  <?php else: ?>
-    <h1>DealerFAI</h1>
-  <?php endif; ?>
-  <div class="logout">
-    <a href="admin_error_alerts.php" class="nav-link-white">Alerts<?php if ($adminAlertCount > 0): ?> <span style="display:inline-block; min-width:18px; padding:2px 8px; border-radius:999px; background:#d7263d; color:#fff; font-size:12px; font-weight:bold; text-align:center; margin-left:6px;"><?= $adminAlertCount ?></span><?php endif; ?></a>
-    <a href="logout.php" class="nav-link-white">Log Out</a>
-  </div>
-</header>
-<nav>
-  <a href="dashboard.php">Dashboard</a>
-  <a href="admin_tools.php">Admin Tools</a>
-  <a href="admin_error_alerts.php">Admin Alerts</a>
-</nav>
-<main>
-  <div class="page-header">
-    <h2>Admin Error Alerts</h2>
-    <div class="summary">
-      Open alerts: <span class="badge"><?= $openCount ?></span>
+<body class="dashboard-wrapper">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header" style="padding: 1.5rem;">
+      <img src="dealerfai_logo_white.png" alt="DealerFAI" style="height: 35px; width: auto;">
     </div>
-  </div>
+    <nav class="sidebar-nav" style="background: transparent; padding: 1.5rem 1rem;">
+      <a href="dashboard" class="sidebar-link">
+        <i class="fa-solid fa-gauge"></i> Dashboard
+      </a>
+      <a href="view_deals" class="sidebar-link">
+        <i class="fa-solid fa-file-invoice-dollar"></i> View Deals
+      </a>
+      <a href="create_deal" class="sidebar-link">
+        <i class="fa-solid fa-plus-circle"></i> Create Deal
+      </a>
+      
+      <?php if ($isAdmin): ?>
+        <div style="margin-top: 2rem; padding: 0 1rem; font-size: 0.75rem; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700;">Admin</div>
+        <a href="admin_scoring_log" class="sidebar-link">
+          <i class="fa-solid fa-list-check"></i> Scoring Log
+        </a>
+        <a href="manage_users" class="sidebar-link">
+          <i class="fa-solid fa-users"></i> Users
+        </a>
+        <a href="admin_organizations" class="sidebar-link">
+          <i class="fa-solid fa-building"></i> Organizations
+        </a>
+        <a href="admin_tools" class="sidebar-link">
+          <i class="fa-solid fa-wrench"></i> Admin Tools
+        </a>
+      <?php endif; ?>
+    </nav>
+    <div style="padding: 1.5rem; border-top: 1px solid rgba(255,255,255,0.1);">
+      <p style="font-size: 0.75rem; color: rgba(255,255,255,0.4); margin: 0;">DealerFAI v2.0</p>
+    </div>
+  </aside>
 
-  <?php if ($loadError): ?>
-    <div class="empty"><?= htmlspecialchars($loadError) ?></div>
-  <?php elseif (empty($alerts)): ?>
-    <div class="empty">No alerts recorded yet.</div>
-  <?php else: ?>
-    <table>
-      <thead>
-        <tr>
-          <th>Status</th>
-          <th>Alert</th>
-          <th>Occurrences</th>
-          <th>Last Seen</th>
-          <th>Context</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php foreach ($alerts as $alert): ?>
-          <?php $isResolved = (int)$alert['is_resolved'] === 1; ?>
-          <tr class="<?= $isResolved ? 'resolved' : '' ?>">
-            <td>
-              <?php if ($isResolved): ?>
-                <span class="status-pill status-resolved">Resolved</span>
-                <?php if (!empty($alert['resolved_at'])): ?>
-                  <div class="meta"><?= htmlspecialchars($alert['resolved_at']) ?></div>
-                <?php endif; ?>
-              <?php else: ?>
-                <span class="status-pill status-open">Open</span>
-              <?php endif; ?>
-            </td>
-            <td>
-              <div class="message" title="<?= htmlspecialchars($alert['message']) ?>"><?= htmlspecialchars(clamp_text($alert['message'])) ?></div>
-              <div class="meta">Level: <?= htmlspecialchars($alert['level']) ?></div>
-              <?php if (!empty($alert['file'])): ?>
-                <div class="meta">File: <?= htmlspecialchars($alert['file']) ?><?php if (!empty($alert['line'])): ?>:<?= (int)$alert['line'] ?><?php endif; ?></div>
-              <?php endif; ?>
-            </td>
-            <td><?= (int)$alert['occurrences'] ?></td>
-            <td>
-              <div><?= htmlspecialchars($alert['last_seen']) ?></div>
-              <div class="meta">First: <?= htmlspecialchars($alert['first_seen']) ?></div>
-            </td>
-            <td>
-              <?php if (!empty($alert['url'])): ?>
-                <div><a href="<?= htmlspecialchars($alert['url']) ?>" target="_blank" rel="noopener">View URL</a></div>
-              <?php endif; ?>
-              <div class="meta">User: <?= htmlspecialchars((string)($alert['user_id'] ?? '')) ?></div>
-              <div class="meta">Org: <?= htmlspecialchars((string)($alert['org_id'] ?? '')) ?></div>
-              <?php if (!empty($alert['last_ip'])): ?>
-                <div class="meta">IP: <?= htmlspecialchars($alert['last_ip']) ?></div>
-              <?php endif; ?>
-            </td>
-            <td>
-              <?php if (!$isResolved): ?>
-                <form method="post">
-                  <input type="hidden" name="resolve_id" value="<?= (int)$alert['id'] ?>">
-                  <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken, ENT_QUOTES, 'UTF-8') ?>">
-                  <button type="submit" class="resolve-button">Mark Resolved</button>
-                </form>
-              <?php else: ?>
-                <span class="meta">Resolved</span>
-              <?php endif; ?>
-            </td>
-          </tr>
-        <?php endforeach; ?>
-      </tbody>
-    </table>
-  <?php endif; ?>
-</main>
+  <!-- Main Content -->
+  <div class="main-container">
+    <header class="top-bar">
+      <div class="breadcrumb" style="font-weight: 600; color: #64748b;">
+        DealerFAI <i class="fa-solid fa-chevron-right" style="font-size: 0.75rem; margin: 0 0.5rem; opacity: 0.5;"></i> Error Alerts
+      </div>
+      <div style="display: flex; align-items: center; gap: 1.5rem;">
+        <?php if ($isAdmin): ?>
+          <a href="admin_error_alerts" style="position: relative; color: var(--brand-color);">
+            <i class="fa-solid fa-bell" style="font-size: 1.25rem;"></i>
+            <?php if ($adminAlertCount > 0): ?>
+              <span style="position: absolute; top: -5px; right: -5px; background: #ef4444; color: white; font-size: 10px; padding: 2px 5px; border-radius: 10px; font-weight: 700;"><?= $adminAlertCount ?></span>
+            <?php endif; ?>
+          </a>
+        <?php endif; ?>
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <div style="text-align: right;">
+            <div style="font-size: 0.875rem; font-weight: 700; color: #0f172a;"><?= htmlspecialchars($_SESSION['full_name'] ?? 'User') ?></div>
+            <a href="logout" style="font-size: 0.75rem; color: #64748b; text-decoration: none;">Log Out</a>
+          </div>
+          <div style="width: 40px; height: 40px; background: var(--brand-color); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">
+            <?= strtoupper(substr($_SESSION['full_name'] ?? 'U', 0, 1)) ?>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-content">
+      <div style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: flex-end;">
+        <div>
+          <h1 class="text-gradient" style="margin-bottom: 0.5rem; display: inline-block;">System Error Alerts</h1>
+          <p class="text-muted">Monitor and resolve system errors across the application.</p>
+        </div>
+        <div class="summary" style="margin-bottom: 0.5rem;">
+          Open alerts: <span class="badge" style="vertical-align: middle;"><?= $openCount ?></span>
+        </div>
+      </div>
+
+      <?php if ($loadError): ?>
+        <div class="glass" style="padding: 3rem; text-align: center;">
+          <i class="fa-solid fa-triangle-exclamation" style="font-size: 3rem; color: #f59e0b; margin-bottom: 1rem;"></i>
+          <p><?= htmlspecialchars($loadError) ?></p>
+        </div>
+      <?php elseif (empty($alerts)): ?>
+        <div class="glass" style="padding: 3rem; text-align: center;">
+          <i class="fa-solid fa-check-circle" style="font-size: 3rem; color: #10b981; margin-bottom: 1rem;"></i>
+          <p>No alerts recorded yet. Everything looks good!</p>
+        </div>
+      <?php else: ?>
+        <div class="data-table-card">
+          <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+              <tr style="background: #f8fafc; border-bottom: 1px solid #e2e8f0;">
+                <th style="padding: 1rem 1.5rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; background: transparent;">Status</th>
+                <th style="padding: 1rem 1.5rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; background: transparent;">Alert Details</th>
+                <th style="padding: 1rem 1.5rem; text-align: center; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; background: transparent;">Occurrences</th>
+                <th style="padding: 1rem 1.5rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; background: transparent;">Last Seen</th>
+                <th style="padding: 1rem 1.5rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; background: transparent;">Context</th>
+                <th style="padding: 1rem 1.5rem; text-align: right; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; background: transparent;">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php foreach ($alerts as $alert): ?>
+                <?php $isResolved = (int)$alert['is_resolved'] === 1; ?>
+                <tr style="border-bottom: 1px solid #f1f5f9; <?= $isResolved ? 'opacity: 0.6;' : '' ?>">
+                  <td style="padding: 1.25rem 1.5rem;">
+                    <?php if ($isResolved): ?>
+                      <span class="status-pill status-resolved">Resolved</span>
+                      <?php if (!empty($alert['resolved_at'])): ?>
+                        <div class="meta"><?= htmlspecialchars($alert['resolved_at']) ?></div>
+                      <?php endif; ?>
+                    <?php else: ?>
+                      <span class="status-pill status-open">Open</span>
+                    <?php endif; ?>
+                  </td>
+                  <td style="padding: 1.25rem 1.5rem;">
+                    <div class="message" style="font-weight: 700; color: #0f172a; margin-bottom: 0.25rem;" title="<?= htmlspecialchars($alert['message']) ?>">
+                      <?= htmlspecialchars(clamp_text($alert['message'])) ?>
+                    </div>
+                    <div class="meta">Level: <?= htmlspecialchars($alert['level']) ?></div>
+                    <?php if (!empty($alert['file'])): ?>
+                      <div class="meta" style="font-family: monospace; font-size: 0.7rem; color: #64748b; background: #f1f5f9; padding: 2px 4px; border-radius: 4px; display: inline-block; margin-top: 4px;">
+                        <?= htmlspecialchars(basename($alert['file'])) ?><?php if (!empty($alert['line'])): ?>:<?= (int)$alert['line'] ?><?php endif; ?>
+                      </div>
+                    <?php endif; ?>
+                  </td>
+                  <td style="padding: 1.25rem 1.5rem; text-align: center;">
+                    <span style="font-weight: 700; color: #0f172a;"><?= (int)$alert['occurrences'] ?></span>
+                  </td>
+                  <td style="padding: 1.25rem 1.5rem;">
+                    <div style="font-size: 0.875rem; font-weight: 500;"><?= htmlspecialchars($alert['last_seen']) ?></div>
+                    <div class="meta">First: <?= htmlspecialchars($alert['first_seen']) ?></div>
+                  </td>
+                  <td style="padding: 1.25rem 1.5rem;">
+                    <?php if (!empty($alert['url'])): ?>
+                      <div style="margin-bottom: 0.25rem;"><a href="<?= htmlspecialchars($alert['url']) ?>" target="_blank" rel="noopener" style="color: var(--brand-color); text-decoration: none; font-size: 0.875rem; font-weight: 600;">View URL <i class="fa-solid fa-external-link" style="font-size: 0.7rem;"></i></a></div>
+                    <?php endif; ?>
+                    <div class="meta">User: <?= htmlspecialchars((string)($alert['user_id'] ?? 'N/A')) ?></div>
+                    <div class="meta">Org: <?= htmlspecialchars((string)($alert['org_id'] ?? 'N/A')) ?></div>
+                  </td>
+                  <td style="padding: 1.25rem 1.5rem; text-align: right;">
+                    <?php if (!$isResolved): ?>
+                      <form method="post" style="display: inline;">
+                        <input type="hidden" name="resolve_id" value="<?= (int)$alert['id'] ?>">
+                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken, ENT_QUOTES, 'UTF-8') ?>">
+                        <button type="submit" class="resolve-button" style="background: var(--brand-color); border-color: var(--brand-color);">Mark Resolved</button>
+                      </form>
+                    <?php else: ?>
+                      <span class="meta" style="font-style: italic;">Resolved</span>
+                    <?php endif; ?>
+                  </td>
+                </tr>
+              <?php endforeach; ?>
+            </tbody>
+          </table>
+        </div>
+      <?php endif; ?>
+    </main>
+
+    <footer style="background: white; border-top: 1px solid #e2e8f0; color: #64748b; padding: 1.5rem; text-align: center; position: static;">
+      &copy; <?= date("Y") ?> DealerFAI. All rights reserved.
+    </footer>
+  </div>
 </body>
+
 </html>
