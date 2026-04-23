@@ -131,135 +131,189 @@ $conditionDefault = $data['vehicle_condition'] ?? 'New';
   <title>Step 2 – Vehicle Info</title>
   <?php dealerfai_theme_head($theme ?? null); ?>
   <style nonce="<?= dealerfai_csp_nonce() ?>">
-    body { font-family: "Segoe UI", sans-serif; background: #f4f6f8; padding: 0; margin: 0; }
-    .container {
-      max-width: 700px; margin: 40px auto; padding: 30px; background: white;
-      border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-    h2 { margin-top: 0; }
-    label { display: block; margin-top: 15px; font-weight: bold; }
-    input, select {
-      width: 100%; padding: 10px; margin-top: 5px;
-      border: 1px solid #ccc; border-radius: 4px;
-    }
-    .btn {
-      background: <?= htmlspecialchars($theme['color']) ?>;
-      color: white; padding: 12px 20px; border: none;
-      border-radius: 4px; margin-top: 20px; font-size: 16px;
-      cursor: pointer;
-    }
-    .btn:hover { opacity: 0.9; }
-    .btn-back { background: #999; margin-right: 10px; }
+    /* Specific page overrides */
+    .form-section { background: white; padding: 2rem; border-radius: var(--radius-lg); border: 1px solid #e2e8f0; box-shadow: var(--shadow-sm); }
+    .form-group { margin-bottom: 1.5rem; }
+    .form-group label { display: block; font-size: 0.875rem; font-weight: 700; color: #475569; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.025em; }
+    .form-control { width: 100%; padding: 0.75rem 1rem; border: 1px solid #cbd5e1; border-radius: var(--radius-md); font-size: 1rem; transition: border-color 0.2s; }
+    .form-control:focus { border-color: var(--brand-color); outline: none; box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1); }
+    .step-indicator { display: flex; gap: 0.5rem; margin-bottom: 2rem; }
+    .step-dot { flex: 1; height: 4px; background: #e2e8f0; border-radius: 2px; }
+    .step-dot.active { background: var(--brand-color); }
+    .d-none { display: none; }
+    .flex-group { display: flex; gap: 0.75rem; align-items: flex-end; }
   </style>
 </head>
-<body>
+<body class="dashboard-wrapper">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header" style="padding: 1.5rem;">
+      <img src="dealerfai_logo_white.png" alt="DealerFAI" style="height: 35px; width: auto;">
+    </div>
+    <nav class="sidebar-nav" style="background: transparent; padding: 1.5rem 1rem;">
+      <a href="dashboard" class="sidebar-link">
+        <i class="fa-solid fa-gauge"></i> Dashboard
+      </a>
+      <a href="view_deals" class="sidebar-link">
+        <i class="fa-solid fa-file-invoice-dollar"></i> View Deals
+      </a>
+      <a href="create_deal" class="sidebar-link active">
+        <i class="fa-solid fa-plus-circle"></i> Create Deal
+      </a>
+      
+      <?php if ($isAdmin): ?>
+        <div style="margin-top: 2rem; padding: 0 1rem; font-size: 0.75rem; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700;">Admin</div>
+        <a href="admin_scoring_log" class="sidebar-link">
+          <i class="fa-solid fa-list-check"></i> Scoring Log
+        </a>
+        <a href="manage_users" class="sidebar-link">
+          <i class="fa-solid fa-users"></i> Users
+        </a>
+        <a href="admin_organizations" class="sidebar-link">
+          <i class="fa-solid fa-building"></i> Organizations
+        </a>
+        <a href="admin_tools" class="sidebar-link">
+          <i class="fa-solid fa-wrench"></i> Admin Tools
+        </a>
+      <?php endif; ?>
+    </nav>
+    <div style="padding: 1.5rem; border-top: 1px solid rgba(255,255,255,0.1);">
+      <p style="font-size: 0.75rem; color: rgba(255,255,255,0.4); margin: 0;">DealerFAI v2.0</p>
+    </div>
+  </aside>
 
-<header style="background-color: <?= htmlspecialchars($theme['color']) ?>; color:white; padding:30px 40px; text-align:center; position:relative;">
-  <?php if (!empty($theme['logo'])): ?>
-    <img src="<?= htmlspecialchars($theme['logo']) ?>" alt="Dealer Logo" style="max-height:60px;">
-  <?php else: ?>
-    <h1>DealerFAI</h1>
-  <?php endif; ?>
-  <div style="position:absolute; right:20px; top:20px; display:flex; gap:12px; align-items:center;">
-    <?php if ($isAdmin): ?>
-      <a href="admin_error_alerts.php" style="color:#fff; font-size:14px; text-decoration:none; font-weight:bold;">Alerts<?php if ($adminAlertCount > 0): ?> <span style="display:inline-block; min-width:18px; padding:2px 8px; border-radius:999px; background:#d7263d; color:#fff; font-size:12px; font-weight:bold; text-align:center; margin-left:6px;"><?= $adminAlertCount ?></span><?php endif; ?></a>
-    <?php endif; ?>
-    <a href="logout.php" style="color:#ccc; font-size:14px; text-decoration:none;">Log Out</a>
+  <!-- Main Content -->
+  <div class="main-container">
+    <header class="top-bar">
+      <div class="breadcrumb" style="font-weight: 600; color: #64748b;">
+        DealerFAI <i class="fa-solid fa-chevron-right" style="font-size: 0.75rem; margin: 0 0.5rem; opacity: 0.5;"></i> Create Deal
+      </div>
+      <div style="display: flex; align-items: center; gap: 1.5rem;">
+        <?php if ($isAdmin): ?>
+          <a href="admin_error_alerts" style="position: relative; color: #64748b;">
+            <i class="fa-solid fa-bell" style="font-size: 1.25rem;"></i>
+            <?php if ($adminAlertCount > 0): ?>
+              <span style="position: absolute; top: -5px; right: -5px; background: #ef4444; color: white; font-size: 10px; padding: 2px 5px; border-radius: 10px; font-weight: 700;"><?= $adminAlertCount ?></span>
+            <?php endif; ?>
+          </a>
+        <?php endif; ?>
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <div style="text-align: right;">
+            <div style="font-size: 0.875rem; font-weight: 700; color: #0f172a;"><?= htmlspecialchars($_SESSION['full_name'] ?? 'User') ?></div>
+            <a href="logout" style="font-size: 0.75rem; color: #64748b; text-decoration: none;">Log Out</a>
+          </div>
+          <div style="width: 40px; height: 40px; background: var(--brand-color); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">
+            <?= strtoupper(substr($_SESSION['full_name'] ?? 'U', 0, 1)) ?>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-content" style="max-width: 800px;">
+      <div style="margin-bottom: 2rem;">
+        <h1 class="text-gradient" style="margin-bottom: 0.5rem; display: inline-block;">Vehicle Information</h1>
+        <p class="text-muted">Enter the details for the vehicle associated with this deal.</p>
+      </div>
+
+      <div class="step-indicator">
+        <div class="step-dot active"></div>
+        <div class="step-dot active"></div>
+        <div class="step-dot"></div>
+      </div>
+
+      <form method="post" class="form-section">
+        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken, ENT_QUOTES, 'UTF-8') ?>">
+        
+        <div class="form-group">
+          <label for="vin">VIN (Vehicle Identification Number)</label>
+          <div class="flex-group">
+            <input type="text" name="vin" id="vin" class="form-control" maxlength="32" value="<?= htmlspecialchars($data['vin'] ?? '') ?>" placeholder="17-character VIN">
+            <button type="button" class="btn btn-outline" id="vin_decode_btn" style="white-space: nowrap;">Decode VIN</button>
+          </div>
+          <div id="vin_decode_status" style="margin-top: 0.5rem; font-size: 0.75rem; color: #64748b;"></div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+          <div class="form-group">
+            <label for="vehicle_condition">Condition</label>
+            <select name="vehicle_condition" id="vehicle_condition" class="form-control" required>
+              <option value="New" <?= ($conditionDefault === 'New') ? 'selected' : '' ?>>New Vehicle</option>
+              <option value="Used" <?= ($conditionDefault === 'Used') ? 'selected' : '' ?>>Used Vehicle</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="vehicle_year">Model Year</label>
+            <select name="vehicle_year" id="vehicle_year" class="form-control" required>
+              <option value="">-- Select Year --</option>
+              <?php foreach ($years as $year): ?>
+                <option value="<?= $year ?>" <?= ($year == ($data['vehicle_year'] ?? '')) ? 'selected' : '' ?>><?= $year ?></option>
+              <?php endforeach; ?>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="vehicle_make_id">Make</label>
+          <select name="vehicle_make_id" id="vehicle_make_id" class="form-control" required>
+            <option value="">-- Select Make --</option>
+            <?php foreach ($vehicleMakes as $make): ?>
+              <option value="<?= $make['id'] ?>" <?= ($make['id'] == ($data['vehicle_make_id'] ?? '')) ? 'selected' : '' ?>><?= htmlspecialchars($make['make_name']) ?></option>
+            <?php endforeach; ?>
+            <option value="custom" <?= ($makeIdDefault === '' && $customMakeDefault !== '') ? 'selected' : '' ?>>Custom...</option>
+          </select>
+          <input type="text" name="custom_make" id="custom_make" class="form-control d-none" style="margin-top: 0.75rem;" placeholder="Enter custom make" value="<?= htmlspecialchars($customMakeDefault) ?>">
+        </div>
+
+        <div class="form-group">
+          <label for="vehicle_model_id">Model</label>
+          <select name="vehicle_model_id" id="vehicle_model_id" class="form-control" required disabled>
+            <option value="">-- Select Model --</option>
+          </select>
+          <input type="text" name="custom_model" id="custom_model" class="form-control d-none" style="margin-top: 0.75rem;" placeholder="Enter custom model" value="<?= htmlspecialchars($customModelDefault) ?>">
+        </div>
+
+        <div class="form-group">
+          <label for="vehicle_trim_id">Trim (Optional)</label>
+          <select name="vehicle_trim_id" id="vehicle_trim_id" class="form-control" disabled>
+            <option value="">-- Select Trim --</option>
+          </select>
+          <input type="text" name="custom_trim" id="custom_trim" class="form-control d-none" style="margin-top: 0.75rem;" placeholder="Enter custom trim" value="<?= htmlspecialchars($customTrimDefault) ?>">
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+          <div class="form-group">
+            <label for="vehicle_kms">Odometer (KM)</label>
+            <input type="number" name="vehicle_kms" id="vehicle_kms" class="form-control" value="<?= htmlspecialchars($data['vehicle_kms'] ?? '') ?>" min="0" placeholder="0">
+          </div>
+
+          <div class="form-group">
+            <label for="in_service_date">In-Service Date</label>
+            <input type="date" name="in_service_date" id="in_service_date" class="form-control" value="<?= htmlspecialchars($data['in_service_date'] ?? '') ?>">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="vehicle_colour">Exterior Colour</label>
+          <select name="vehicle_colour" id="vehicle_colour" class="form-control" required>
+            <option value="">-- Select Colour --</option>
+            <?php foreach ($vehicleColours as $colour): ?>
+              <option value="<?= htmlspecialchars($colour) ?>" <?= ($colour == ($data['vehicle_colour'] ?? '')) ? 'selected' : '' ?>><?= htmlspecialchars($colour) ?></option>
+            <?php endforeach; ?>
+          </select>
+        </div>
+
+        <div style="margin-top: 2rem; display: flex; justify-content: space-between;">
+          <a href="create_deal" class="btn btn-secondary" style="padding: 1rem 2rem;"><i class="fa-solid fa-arrow-left" style="margin-right: 0.75rem;"></i> Back</a>
+          <button type="submit" class="btn btn-primary" style="padding: 1rem 2.5rem; font-weight: 700;">Continue to Step 3 <i class="fa-solid fa-arrow-right" style="margin-left: 0.75rem;"></i></button>
+        </div>
+      </form>
+    </main>
+
+    <footer style="background: white; border-top: 1px solid #e2e8f0; color: #64748b; padding: 1.5rem; text-align: center; position: static;">
+      &copy; <?= date("Y") ?> DealerFAI. All rights reserved.
+    </footer>
   </div>
-</header>
-
-<nav style="background-color: <?= htmlspecialchars($theme['color']) ?>; padding:12px; text-align:center;">
-  <a href="dashboard" class="nav-link-white">Dashboard</a>
-  <a href="view_deals" class="nav-link-white">View Deals</a>
-  <a href="create_deal" class="nav-link-white">Create Deal</a>
-  <?php if (in_array('General Manager', $roles, true) || $isAdmin): ?>
-    <a href="admin_tools" class="nav-link-white">Admin Tools</a>
-  <?php endif; ?>
-</nav>
-
-<div class="container">
-  <h2>Step 2 of 3: Vehicle Information</h2>
-
-  <form method="post">
-    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken, ENT_QUOTES, 'UTF-8') ?>">
-    <label for="vin">VIN (optional)</label>
-    <div class="flex-gap-10">
-      <input type="text" name="vin" id="vin" maxlength="32"
-             value="<?= htmlspecialchars($data['vin'] ?? '') ?>" placeholder="17-character VIN" style="flex:1;">
-      <button type="button" class="btn" id="vin_decode_btn" class="mt-0">Decode VIN</button>
-    </div>
-    <div id="vin_decode_status" style="margin-top:6px; font-size:13px; color:#555;"></div>
-
-    <label for="vehicle_condition">Vehicle Condition</label>
-    <select name="vehicle_condition" id="vehicle_condition" required>
-      <option value="New" <?= ($conditionDefault === 'New') ? 'selected' : '' ?>>New</option>
-      <option value="Used" <?= ($conditionDefault === 'Used') ? 'selected' : '' ?>>Used</option>
-    </select>
-
-    <label for="vehicle_year">Model Year</label>
-    <select name="vehicle_year" id="vehicle_year" required>
-      <option value="">-- Select Year --</option>
-      <?php foreach ($years as $year): ?>
-        <option value="<?= $year ?>"
-          <?= ($year == ($data['vehicle_year'] ?? '')) ? 'selected' : '' ?>>
-          <?= $year ?>
-        </option>
-      <?php endforeach; ?>
-    </select>
-
-    <label for="vehicle_make_id">Vehicle Make</label>
-    <select name="vehicle_make_id" id="vehicle_make_id" required>
-      <option value="">-- Select Make --</option>
-      <?php foreach ($vehicleMakes as $make): ?>
-        <option value="<?= $make['id'] ?>"
-          <?= ($make['id'] == ($data['vehicle_make_id'] ?? '')) ? 'selected' : '' ?>>
-          <?= htmlspecialchars($make['make_name']) ?>
-        </option>
-      <?php endforeach; ?>
-      <option value="custom" <?= ($makeIdDefault === '' && $customMakeDefault !== '') ? 'selected' : '' ?>>Custom...</option>
-    </select>
-    <input type="text" name="custom_make" id="custom_make" placeholder="Enter custom make"
-           value="<?= htmlspecialchars($customMakeDefault) ?>" class="d-none">
-
-    <label for="vehicle_model_id">Vehicle Model</label>
-    <select name="vehicle_model_id" id="vehicle_model_id" required disabled>
-      <option value="">-- Select Model --</option>
-    </select>
-    <input type="text" name="custom_model" id="custom_model" placeholder="Enter custom model"
-           value="<?= htmlspecialchars($customModelDefault) ?>" class="d-none">
-
-    <label for="vehicle_trim_id">Vehicle Trim</label>
-    <select name="vehicle_trim_id" id="vehicle_trim_id" disabled>
-      <option value="">-- Select Trim (Optional) --</option>
-    </select>
-    <input type="text" name="custom_trim" id="custom_trim" placeholder="Enter custom trim"
-           value="<?= htmlspecialchars($customTrimDefault) ?>" class="d-none">
-
-    <label for="vehicle_kms">Odometer (km)</label>
-    <input type="number" name="vehicle_kms" id="vehicle_kms"
-           value="<?= htmlspecialchars($data['vehicle_kms'] ?? '') ?>" min="0">
-
-    <label for="in_service_date">In-Service Date</label>
-    <input type="date" name="in_service_date" id="in_service_date"
-           value="<?= htmlspecialchars($data['in_service_date'] ?? '') ?>">
-
-    <label for="vehicle_colour">Vehicle Colour</label>
-    <select name="vehicle_colour" id="vehicle_colour" required>
-      <option value="">-- Select Colour --</option>
-      <?php foreach ($vehicleColours as $colour): ?>
-        <option value="<?= htmlspecialchars($colour) ?>"
-          <?= ($colour == ($data['vehicle_colour'] ?? '')) ? 'selected' : '' ?>>
-          <?= htmlspecialchars($colour) ?>
-        </option>
-      <?php endforeach; ?>
-    </select>
-
-    <div class="mt-30">
-      <a href="create_deal" class="btn btn-back">← Back</a>
-      <button type="submit" class="btn">Next Step →</button>
-    </div>
-  </form>
-</div>
 
 <script nonce="<?= dealerfai_csp_nonce() ?>">
   const makeSelect = document.getElementById('vehicle_make_id');
