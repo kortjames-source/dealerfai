@@ -165,182 +165,162 @@ unset($deal);
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <?php dealerfai_theme_head($theme ?? null); ?>
   <style nonce="<?= dealerfai_csp_nonce() ?>">
-    body {
-      margin: 0;
-      font-family: "Segoe UI", sans-serif;
-      background-color: #f4f6f8;
-      color: #111111;
-    }
-    header {
-      background-color: <?= htmlspecialchars($theme['color']) ?>;
-      color: white;
-      padding: 30px 40px;
-      text-align: center;
-      position: relative;
-    }
-    header img {
-      max-width: 480px;
-      max-height: 180px;
-      height: auto;
-      display: block;
-      margin: 0 auto 10px;
-    }
-    nav {
-      background-color: <?= htmlspecialchars($theme['color']) ?>;
-      padding: 12px;
-      text-align: center;
-    }
-    nav a {
-      color: white;
-      margin: 0 20px;
-      text-decoration: none;
-      font-weight: bold;
-    }
-    main {
-      padding: 30px 40px;
-    }
-    .filter-bar {
-      display:flex;
-      flex-wrap:wrap;
-      gap:12px;
-      justify-content:center;
-      margin-bottom:20px;
-      align-items:center;
-    }
-    .filter-bar select,
-    .filter-bar input {
-      padding:8px 10px;
-      border-radius:4px;
-      border:1px solid #ccc;
-    }
-    .filter-bar button {
-      padding:8px 14px;
-      border:none;
-      border-radius:4px;
-      background:#0066cc;
-      color:white;
-      font-weight:bold;
-      cursor:pointer;
-    }
-    .context-note {
-      text-align:center;
-      color:#1f3d5e;
-      font-weight:600;
-      margin-bottom:20px;
-    }
-    .deal-card {
-      background:white;
-      border-radius:10px;
-      padding:18px;
-      margin-bottom:24px;
-      box-shadow:0 2px 12px rgba(0,0,0,0.1);
-    }
-    .deal-card h3 {
-      margin:0 0 4px;
-      color:#0066cc;
-    }
-    .product-row {
-      border-top:1px solid #e1e8f1;
-      padding:12px 0;
-    }
-    .product-row:first-of-type {
-      border-top:none;
-    }
-    .product-name {
-      font-weight:600;
-      margin:0;
-    }
-    .product-meta {
-      font-size:0.9rem;
-      color:#555;
-      margin:2px 0;
-    }
+    /* Specific page overrides */
+    .deal-card { background: white; border-radius: var(--radius-lg); padding: 0; margin-bottom: 1.5rem; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: var(--shadow-sm); }
+    .deal-card summary { padding: 1.25rem 1.5rem; cursor: pointer; display: flex; align-items: center; justify-content: space-between; background: #f8fafc; border-bottom: 1px solid #e2e8f0; }
+    .deal-card summary::-webkit-details-marker { display: none; }
+    .product-list { padding: 1rem 1.5rem; }
+    .product-item { padding: 1rem 0; border-bottom: 1px solid #f1f5f9; }
+    .product-item:last-child { border-bottom: none; }
+    .score-badge { display: inline-block; padding: 0.25rem 0.6rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; background: #f1f5f9; color: #475569; }
+    .score-high { background: #dcfce7; color: #166534; }
+    .score-med { background: #fef9c3; color: #854d0e; }
   </style>
 </head>
-<body>
-  <header>
-    <?php if (!empty($theme['logo'])): ?>
-      <img src="<?= htmlspecialchars($theme['logo']) ?>" alt="Dealer Logo" style="max-height:60px;">
-    <?php else: ?>
-      <h1>DealerFAI Admin</h1>
-    <?php endif; ?>
-    <div style="position:absolute; top:24px; right:32px; display:flex; gap:12px; align-items:center;">
-      <a href="admin_error_alerts.php" style="color:#fff; text-decoration:none;">Alerts<?php if ($adminAlertCount > 0): ?> <span style="display:inline-block; min-width:18px; padding:2px 8px; border-radius:999px; background:#d7263d; color:#fff; font-size:12px; font-weight:bold; text-align:center; margin-left:6px;"><?= $adminAlertCount ?></span><?php endif; ?></a>
-      <a href="logout.php" style="color:#fff; text-decoration:none;">Log Out</a>
+<body class="dashboard-wrapper">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header" style="padding: 1.5rem;">
+      <img src="dealerfai_logo_white.png" alt="DealerFAI" style="height: 35px; width: auto;">
     </div>
-  </header>
+    <nav class="sidebar-nav" style="background: transparent; padding: 1.5rem 1rem;">
+      <a href="dashboard" class="sidebar-link">
+        <i class="fa-solid fa-gauge"></i> Dashboard
+      </a>
+      <a href="view_deals" class="sidebar-link">
+        <i class="fa-solid fa-file-invoice-dollar"></i> View Deals
+      </a>
+      <a href="create_deal" class="sidebar-link">
+        <i class="fa-solid fa-plus-circle"></i> Create Deal
+      </a>
+      
+      <?php if ($isAdmin): ?>
+        <div style="margin-top: 2rem; padding: 0 1rem; font-size: 0.75rem; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700;">Admin</div>
+        <a href="admin_scoring_log" class="sidebar-link active">
+          <i class="fa-solid fa-list-check"></i> Scoring Log
+        </a>
+        <a href="manage_users" class="sidebar-link">
+          <i class="fa-solid fa-users"></i> Users
+        </a>
+        <a href="admin_organizations" class="sidebar-link">
+          <i class="fa-solid fa-building"></i> Organizations
+        </a>
+        <a href="admin_tools" class="sidebar-link">
+          <i class="fa-solid fa-wrench"></i> Admin Tools
+        </a>
+      <?php endif; ?>
+    </nav>
+    <div style="padding: 1.5rem; border-top: 1px solid rgba(255,255,255,0.1);">
+      <p style="font-size: 0.75rem; color: rgba(255,255,255,0.4); margin: 0;">DealerFAI v2.0</p>
+    </div>
+  </aside>
 
-  <nav>
-    <a href="dashboard.php">Dashboard</a>
-    <a href="view_deals.php">View Deals</a>
-    <a href="create_deal.php">Create Deal</a>
-    <a href="admin_tools.php">Admin Tools</a>
-  </nav>
+  <!-- Main Content -->
+  <div class="main-container">
+    <header class="top-bar">
+      <div class="breadcrumb" style="font-weight: 600; color: #64748b;">
+        DealerFAI <i class="fa-solid fa-chevron-right" style="font-size: 0.75rem; margin: 0 0.5rem; opacity: 0.5;"></i> Scoring Log
+      </div>
+      <div style="display: flex; align-items: center; gap: 1.5rem;">
+        <a href="admin_error_alerts" style="position: relative; color: #64748b;">
+          <i class="fa-solid fa-bell" style="font-size: 1.25rem;"></i>
+          <?php if ($adminAlertCount > 0): ?>
+            <span style="position: absolute; top: -5px; right: -5px; background: #ef4444; color: white; font-size: 10px; padding: 2px 5px; border-radius: 10px; font-weight: 700;"><?= $adminAlertCount ?></span>
+          <?php endif; ?>
+        </a>
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <div style="text-align: right;">
+            <div style="font-size: 0.875rem; font-weight: 700; color: #0f172a;"><?= htmlspecialchars($_SESSION['full_name'] ?? 'User') ?></div>
+            <a href="logout" style="font-size: 0.75rem; color: #64748b; text-decoration: none;">Log Out</a>
+          </div>
+          <div style="width: 40px; height: 40px; background: var(--brand-color); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">
+            <?= strtoupper(substr($_SESSION['full_name'] ?? 'U', 0, 1)) ?>
+          </div>
+        </div>
+      </div>
+    </header>
 
-  <main>
-    <h2>Recommendation Scoring Log</h2>
-    <?php if ($orgContextId && ($orgNames[$orgContextId] ?? '')): ?>
-      <p class="context-note">Currently working within <?= htmlspecialchars($orgNames[$orgContextId]) ?>.</p>
-    <?php endif; ?>
-    <form method="get" class="filter-bar">
-      <label>
-        Organization:
-        <select name="org">
-          <option value="">All</option>
-          <?php foreach ($orgNames as $id => $label): ?>
-            <option value="<?= $id ?>" <?= ($selectedOrg === $id) ? 'selected' : '' ?>>
-              <?= htmlspecialchars($label) ?>
-            </option>
-          <?php endforeach; ?>
-        </select>
-      </label>
-      <label>
-        Deal ID:
-        <input type="number" name="deal_id" value="<?= htmlspecialchars($_GET['deal_id'] ?? '') ?>" min="1" placeholder="123">
-      </label>
-      <button type="submit">Apply filters</button>
-    </form>
-    <?php if (empty($grouped)): ?>
-      <p>No scoring records found for this filter.</p>
-    <?php else: ?>
-      <?php foreach ($ord as $dealId): ?>
-        <?php $deal = $grouped[$dealId]; ?>
-        <?php
-          $displayScoredAt = '';
-          if (!empty($deal['latest_scored_at'])) {
-            try {
-              $displayScoredAt = (new DateTime($deal['latest_scored_at']))->format('d-m-Y H:i');
-            } catch (Exception $e) {
-              $displayScoredAt = $deal['latest_scored_at'];
-            }
-          }
-        ?>
-        <details class="deal-card">
-          <summary>
-            <strong>Deal <?= htmlspecialchars($deal['deal_number']) ?></strong>
-            <span class="product-meta" class="ml-10">
-              <?= htmlspecialchars($deal['customer_name']) ?> · <?= htmlspecialchars($deal['organization_name']) ?>
-              <?php if ($displayScoredAt !== ''): ?>
-                · <?= htmlspecialchars($displayScoredAt) ?>
-              <?php endif; ?>
-            </span>
-          </summary>
-          <?php foreach ($deal['products'] as $product): ?>
-            <div class="product-row">
-              <p class="product-name">
-                <?= htmlspecialchars($product['product_name']) ?> — Score <?= htmlspecialchars($product['match_score']) ?>
-              </p>
-              <?php if ($product['reason']): ?>
-                <p class="product-meta"><?= htmlspecialchars($product['reason']) ?></p>
-              <?php endif; ?>
-              <?php if (!empty($product['scoring_details'])): ?>
-                <p class="product-meta"><?= htmlspecialchars($product['scoring_details']) ?></p>
-              <?php endif; ?>
+    <main class="page-content">
+      <div style="margin-bottom: 2.5rem;">
+        <h1 class="text-gradient" style="margin-bottom: 0.5rem; display: inline-block;">Scoring Log</h1>
+        <p class="text-muted">Audit the logic behind product recommendations and matching scores.</p>
+      </div>
+
+      <div class="glass" style="padding: 1.5rem; margin-bottom: 2rem;">
+        <form method="get" style="display: flex; gap: 1rem; align-items: flex-end; flex-wrap: wrap;">
+          <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <label style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Organization</label>
+            <select name="org" class="form-control" style="margin: 0; min-width: 220px;">
+              <option value="">All Organizations</option>
+              <?php foreach ($orgNames as $id => $label): ?>
+                <option value="<?= $id ?>" <?= ($selectedOrg === $id) ? 'selected' : '' ?>><?= htmlspecialchars($label) ?></option>
+              <?php endforeach; ?>
+            </select>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <label style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Deal ID</label>
+            <input type="number" name="deal_id" class="form-control" style="margin: 0; max-width: 120px;" value="<?= htmlspecialchars($_GET['deal_id'] ?? '') ?>" placeholder="123">
+          </div>
+          <button type="submit" class="btn btn-primary">Apply Filters</button>
+          <?php if ($selectedOrg || $dealFilter): ?>
+            <a href="admin_scoring_log" class="btn btn-secondary">Clear</a>
+          <?php endif; ?>
+        </form>
+      </div>
+
+      <?php if (empty($grouped)): ?>
+        <div style="text-align: center; padding: 4rem 2rem; background: white; border-radius: var(--radius-lg); border: 1px dashed #cbd5e1;">
+          <i class="fa-solid fa-magnifying-glass" style="font-size: 3rem; color: #e2e8f0; margin-bottom: 1.5rem;"></i>
+          <h3 style="color: #64748b;">No scoring records found</h3>
+          <p class="text-muted">Try adjusting your filters to see more results.</p>
+        </div>
+      <?php else: ?>
+        <?php foreach ($ord as $dealId): ?>
+          <?php $deal = $grouped[$dealId]; ?>
+          <details class="deal-card">
+            <summary>
+              <div style="display: flex; align-items: center; gap: 1rem;">
+                <div style="background: #f1f5f9; width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #64748b; font-weight: 700;">#<?= htmlspecialchars($deal['deal_number']) ?></div>
+                <div>
+                  <div style="font-weight: 700; color: #0f172a;"><?= htmlspecialchars($deal['customer_name']) ?></div>
+                  <div style="font-size: 0.75rem; color: #64748b;"><?= htmlspecialchars($deal['organization_name']) ?></div>
+                </div>
+              </div>
+              <div style="text-align: right; font-size: 0.75rem; color: #94a3b8;">
+                Scored: <?= $deal['latest_scored_at'] ? (new DateTime($deal['latest_scored_at']))->format('M j, Y g:ia') : 'N/A' ?>
+                <i class="fa-solid fa-chevron-down" style="margin-left: 0.5rem; font-size: 0.7rem;"></i>
+              </div>
+            </summary>
+            <div class="product-list">
+              <?php foreach ($deal['products'] as $product): ?>
+                <div class="product-item">
+                  <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                    <div style="font-weight: 600; color: #1e293b;"><?= htmlspecialchars($product['product_name']) ?></div>
+                    <div class="score-badge <?= $product['match_score'] >= 80 ? 'score-high' : ($product['match_score'] >= 50 ? 'score-med' : '') ?>">
+                      Score: <?= htmlspecialchars($product['match_score']) ?>
+                    </div>
+                  </div>
+                  <?php if ($product['reason']): ?>
+                    <div style="font-size: 0.875rem; color: #475569; margin-bottom: 0.25rem;"><?= htmlspecialchars($product['reason']) ?></div>
+                  <?php endif; ?>
+                  <?php if (!empty($product['scoring_details'])): ?>
+                    <div style="font-family: monospace; font-size: 0.75rem; color: #64748b; background: #f8fafc; padding: 0.5rem; border-radius: 4px; border-left: 3px solid #e2e8f0; margin-top: 0.5rem;">
+                      <?= htmlspecialchars($product['scoring_details']) ?>
+                    </div>
+                  <?php endif; ?>
+                </div>
+              <?php endforeach; ?>
             </div>
-          <?php endforeach; ?>
-        </details>
-      <?php endforeach; ?>
-    <?php endif; ?>
-  </main>
+          </details>
+        <?php endforeach; ?>
+      <?php endif; ?>
+    </main>
+
+    <footer style="background: white; border-top: 1px solid #e2e8f0; color: #64748b; padding: 1.5rem; text-align: center; position: static;">
+      &copy; <?= date("Y") ?> DealerFAI. All rights reserved.
+    </footer>
+  </div>
+</body>
+</html>
 </body>
 </html>
