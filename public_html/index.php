@@ -122,27 +122,31 @@ require_once __DIR__ . '/includes/theme_head.php';
       </div>
     </section>
 
-    <section id="features" style="padding: 4rem 0;">
-      <h2 class="text-center" style="margin-bottom: 3rem;">Engineered for Performance</h2>
+    <section id="features" style="padding: 4rem 0; position: relative;">
+      <h2 class="text-center" style="margin-bottom: 3rem; color: white; font-size: 2.5rem; text-shadow: 0 2px 10px rgba(0,0,0,0.3);">Engineered for Performance</h2>
       <div class="features" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem;">
-        <div class="feature glass card" style="margin: 0; text-align: left;">
-          <div style="font-size: 2rem; margin-bottom: 1rem;">⚡️</div>
-          <h3 class="mt-0">Dynamic Deal Flow</h3>
+        <div class="feature glass card" style="margin: 0; text-align: left; padding: 2rem;">
+          <h3 class="mt-0" style="display: flex; align-items: center; gap: 0.75rem;">
+            <span>⚡️</span> Dynamic Deal Flow
+          </h3>
           <p class="text-muted">Capture and structure deals with intuitive inputs, automated calculations, and multi-user collaboration.</p>
         </div>
-        <div class="feature glass card" style="margin: 0; text-align: left;">
-          <div style="font-size: 2rem; margin-bottom: 1rem;">🤖</div>
-          <h3 class="mt-0">AI Protection Logic</h3>
+        <div class="feature glass card" style="margin: 0; text-align: left; padding: 2rem;">
+          <h3 class="mt-0" style="display: flex; align-items: center; gap: 0.75rem;">
+            <span>🤖</span> AI Protection Logic
+          </h3>
           <p class="text-muted">Proprietary algorithms suggest the best protection products based on regional data and vehicle profiles.</p>
         </div>
-        <div class="feature glass card" style="margin: 0; text-align: left;">
-          <div style="font-size: 2rem; margin-bottom: 1rem;">📊</div>
-          <h3 class="mt-0">Advanced Analytics</h3>
+        <div class="feature glass card" style="margin: 0; text-align: left; padding: 2rem;">
+          <h3 class="mt-0" style="display: flex; align-items: center; gap: 0.75rem;">
+            <span>📊</span> Advanced Analytics
+          </h3>
           <p class="text-muted">Real-time insights into gross profit, take rates, and agent performance across all your store locations.</p>
         </div>
-        <div class="feature glass card" style="margin: 0; text-align: left;">
-          <div style="font-size: 2rem; margin-bottom: 1rem;">🛡️</div>
-          <h3 class="mt-0">Secure Applications</h3>
+        <div class="feature glass card" style="margin: 0; text-align: left; padding: 2rem;">
+          <h3 class="mt-0" style="display: flex; align-items: center; gap: 0.75rem;">
+            <span>🛡️</span> Secure Applications
+          </h3>
           <p class="text-muted">Encryption-first approach to customer data and application links, ensuring compliance at every step.</p>
         </div>
       </div>
