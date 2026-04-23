@@ -28,5 +28,4 @@ header('Permissions-Policy: geolocation=(), microphone=(), camera=(), payment=()
 // style-src retains unsafe-inline for ~142 remaining one-off inline style= attributes.
 // Once those are converted to classes or CSS vars, unsafe-inline can be removed from style-src.
 $nonce = dealerfai_csp_nonce();
-header("Content-Security-Policy: default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'nonce-{$nonce}'; connect-src 'self'; font-src 'self' data:; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; object-src 'none'");
-
+header("Content-Security-Policy: default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; script-src 'self' 'nonce-{$nonce}'; connect-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com; font-src 'self' data: https://fonts.gstatic.com; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; object-src 'none'");

@@ -109,6 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $service_rate_override_input = $hasServiceRateOverrideColumn ? trim($_POST['service_rate_override'] ?? '') : null;
   $lease_cap_percent_input = $hasLeaseCapPercentColumn ? trim($_POST['lease_msrp_cap_percent'] ?? '') : null;
   $finance_cap_percent_input = $hasFinanceCapPercentColumn ? trim($_POST['finance_msrp_cap_percent'] ?? '') : null;
+  $primary_color = trim($_POST['primary_color'] ?? '');
   $remove_logo = !empty($_POST['remove_logo']);
 
   if ($name === '') {
@@ -178,10 +179,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'logo_url = ?',
         'logic_type = ?',
         'theme_variant = ?',
+        'primary_color = ?',
         'parent_org_id = ?',
         'org_kind = ?'
       ];
-      $values = [$name, $logo_path, $logic_type, $theme_variant, $parent_org_id, $org_kind];
+      $values = [$name, $logo_path, $logic_type, $theme_variant, $primary_color !== '' ? $primary_color : null, $parent_org_id, $org_kind];
 
       if ($hasPackageLabelsColumn) {
         $updates[] = 'package_menu_labels = ?';
@@ -275,8 +277,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       exit;
     }
 
-    $columns = ['name', 'logo_url', 'logic_type', 'theme_variant', 'parent_org_id', 'org_kind'];
-    $values = [$name, $logo_path, $logic_type, $theme_variant, $parent_org_id, $org_kind];
+    $columns = ['name', 'logo_url', 'logic_type', 'theme_variant', 'primary_color', 'parent_org_id', 'org_kind'];
+    $values = [$name, $logo_path, $logic_type, $theme_variant, $primary_color !== '' ? $primary_color : null, $parent_org_id, $org_kind];
     if ($hasPackageLabelsColumn) {
       $columns[] = 'package_menu_labels';
       $values[] = ($package_labels_input !== '' ? $package_labels_input : null);
@@ -391,6 +393,7 @@ $formAccessoryRateOverride = $org['accessory_rate_override'] ?? null;
 $formServiceRateOverride = $org['service_rate_override'] ?? null;
 $formLeaseCapPercent = $org['lease_msrp_cap_percent'] ?? null;
 $formFinanceCapPercent = $org['finance_msrp_cap_percent'] ?? null;
+$formPrimaryColor = $org['primary_color'] ?? '';
 $defaultLabels = implode("\n", get_default_package_menu_labels());
 $creditQuestionConfig = normalize_credit_app_question_config(
   json_decode($formCreditQuestions ?: '', true)
@@ -597,6 +600,24 @@ $isCreditQuestionVisible = function (string $step, string $id) use ($creditQuest
       <option value="ford_blue" <?= $formTheme === 'ford_blue' ? 'selected' : '' ?>>Ford Blue</option>
       <option value="honda_red" <?= $formTheme === 'honda_red' ? 'selected' : '' ?>>Honda Red</option>
     </select>
+
+    <label>Primary Brand Color</label>
+    <div style="display:flex; gap:10px; align-items:center; margin-top:5px;">
+      <input type="color" name="primary_color" value="<?= htmlspecialchars($formPrimaryColor ?: '#0a6280') ?>" style="width:50px; height:38px; padding:2px; border:1px solid #ccc; cursor:pointer;">
+      <input type="text" id="primary_color_text" value="<?= htmlspecialchars($formPrimaryColor ?: '#0a6280') ?>" placeholder="#000000" style="flex:1; margin-top:0;">
+    </div>
+    <p class="note">This color will be used for buttons, links, and highlights across the site.</p>
+    <script nonce="<?= dealerfai_csp_nonce() ?>">
+      (function initColorSync() {
+        const picker = document.querySelector('input[name="primary_color"]');
+        const text = document.getElementById('primary_color_text');
+        if (!picker || !text) return;
+        picker.addEventListener('input', () => text.value = picker.value);
+        text.addEventListener('input', () => {
+          if (/^#[0-9A-F]{6}$/i.test(text.value)) picker.value = text.value;
+        });
+      })();
+    </script>
 
     <?php if ($hasPackageLabelsColumn): ?>
       <label>Package labels (one per line, max 4)</label>

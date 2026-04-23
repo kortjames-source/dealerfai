@@ -4,15 +4,19 @@ function dealerfai_get_theme_palette(?string $themeVariant, array $overrides = [
 {
     $variant = strtolower(trim((string)$themeVariant));
 
+    // Modern "Clean" Defaults
     $theme = [
         'variant' => $variant !== '' ? $variant : 'default',
         'logo' => '',
-        'color' => '#0a6280',
-        'page_background' => '#f4f6f8',
-        'header_background' => '#0a2e36',
-        'header_text' => '#ffffff',
-        'nav_background' => '#0a2e36',
-        'nav_text' => '#ffffff',
+        'color' => '#0a6280', // Default primary accent
+        'primary_color' => null,
+        'page_background' => '#f8fafc',
+        'header_background' => '#ffffff',
+        'header_text' => '#1e293b',
+        'nav_background' => '#ffffff',
+        'nav_text' => '#475569',
+        'card_background' => '#ffffff',
+        'border_color' => '#e2e8f0',
     ];
 
     if ($variant === 'jlr') {
@@ -29,9 +33,13 @@ function dealerfai_get_theme_palette(?string $themeVariant, array $overrides = [
     if (array_key_exists('logo', $overrides)) {
         $theme['logo'] = (string)$overrides['logo'];
     }
-    if (!empty($overrides['color'])) {
+    if (!empty($overrides['primary_color'])) {
+        $theme['primary_color'] = (string)$overrides['primary_color'];
+        $theme['color'] = $theme['primary_color']; // Primary color overrides brand accent
+    } elseif (!empty($overrides['color'])) {
         $theme['color'] = (string)$overrides['color'];
     }
+
     if (!empty($overrides['page_background'])) {
         $theme['page_background'] = (string)$overrides['page_background'];
     }
@@ -43,3 +51,4 @@ function dealerfai_get_theme_palette(?string $themeVariant, array $overrides = [
 
     return $theme;
 }
+

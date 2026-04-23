@@ -25,18 +25,19 @@ if (!function_exists('dealerfai_theme_head')) {
     {
         $defaults = [
             'color'             => '#0a6280',
-            'page_background'   => '#f4f6f8',
-            'header_background' => '#0a2e36',
-            'header_text'       => '#ffffff',
-            'nav_background'    => '#0a2e36',
-            'nav_text'          => '#ffffff',
+            'page_background'   => '#f8fafc',
+            'header_background' => '#ffffff',
+            'header_text'       => '#1e293b',
+            'nav_background'    => '#ffffff',
+            'nav_text'          => '#475569',
+            'card_background'   => '#ffffff',
+            'border_color'      => '#e2e8f0',
         ];
 
         $t = array_merge($defaults, (array)$theme);
 
-        // Sanitize every value — these go directly into a <style> block.
+        // Sanitize every value
         $escape = static function (string $v): string {
-            // Strip anything that could break out of a CSS property value.
             return preg_replace('/[^a-zA-Z0-9#(),. %\-]/', '', $v);
         };
 
@@ -46,20 +47,71 @@ if (!function_exists('dealerfai_theme_head')) {
         $headerText  = $escape((string)$t['header_text']);
         $navBg       = $escape((string)$t['nav_background']);
         $navText     = $escape((string)$t['nav_text']);
+        $cardBg      = $escape((string)($t['card_background'] ?? '#ffffff'));
+        $borderColor = $escape((string)($t['border_color'] ?? '#e2e8f0'));
+
+        // Helper to get HSL for translucency
+        $hexToHsl = function($hex) {
+            $hex = str_replace('#', '', $hex);
+            if(strlen($hex) == 3) {
+                $r = hexdec(substr($hex,0,1).substr($hex,0,1));
+                $g = hexdec(substr($hex,1,1).substr($hex,1,1));
+                $b = hexdec(substr($hex,2,1).substr($hex,2,1));
+            } else {
+                $r = hexdec(substr($hex,0,2));
+                $g = hexdec(substr($hex,2,2));
+                $b = hexdec(substr($hex,4,2));
+            }
+            $r /= 255; $g /= 255; $b /= 255;
+            $max = max($r, $g, $b); $min = min($r, $g, $b);
+            $l = ($max + $min) / 2;
+            if ($max == $min) { $h = $s = 0; }
+            else {
+                $d = $max - $min;
+                $s = $l > 0.5 ? $d / (2 - $max - $min) : $d / ($max + $min);
+                switch($max){
+                    case $r: $h = ($g - $b) / $d + ($g < $b ? 6 : 0); break;
+                    case $g: $h = ($b - $r) / $d + 2; break;
+                    case $b: $h = ($r - $g) / $d + 4; break;
+                }
+                $h /= 6;
+            }
+            return [round($h * 360), round($s * 100) . '%', round($l * 100) . '%'];
+        };
+
+        $hsl = $hexToHsl($brandColor);
+        $brandHsl = "{$hsl[0]}, {$hsl[1]}, {$hsl[2]}";
 
         $nonce = dealerfai_csp_nonce();
         ?>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style nonce="<?= htmlspecialchars($nonce, ENT_QUOTES, 'UTF-8') ?>">
   :root {
     --brand-color: <?= $brandColor ?>;
+    --brand-hsl:   <?= $brandHsl ?>;
     --page-bg:     <?= $pageBg ?>;
     --header-bg:   <?= $headerBg ?>;
     --header-text: <?= $headerText ?>;
     --nav-bg:      <?= $navBg ?>;
     --nav-text:    <?= $navText ?>;
+    --card-bg:     <?= $cardBg ?>;
+    --border-color:<?= $borderColor ?>;
+    
+    /* Modern Accents derived from brand color */
+    --accent-glow: rgba(<?= $brandHsl ?>, 0.15);
+    --accent-soft: rgba(<?= $brandHsl ?>, 0.08);
+    --glass-bg:    rgba(255, 255, 255, 0.7);
+    --radius-lg:   12px;
+    --radius-md:   8px;
+    --shadow-sm:   0 1px 2px rgba(0,0,0,0.05);
+    --shadow-md:   0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+    --shadow-lg:   0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
   }
 </style>
 <link rel="stylesheet" href="/assets/css/app.css">
         <?php
     }
 }
+
