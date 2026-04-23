@@ -1,0 +1,350 @@
+[
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "extwarranty",
+        "tag": "expensive_repairs_risk"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "extwarranty",
+        "tag": "low_coverage_remaining"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "extwarranty",
+        "tag": "older_vehicle"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "extwarranty",
+        "tag": "out_of_warranty"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "extwarranty",
+        "tag": "out_of_warranty_soon"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "extwarranty",
+        "tag": "powertrain_only_remaining"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "extwarranty",
+        "tag": "warranty_gap_km"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "extwarranty",
+        "tag": "warranty_gap_time"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "gapprotection",
+        "tag": "high_depreciation_risk"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "gapprotection",
+        "tag": "low_down_payment"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "gapprotection",
+        "tag": "negative_equity"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "gapprotection",
+        "tag": "rolled_negative_equity"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "assetprotection",
+        "tag": "large_down_payment"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "assetprotection",
+        "tag": "short_loan_term"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "assetprotection",
+        "tag": "total_loss_concern"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "dentding",
+        "tag": "leasing"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "paintshield",
+        "tag": "economy_vehicle"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "ceramiccoating",
+        "tag": "seasonal_conditions_varied"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "undercoat",
+        "tag": "desert_region"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "undercoat",
+        "tag": "lives_near_water"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "totalloss",
+        "tag": "older_vehicle"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "rustmodule",
+        "tag": "garage_parked_only"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "worryfree",
+        "tag": "critical_illness"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "worryfree",
+        "tag": "sickness_injury"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "creditlife",
+        "tag": "already_has_life_insurance"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "creditlife",
+        "tag": "retired_with_savings"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "sickinjury",
+        "tag": "high_payment_to_income"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "extwarranty",
+        "tag": "expensive_repairs_risk"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "extwarranty",
+        "tag": "low_coverage_remaining"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "extwarranty",
+        "tag": "older_vehicle"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "extwarranty",
+        "tag": "out_of_warranty"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "extwarranty",
+        "tag": "out_of_warranty_soon"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "extwarranty",
+        "tag": "powertrain_only_remaining"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "extwarranty",
+        "tag": "warranty_gap_km"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "extwarranty",
+        "tag": "warranty_gap_time"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "extwarranty",
+        "tag": "expensive_repairs_risk"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "extwarranty",
+        "tag": "low_coverage_remaining"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "extwarranty",
+        "tag": "older_vehicle"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "extwarranty",
+        "tag": "out_of_warranty"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "extwarranty",
+        "tag": "out_of_warranty_soon"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "extwarranty",
+        "tag": "powertrain_only_remaining"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "extwarranty",
+        "tag": "warranty_gap_km"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "extwarranty",
+        "tag": "warranty_gap_time"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "extwarranty",
+        "tag": "expensive_repairs_risk"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "extwarranty",
+        "tag": "low_coverage_remaining"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "extwarranty",
+        "tag": "older_vehicle"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "extwarranty",
+        "tag": "out_of_warranty"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "extwarranty",
+        "tag": "out_of_warranty_soon"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "extwarranty",
+        "tag": "powertrain_only_remaining"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "extwarranty",
+        "tag": "warranty_gap_km"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "extwarranty",
+        "tag": "warranty_gap_time"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "tint",
+        "tag": "summer_region"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "ceramiccoating",
+        "tag": "seasonal_conditions_varied"
+    },
+    {
+        "table": "product_scoring_tags",
+        "scope": "global",
+        "target": "ceramiccoating",
+        "tag": "seasonal_conditions_varied"
+    },
+    {
+        "table": "organization_scoring_models",
+        "scope": "1",
+        "target": "assetprotection",
+        "tag": "short_loan_term"
+    },
+    {
+        "table": "organization_scoring_models",
+        "scope": "1",
+        "target": "assetprotection",
+        "tag": "short_loan_term"
+    },
+    {
+        "table": "organization_scoring_models",
+        "scope": "1",
+        "target": "assetprotection",
+        "tag": "short_loan_term"
+    },
+    {
+        "table": "organization_scoring_models",
+        "scope": "1",
+        "target": "assetprotection",
+        "tag": "short_loan_term"
+    }
+]

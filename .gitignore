@@ -1,0 +1,40 @@
+# Sensitive Config Files
+secure/local_config.php
+secure/local_config.private.php
+secure/local_config.private.whc.php
+secure/api_keys.php
+secure/aes_key.txt
+secure/aes_key.private.txt
+
+# Logs and Data
+secure/logs/
+secure/temp_passwords.log
+public_html/email_log.txt
+public_html/logs/
+data/
+*.log
+
+# Large files and dumps
+*.sql
+*.zip
+*.gz
+*.tar
+dealerfai_local_20260409.sql
+dealerfai_migration.zip
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Developer scratch files
+scratch*.php
+public_html/scratch/
+public_html/test_step3_visual.php
+
+# Environment files
+.env
+.env.local
+
+# Project specific
+DO_NOT_UPLOAD_HERE/
+vendor/

@@ -1,0 +1,414 @@
+/*
+ * DealerFAI — Shared Application Stylesheet
+ *
+ * Colours come from per-org CSS custom properties injected via a PHP nonce'd <style> block.
+ * Default fallbacks mirror the "default" theme so the file is usable standalone.
+ *
+ * Property reference:
+ *   --brand-color     Primary accent (buttons, links, table headers, h2/h3, footer bg)
+ *   --page-bg         Page background
+ *   --header-bg       Top header bar background
+ *   --header-text     Top header bar foreground / text
+ *   --nav-bg          Navigation bar background
+ *   --nav-text        Navigation bar link colour
+ */
+
+/* ─── Reset & Base ──────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background-color: var(--page-bg, #f4f6f8);
+  color: #111111;
+}
+
+/* ─── Layout Chrome ─────────────────────────────────────────────────────────── */
+header {
+  background-color: var(--header-bg, #0a2e36);
+  color: var(--header-text, #ffffff);
+  padding: 30px 40px;
+  text-align: center;
+  position: relative;
+}
+header img {
+  max-width: 480px;
+  max-height: 180px;
+  height: auto;
+  display: block;
+  margin: 0 auto 10px;
+}
+header h1 {
+  margin: 0;
+  font-size: 22px;
+}
+
+nav {
+  background-color: var(--nav-bg, #0a2e36);
+  padding: 12px;
+  text-align: center;
+}
+nav a {
+  color: var(--nav-text, #ffffff);
+  margin: 0 20px;
+  text-decoration: none;
+  font-weight: bold;
+}
+nav a:hover { text-decoration: underline; }
+
+main { padding: 30px 40px; }
+
+footer {
+  background-color: var(--brand-color, #0a6280);
+  color: #ffffff;
+  text-align: center;
+  padding: 16px;
+  font-size: 14px;
+  margin-top: 60px;
+  position: relative;
+}
+
+/* ─── Header Logout / Action Area ───────────────────────────────────────────── */
+.header-actions {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.header-actions a,
+.header-actions a:visited {
+  color: var(--header-text, #ffffff);
+  font-size: 14px;
+  text-decoration: none;
+  opacity: 0.85;
+  font-weight: 600;
+}
+.header-actions a:hover { opacity: 1; }
+
+/* Legacy selector used on existing pages — keep until replaced */
+.logout {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.logout a  { color: #ccc; font-size: 14px; text-decoration: none; }
+.logout a:hover { color: white; }
+
+/* ─── Notification Badge ─────────────────────────────────────────────────────── */
+.badge {
+  display: inline-block;
+  min-width: 18px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #d7263d;
+  color: #fff;
+  font-size: 12px;
+  font-weight: bold;
+  text-align: center;
+  margin-left: 6px;
+}
+
+/* ─── Headings ───────────────────────────────────────────────────────────────── */
+h2 {
+  color: var(--brand-color, #0a6280);
+  text-align: center;
+  margin-bottom: 10px;
+}
+h3 {
+  color: var(--brand-color, #0a6280);
+  margin-top: 30px;
+}
+
+/* ─── Cards ──────────────────────────────────────────────────────────────────── */
+.card {
+  background: #fff;
+  border-radius: 8px;
+  padding: 25px;
+  margin: 20px auto;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  max-width: 800px;
+}
+.card h3 {
+  margin-top: 0;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
+/* ─── Forms ──────────────────────────────────────────────────────────────────── */
+label {
+  display: block;
+  margin-top: 15px;
+  font-weight: bold;
+}
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="date"],
+input[type="tel"],
+select,
+textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  font-size: 15px;
+  font-family: inherit;
+}
+
+/* ─── Buttons ────────────────────────────────────────────────────────────────── */
+.btn,
+button[type="submit"] {
+  background-color: var(--brand-color, #0a6280);
+  color: #ffffff;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  margin-top: 20px;
+  cursor: pointer;
+  font-size: 16px;
+  font-family: inherit;
+  display: inline-block;
+  text-decoration: none;
+}
+.btn:hover,
+button[type="submit"]:hover { opacity: 0.9; }
+
+.btn-sm      { padding: 8px 12px; font-size: 14px; margin-top: 0; }
+.btn-link    { font-weight: bold; }
+.btn-danger,
+.btn-cancel  { background-color: #c82333; }
+.btn-success { background-color: #1f6f7a; }
+.btn-delivered { background-color: #1f6f7a; }
+.btn-secondary {
+  background-color: #e6ebf2;
+  color: #1b2c40;
+  border: 1px solid #c7d0d8;
+}
+.btn-secondary:hover { background-color: #d8dfe8; opacity: 1; }
+
+/* ─── Tables ─────────────────────────────────────────────────────────────────── */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  margin-top: 20px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
+}
+th, td {
+  padding: 14px;
+  border-bottom: 1px solid #ddd;
+  text-align: center;
+}
+th {
+  background-color: var(--brand-color, #0a6280);
+  color: white;
+}
+tr:hover { background-color: #f1f8fb; }
+
+/* ─── Alerts / Banners ───────────────────────────────────────────────────────── */
+.alert {
+  max-width: 900px;
+  margin: 16px auto;
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  font-weight: 600;
+}
+.alert-success  { color: #0f5132; background: #d1e7dd; border-color: #badbcc; }
+.alert-error,
+.alert-danger   { color: #842029; background: #f8d7da; border-color: #f5c2c7; }
+.alert-warning  { color: #664d03; background: #fff3cd; border-color: #ffecb5; }
+.alert-info     { color: #0c5460; background: #d1ecf1; border-color: #bee5eb; }
+
+/* ─── Inline form / action groups ───────────────────────────────────────────── */
+.inline-form   { margin: 0; }
+.actions-cell  { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.status-actions { text-align: center; }
+.status-actions-buttons { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 10px; }
+
+/* ─── Dialogs / Modals ───────────────────────────────────────────────────────── */
+dialog {
+  border: none;
+  border-radius: 12px;
+  padding: 0;
+  width: min(480px, 92vw);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.2);
+}
+dialog::backdrop  { background: rgba(0, 0, 0, 0.35); }
+.dialog-header    { background: var(--brand-color, #0a6280); color: white; padding: 16px 20px; font-weight: 700; }
+.dialog-body      { padding: 18px 20px; display: grid; gap: 12px; }
+.dialog-body label { font-weight: 600; color: #203040; }
+.dialog-actions   { padding: 14px 20px 20px; display: flex; justify-content: flex-end; gap: 10px; background: #f4f6f8; }
+
+/* ─── Filter bars ────────────────────────────────────────────────────────────── */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  margin: 10px 0 20px;
+}
+.filters input,
+.filters select {
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid #c7d0d8;
+  min-width: 200px;
+}
+.filters button {
+  padding: 10px 16px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  background-color: var(--brand-color, #0a6280);
+  color: white;
+}
+.filters a {
+  padding: 10px 16px;
+  border-radius: 6px;
+  background: #e5e9ee;
+  color: #203040;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+/* ─── Details / Summary ──────────────────────────────────────────────────────── */
+details {
+  margin-top: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
+  padding: 10px 16px;
+}
+details > summary {
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--brand-color, #0a6280);
+  padding: 6px 0;
+}
+details[open] { padding-bottom: 20px; }
+
+/* ─── Misc components ────────────────────────────────────────────────────────── */
+.context-note   { text-align: center; color: #1f3d5e; font-weight: 600; margin-top: 10px; }
+.muted          { color: #667085; font-size: 0.9rem; }
+.payment-highlight {
+  font-size: 24px;
+  font-weight: bold;
+  color: #28a745;
+  background: #d4f9d4;
+  padding: 12px 18px;
+  border-radius: 12px;
+  display: inline-block;
+  margin-top: 10px;
+}
+.payment-updated { font-size: 14px; color: green; margin-top: 5px; margin-left: 10px; }
+.error-msg, .error { color: red; text-align: center; margin-top: 15px; }
+.success-msg, .success { color: green; }
+.forgot-link { margin-top: 12px; text-align: right; }
+.forgot-link a { font-size: 14px; color: var(--brand-color, #0a6280); text-decoration: none; }
+.forgot-link a:hover { text-decoration: underline; }
+
+/* ─── Utility Classes ────────────────────────────────────────────────────────── */
+/* Display */
+.d-none         { display: none !important; }
+.d-block        { display: block !important; }
+.d-inline       { display: inline !important; }
+.d-inline-block { display: inline-block !important; }
+.d-flex         { display: flex !important; }
+
+/* Spacing */
+.mt-0  { margin-top: 0; }
+.mt-6  { margin-top: 6px; }
+.mt-8  { margin-top: 8px; }
+.mt-10 { margin-top: 10px; }
+.mt-12 { margin-top: 12px; }
+.mt-16 { margin-top: 16px; }
+.mt-20 { margin-top: 20px; }
+.mt-24 { margin-top: 24px; }
+.mb-6  { margin-bottom: 6px; }
+.mb-20 { margin-bottom: 20px; }
+.ml-10 { margin-left: 10px; }
+
+/* Text */
+.text-center  { text-align: center; }
+.text-right   { text-align: right; }
+.fw-normal    { font-weight: normal; }
+.fw-bold      { font-weight: bold; }
+
+/* Width utilities (for table columns) */
+.w-4  { width: 4%; }
+.w-6  { width: 6%; }
+.w-8  { width: 8%; }
+.w-10 { width: 10%; }
+.w-12 { width: 12%; }
+.w-14 { width: 14%; }
+.w-16 { width: 16%; }
+.w-18 { width: 18%; }
+.w-20 { width: 20%; }
+.w-24 { width: 24%; }
+.w-28 { width: 28%; }
+.w-100 { width: 100%; }
+.w-90px  { width: 90px; }
+.w-110px { width: 110px; }
+
+/* Colour utilities */
+.text-white   { color: white; }
+.text-muted   { color: #667085; }
+.bg-danger    { background-color: #c0392b !important; }
+
+/* Position */
+.pos-relative { position: relative; }
+
+/* ─── Additional utility classes ─────────────────────────────────────────────── */
+.cursor-pointer { cursor: pointer; }
+.cursor-pointer-bold { cursor: pointer; font-weight: bold; }
+
+.flex-gap-10  { display: flex; gap: 10px; align-items: center; }
+.flex-gap-12  { display: flex; gap: 12px; align-items: center; }
+.flex-end     { align-self: flex-end; }
+.flex-end-160 { align-self: flex-end; max-width: 160px; }
+
+.mt-14  { margin-top: 14px; }
+.mt-15  { margin-top: 15px; }
+.mt-30  { margin-top: 30px; }
+.mb-10  { margin-bottom: 10px; }
+.m-0    { margin: 0; }
+.mb-6-mt-20 { margin-bottom: 6px; margin-top: 20px; }
+
+.p-4-10        { padding: 4px 10px; }
+.p-4-10-danger { padding: 4px 10px; background: #c0392b; color: #fff; }
+
+.w-22 { width: 22%; }
+.w-26 { width: 26%; }
+.w-30 { width: 30%; }
+.max-w-160 { max-width: 160px; }
+.w-18-pointer { width: 18%; cursor: pointer; }
+.w-10-pointer { width: 10%; cursor: pointer; }
+
+/* Card-style info box (used in form sections) */
+.info-box {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 12px;
+  border-radius: 8px;
+  margin-top: 12px;
+}
+
+/* Section header bar (dark banner inside a card) */
+.card-header-bar {
+  background: #0a2e36;
+  color: #fff;
+  padding: 12px 20px;
+  position: relative;
+  margin: -40px -40px 30px -40px;
+}

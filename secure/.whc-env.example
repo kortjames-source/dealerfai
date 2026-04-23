@@ -1,0 +1,1 @@
+Create an empty file named '.whc-env' in the secure folder on your WHC server to force it to use the WHC config.
