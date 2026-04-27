@@ -180,9 +180,20 @@ if ($app_exists) {
         $step2['co_employer'] ?? '', $step2['co_work_address'] ?? '', $step2['co_position'] ?? '', $co_employment_length, $step2['co_prev_employer'] ?? '', $step2['co_prev_phone'] ?? '', $step2['co_prev_address'] ?? '', $co_prev_length, $co_income, $co_other_income, $co_other_income_source,
         $vehicle_make, $vehicle_model,
         $usage_json, $highway, $extra_answers_json,
-        date('Y-m-d H:i:s'), date('Y-m-d H:i:s')
     ]);
 }
+
+// Lock the credit app after Step 3 submission.
+$lockUserId = $_SESSION['user_id'] ?? null;
+$lockStmt = $db->prepare("
+    UPDATE deals
+    SET credit_app_locked = 1,
+        credit_app_locked_at = NOW(),
+        credit_app_locked_by = ?
+    WHERE id = ?
+      AND (credit_app_locked = 0 OR credit_app_locked IS NULL)
+");
+$lockStmt->execute([$lockUserId, $deal_id]);
 
 require_once __DIR__ . '/helpers/billing_helpers.php';
 

@@ -20,11 +20,16 @@ if (!$deal_id) {
     die('Missing deal ID');
 }
 
-// Stop updates once the credit app is locked.
+// Stop updates once the credit app is locked, EXCEPT if this is the first time submitting protections.
 $lockStmt = $db->prepare("SELECT credit_app_locked FROM deals WHERE id = ?");
 $lockStmt->execute([$deal_id]);
 if ($lockStmt->fetchColumn()) {
-    die('This credit application is locked.');
+    // Check if protections have already been submitted (audit log entry exists)
+    $auditCheck = $db->prepare("SELECT COUNT(*) FROM protection_audit_log WHERE deal_id = ?");
+    $auditCheck->execute([$deal_id]);
+    if ($auditCheck->fetchColumn() > 0) {
+        die('This credit application is locked.');
+    }
 }
 
 // Collect submitted selections

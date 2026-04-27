@@ -1978,10 +1978,28 @@ function calculate_payment($total_to_finance, $interest_rate, $term) {
               <span class="financial-label">Sale Price</span>
               <span class="financial-value">$<?= number_format($deal['sale_price'], 2) ?></span>
             </div>
+            <?php if ($doc_fee > 0): ?>
+              <div class="financial-row">
+                <span class="financial-label">Doc Fee</span>
+                <span class="financial-value">$<?= number_format($doc_fee, 2) ?></span>
+              </div>
+            <?php endif; ?>
+            <?php if ($ppsa_total > 0): ?>
+              <div class="financial-row">
+                <span class="financial-label">PPSA Fee</span>
+                <span class="financial-value">$<?= number_format($ppsa_total, 2) ?></span>
+              </div>
+            <?php endif; ?>
             <?php if ($deal['trade_value'] > 0): ?>
               <div class="financial-row">
                 <span class="financial-label">Trade-In Allowance</span>
                 <span class="financial-value" style="color: #ef4444;">- $<?= number_format($deal['trade_value'], 2) ?></span>
+              </div>
+            <?php endif; ?>
+            <?php if ($deal['lien_amount'] > 0): ?>
+              <div class="financial-row">
+                <span class="financial-label">Trade-In Lien</span>
+                <span class="financial-value" style="color: #ef4444;">+ $<?= number_format($deal['lien_amount'], 2) ?></span>
               </div>
             <?php endif; ?>
             <div class="financial-row">
@@ -1992,10 +2010,60 @@ function calculate_payment($total_to_finance, $interest_rate, $term) {
               <span class="financial-label">Accessories</span>
               <span class="financial-value">$<?= number_format($accessories_total, 2) ?></span>
             </div>
+
+            <!-- Tax Breakdown -->
+            <?php if ($gst_amt > 0): ?>
+              <div class="financial-row">
+                <span class="financial-label">GST (<?= ($gst * 100) ?>%)</span>
+                <span class="financial-value">$<?= number_format($gst_amt, 2) ?></span>
+              </div>
+            <?php endif; ?>
+            <?php if ($pst_amt > 0): ?>
+              <div class="financial-row">
+                <span class="financial-label">PST (<?= ($pst * 100) ?>%)</span>
+                <span class="financial-value">$<?= number_format($pst_amt, 2) ?></span>
+              </div>
+            <?php endif; ?>
+            <?php if ($hst_amt > 0): ?>
+              <div class="financial-row">
+                <span class="financial-label">HST (<?= ($hst * 100) ?>%)</span>
+                <span class="financial-value">$<?= number_format($hst_amt, 2) ?></span>
+              </div>
+            <?php endif; ?>
+            <?php if ($flt_amt > 0): ?>
+              <div class="financial-row">
+                <span class="financial-label">Luxury Tax</span>
+                <span class="financial-value">$<?= number_format($flt_amt, 2) ?></span>
+              </div>
+            <?php endif; ?>
+
             <div class="financial-row" style="margin-top: 0.5rem; padding-top: 1rem; border-top: 2px solid rgba(0,0,0,0.05);">
-              <span class="financial-label" style="font-weight: 800; color: #0f172a;">Total with Taxes</span>
-              <span class="financial-value" style="font-size: 1.25rem; color: var(--brand-color);">$<?= number_format($total_with_taxes, 2) ?></span>
+              <span class="financial-label" style="font-weight: 800; color: #0f172a;">Total Price</span>
+              <span class="financial-value" style="font-size: 1.1rem; color: #0f172a;">$<?= number_format($total_with_taxes, 2) ?></span>
             </div>
+
+            <?php if ($deal['deal_type'] !== 'Cash'): ?>
+              <?php if ($deal['down_payment'] > 0): ?>
+                <div class="financial-row">
+                  <span class="financial-label">Down Payment</span>
+                  <span class="financial-value" style="color: #ef4444;">- $<?= number_format($deal['down_payment'], 2) ?></span>
+                </div>
+              <?php endif; ?>
+              <div class="financial-row">
+                <span class="financial-label">Amount Financed</span>
+                <span class="financial-value" style="font-weight: 700;">$<?= number_format($total_to_finance, 2) ?></span>
+              </div>
+              <div class="financial-row" style="background: rgba(var(--brand-hsl), 0.05); margin: 0.5rem -1.5rem; padding: 0.5rem 1.5rem;">
+                <span class="financial-label">Rate & Term</span>
+                <span class="financial-value"><?= number_format($deal['interest_rate'], 2) ?>% / <?= (int)$deal['term'] ?> mo.</span>
+              </div>
+              <?php if ($isLeaseDeal && $deal['residual'] > 0): ?>
+                <div class="financial-row">
+                  <span class="financial-label">Residual Value</span>
+                  <span class="financial-value">$<?= number_format($deal['residual'], 2) ?></span>
+                </div>
+              <?php endif; ?>
+            <?php endif; ?>
           </div>
 
           <div class="card">
