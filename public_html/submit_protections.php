@@ -1,40 +1,36 @@
 <?php
-include 'auth.php';
+require_once __DIR__ . '/includes/session_bootstrap.php';
 include 'db.php';
-require_once __DIR__ . '/vendor/autoload.php';
+include_once 'protection_helpers.php';
 
-use PHPMailer\PHPMailer\PHPMailer;
+header('Content-Type: application/json');
 
-$localConfigPath = __DIR__ . '/../secure/local_config.php';
-$localConfig = [];
-if (file_exists($localConfigPath)) {
-    $loaded = require $localConfigPath;
-    if (is_array($loaded)) {
-        $localConfig = $loaded;
-    }
-}
-$smtpConfig = $localConfig['smtp'] ?? [];
-
-$deal_id = $_POST['deal_id'] ?? null;
-if (!$deal_id) {
-    die('Missing deal ID');
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    echo json_encode(['success' => false, 'error' => 'Method not allowed']);
+    exit;
 }
 
-// Stop updates once the credit app is locked, EXCEPT if this is the first time submitting protections.
-$lockStmt = $db->prepare("SELECT credit_app_locked FROM deals WHERE id = ?");
-$lockStmt->execute([$deal_id]);
-if ($lockStmt->fetchColumn()) {
-    // Check if protections have already been submitted (audit log entry exists)
-    $auditCheck = $db->prepare("SELECT COUNT(*) FROM protection_audit_log WHERE deal_id = ?");
-    $auditCheck->execute([$deal_id]);
-    if ($auditCheck->fetchColumn() > 0) {
-        die('This credit application is locked.');
-    }
+$deal_id = (int)($_POST['deal_id'] ?? 0);
+if ($deal_id <= 0) {
+    http_response_code(400);
+    echo json_encode(['success' => false, 'error' => 'Invalid deal ID']);
+    exit;
 }
 
-// Collect submitted selections
-$declineAll = isset($_POST['decline_all']) && $_POST['decline_all'] === '1';
-$selected = $_POST['selected_protections'] ?? $_POST['selected'] ?? [];
+// Fetch deal for organization and lock status
+$deal_stmt = $db->prepare("SELECT id, organization, credit_app_locked, included_protections FROM deals WHERE id = ?");
+$deal_stmt->execute([$deal_id]);
+$deal = $deal_stmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$deal) {
+    http_response_code(404);
+    echo json_encode(['success' => false, 'error' => 'Deal not found']);
+    exit;
+}
+
+// Get recommendations and selected items
+$selected = $_POST['selected'] ?? [];
 $recommendations = $_POST['recommendations'] ?? [];
 $xpel_package = $_POST['xpel_package'] ?? null;
 $term_options = $_POST['term_option'] ?? [];
@@ -43,128 +39,61 @@ $aiNarrative = $_POST['ai_narrative'] ?? '';
 
 if (!is_array($selected)) $selected = [];
 if (!is_array($recommendations)) $recommendations = [];
+if (!is_array($term_options)) $term_options = [];
+if (!is_array($variant_options)) $variant_options = [];
 
+// Fetch previous selections for audit
+$prev_stmt = $db->prepare("SELECT selected_protections FROM applications WHERE deal_id = ?");
+$prev_stmt->execute([$deal_id]);
+$prev_json = $prev_stmt->fetchColumn();
+$previousSelected = json_decode($prev_json ?: '[]', true) ?: [];
+
+// Prepare usage data update
+$usage_stmt = $db->prepare("SELECT usage_data FROM applications WHERE deal_id = ?");
+$usage_stmt->execute([$deal_id]);
+$usage_json = $usage_stmt->fetchColumn();
+$usage = json_decode($usage_json ?: '[]', true) ?: [];
+
+// Add XPEL package if selected
 if ($xpel_package) {
-    $xpel_package = strtolower(trim((string)$xpel_package));
-    $legacyXpelMap = [
-        'xpel_standard' => 'xpel_basic',
-        'xpel_full_wrap' => 'xpel_full_vehicle_wrap',
-    ];
-    if (isset($legacyXpelMap[$xpel_package])) {
-        $xpel_package = $legacyXpelMap[$xpel_package];
-    }
+    $usage['xpel_package'] = $xpel_package;
 }
+// Add terms and variants
+$usage['term_options'] = $term_options;
+$usage['variant_options'] = $variant_options;
 
-if ($declineAll) {
-    $selected = [];
-}
+$usage_json = json_encode($usage);
 
-if (!is_array($term_options)) {
-    $term_options = [];
-}
-
-if (!is_array($variant_options)) {
-    $variant_options = [];
-}
-
-// Apply term selections
-if (!empty($term_options)) {
-    $selectedLookup = array_map(fn($entry) => is_string($entry) ? strtolower(trim($entry)) : '', $selected);
-    $selected = array_values(array_filter($selected, function ($entry) {
-        return !(is_string($entry) && str_starts_with($entry, 'term_'));
-    }));
-    foreach ($term_options as $code => $months) {
-        $code = strtolower(trim((string)$code));
-        $raw = trim((string)$months);
-        $term = 0;
-        $kms = 0;
-        if ($raw !== '') {
-            // New format: "24_40000" (months_kms). Backward compatible with plain "24".
-            if (preg_match('/^(\\d+)(?:[_-](\\d+))?$/', $raw, $m)) {
-                $term = (int)($m[1] ?? 0);
-                $kms = isset($m[2]) ? (int)$m[2] : 0;
-            }
-        }
-        if ($code === '' || $term <= 0) {
-            continue;
-        }
-        if (!in_array($code, $selectedLookup, true)) {
-            continue;
-        }
-        $selected[] = $kms > 0
-            ? ('term_' . $code . '_' . $term . '_' . $kms)
-            : ('term_' . $code . '_' . $term);
-    }
-}
-
-// Apply variant selections (option-set products like warranties).
-if (!empty($variant_options)) {
-    $selectedLookup = array_map(fn($entry) => is_string($entry) ? strtolower(trim($entry)) : '', $selected);
-    foreach ($variant_options as $code => $variantValue) {
-        $code = strtolower(trim((string)$code));
-        $variantValue = strtolower(trim((string)$variantValue));
-        if ($code === '' || $variantValue === '') {
-            continue;
-        }
-        if (!in_array($code, $selectedLookup, true)) {
-            continue;
-        }
-        // Expected: variant_<code>_<productId>
-        if (!preg_match('/^variant_' . preg_quote($code, '/') . '_\\d+$/', $variantValue)) {
-            continue;
-        }
-        // Remove any previous variant selection for this code.
-        $selected = array_values(array_filter($selected, function ($entry) use ($code) {
-            return !(is_string($entry) && str_starts_with(strtolower($entry), 'variant_' . $code . '_'));
-        }));
-        $selected[] = $variantValue;
-    }
-}
-
-// Add XPEL selection if present
-if ($xpel_package && in_array($xpel_package, [
-    'xpel_intro',
-    'xpel_basic',
-    'xpel_intermediate',
-    'xpel_premium',
-    'xpel_premium_plus',
-    'xpel_full_vehicle',
-    'xpel_full_vehicle_wrap',
-    'xpel_standard',
-    'xpel_full_wrap',
-], true)) {
-    $selected = array_filter($selected, fn($s) => !str_starts_with($s, 'xpel_')); // Remove any accidental duplicates
-    $selected[] = $xpel_package;
-}
-
-// Make sure application record exists
-$check = $db->prepare("SELECT selected_protections, all_recommendations FROM applications WHERE deal_id = ?");
+// Update application
+$app_exists = false;
+$check = $db->prepare("SELECT id FROM applications WHERE deal_id = ?");
 $check->execute([$deal_id]);
-$app_exists = $check->fetch(PDO::FETCH_ASSOC);
-$previousSelected = [];
-if (!empty($app_exists['selected_protections'])) {
-    $previousSelected = json_decode($app_exists['selected_protections'], true);
-    if (!is_array($previousSelected)) {
-        $previousSelected = [];
-    }
+if ($check->fetch()) {
+    $app_exists = true;
+    $update = $db->prepare("UPDATE applications SET selected_protections = ?, usage_data = ? WHERE deal_id = ?");
+    $update->execute([json_encode($selected), $usage_json, $deal_id]);
+} else {
+    // Should not happen in normal flow as Step 3 creates it, but handle just in case
+    $insert = $db->prepare("INSERT INTO applications (deal_id, selected_protections, usage_data, started_at, submitted_at) VALUES (?, ?, ?, NOW(), NOW())");
+    $insert->execute([$deal_id, json_encode($selected), $usage_json]);
 }
 
-if ($app_exists) {
-    $stmt = $db->prepare("UPDATE applications SET selected_protections = ?, all_recommendations = ? WHERE deal_id = ?");
-    $stmt->execute([
-        json_encode($selected),
-        json_encode($recommendations),
-        $deal_id
-    ]);
-} else {
-    $stmt = $db->prepare("INSERT INTO applications (deal_id, selected_protections, all_recommendations, payment_info, submitted_at)
-                          VALUES (?, ?, ?, ?, NOW())");
-    $stmt->execute([
-        $deal_id,
-        json_encode($selected),
-        json_encode($recommendations),
-        json_encode([]) // placeholder for payment_info
-    ]);
+// Store individual product recommendations and explanations
+if (!empty($recommendations)) {
+    // Clear old recommendations first
+    $clear = $db->prepare("DELETE FROM product_recommendations WHERE deal_id = ?");
+    $clear->execute([$deal_id]);
+
+    $ins = $db->prepare("INSERT INTO product_recommendations (deal_id, product_code, product_name, score, ai_explanation, created_at) VALUES (?, ?, ?, ?, ?, NOW())");
+    foreach ($recommendations as $rec) {
+        $ins->execute([
+            $deal_id,
+            $rec['code'] ?? '',
+            $rec['name'] ?? '',
+            (int)($rec['score'] ?? 0),
+            $rec['explanation'] ?? ''
+        ]);
+    }
 }
 
 // Insert audit log
@@ -177,17 +106,25 @@ $changeMeta = json_encode([
     'removed' => $removed
 ]);
 $changeType = $app_exists ? 'resubmit' : 'initial_submit';
-$audit = $db->prepare("INSERT INTO protection_audit_log (deal_id, selected_protections, all_recommendations, user_id, change_type, change_meta, ai_narrative, submitted_at)
-                       VALUES (?, ?, ?, ?, ?, ?, ?, NOW())");
-$audit->execute([
-    $deal_id,
-    json_encode($selected),
-    json_encode($recommendations),
-    $_SESSION['user_id'] ?? null,
-    $changeType,
-    $changeMeta,
-    $aiNarrative
-]);
+
+$auditData = [
+    'deal_id' => $deal_id,
+    'selected_protections' => json_encode($selected),
+    'all_recommendations' => json_encode($recommendations),
+    'user_id' => $_SESSION['user_id'] ?? null,
+    'change_type' => $changeType,
+    'change_meta' => $changeMeta,
+    'ai_narrative' => $aiNarrative
+];
+
+$audit = $db->prepare("
+    INSERT INTO protection_audit_log (
+        deal_id, selected_protections, all_recommendations, user_id, change_type, change_meta, ai_narrative, submitted_at
+    ) VALUES (
+        :deal_id, :selected_protections, :all_recommendations, :user_id, :change_type, :change_meta, :ai_narrative, NOW()
+    )
+");
+$audit->execute($auditData);
 
 // Lock the credit app after the first completed selection.
 $lockUserId = $_SESSION['user_id'] ?? null;
@@ -201,60 +138,4 @@ $lockStmt = $db->prepare("
 ");
 $lockStmt->execute([$lockUserId, $deal_id]);
 
-// Notify Finance Manager(s)
-$dealStmt = $db->prepare("SELECT * FROM deals WHERE id = ?");
-$dealStmt->execute([$deal_id]);
-$dealData = $dealStmt->fetch(PDO::FETCH_ASSOC);
-
-if ($dealData) {
-    $org_id = $dealData['organization'] ?? null;
-    $deal_type = $dealData['deal_type'] ?? 'Unknown';
-
-    if ($org_id) {
-        $user_stmt = $db->prepare("SELECT email FROM users WHERE organization = ? AND JSON_CONTAINS(role, '\"Finance Manager\"')");
-        $user_stmt->execute([$org_id]);
-        $manager_emails = $user_stmt->fetchAll(PDO::FETCH_COLUMN);
-
-        $subject = "DealerFAI - Protection Selections Completed";
-        $message = "Customer has submitted their protection choices for Deal #$deal_id.\n\n";
-        $message .= ($deal_type === 'Cash')
-            ? "This is a cash deal. Product selections have been submitted."
-            : "This is a finance/lease deal. Application and product selections have been submitted.";
-
-        foreach ($manager_emails as $email) {
-            try {
-                $smtpHost = $smtpConfig['host'] ?? ($_ENV['SMTP_HOST'] ?? getenv('SMTP_HOST') ?? '');
-                $smtpUser = $smtpConfig['user'] ?? ($_ENV['SMTP_USER'] ?? getenv('SMTP_USER') ?? '');
-                $smtpPass = $smtpConfig['pass'] ?? ($_ENV['SMTP_PASS'] ?? getenv('SMTP_PASS') ?? '');
-                $smtpPort = (int)($smtpConfig['port'] ?? ($_ENV['SMTP_PORT'] ?? getenv('SMTP_PORT') ?? 587));
-                $smtpSecure = $smtpConfig['secure'] ?? ($_ENV['SMTP_SECURE'] ?? getenv('SMTP_SECURE') ?? PHPMailer::ENCRYPTION_STARTTLS);
-                $fromEmail = $smtpConfig['from_email'] ?? $smtpUser;
-                $fromName = $smtpConfig['from_name'] ?? 'DealerFAI';
-
-                $mail = new PHPMailer(true);
-                $mail->isSMTP();
-                $mail->Host = $smtpHost;
-                $mail->SMTPAuth = true;
-                $mail->Username = $smtpUser;
-                $mail->Password = $smtpPass;
-                $mail->SMTPSecure = $smtpSecure;
-                $mail->Port = $smtpPort;
-                $mail->setFrom($fromEmail, $fromName);
-                $mail->addAddress($email);
-                $mail->Subject = $subject;
-                $mail->Body = $message;
-                $mail->send();
-            } catch (\Throwable $e) {
-                error_log('Failed to send protection submission email to ' . $email . ': ' . $e->getMessage());
-            }
-        }
-    }
-}
-
-// Clear wizard data after successful submission
-unset($_SESSION['step1'], $_SESSION['step2'], $_SESSION['step3']);
-
-// Redirect to thank you
-header("Location: thank_you.php?deal_id=" . urlencode($deal_id));
-exit;
-?>
+echo json_encode(['success' => true]);
