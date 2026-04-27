@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   }
 
   if (empty($errors)) {
-    $org = $is_admin ? ($_POST['organization_custom'] ?: $_POST['organization']) : $user_org;
+    $org = $is_admin ? ($_POST['organization'] ?? $user_org) : $user_org;
     $postedRoles = $_POST['role'] ?? [];
     if (!is_array($postedRoles)) {
       $postedRoles = [];
@@ -47,8 +47,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $stmt = $db->prepare("INSERT INTO users 
-      (full_name, email, password, organization, role, password_created_at, password_expires_at, created_at) 
-      VALUES (?, ?, ?, ?, ?, NOW(), DATE_ADD(NOW(), INTERVAL 6 MONTH), NOW())");
+      (full_name, email, password, organization, role, created_at, password_last_set) 
+      VALUES (?, ?, ?, ?, ?, NOW(), NOW())");
 
     $stmt->execute([
       $_POST['full_name'],
