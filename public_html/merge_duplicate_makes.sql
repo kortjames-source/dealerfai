@@ -7,10 +7,6 @@ SET FOREIGN_KEY_CHECKS = 0;
 UPDATE deals SET vehicle_make_id = 47 WHERE vehicle_make_id = 8;
 UPDATE deals SET vehicle_make_id = 41 WHERE vehicle_make_id = 1;
 
--- Update deal_change_audit_log
-UPDATE deal_change_audit_log SET vehicle_make_id = 47 WHERE vehicle_make_id = 8;
-UPDATE deal_change_audit_log SET vehicle_make_id = 41 WHERE vehicle_make_id = 1;
-
 -- Update product_vehicle_eligibility
 -- Use IGNORE to avoid unique key conflicts if rules already exist for the target make
 UPDATE IGNORE product_vehicle_eligibility SET make_id = 47 WHERE make_id = 8;
@@ -23,15 +19,10 @@ UPDATE IGNORE product_vehicle_pricing_overrides SET vehicle_make_id = 47 WHERE v
 UPDATE IGNORE product_vehicle_pricing_overrides SET vehicle_make_id = 41 WHERE vehicle_make_id = 1;
 DELETE FROM product_vehicle_pricing_overrides WHERE vehicle_make_id IN (1, 8);
 
--- Update product_organization_overrides
-UPDATE IGNORE product_organization_overrides SET vehicle_make_id = 47 WHERE vehicle_make_id = 8;
-UPDATE IGNORE product_organization_overrides SET vehicle_make_id = 41 WHERE vehicle_make_id = 1;
-DELETE FROM product_organization_overrides WHERE vehicle_make_id IN (1, 8);
-
 -- Update product_pricing_overrides
-UPDATE IGNORE product_pricing_overrides SET make_id = 47 WHERE make_id = 8;
-UPDATE IGNORE product_pricing_overrides SET make_id = 41 WHERE make_id = 1;
-DELETE FROM product_pricing_overrides WHERE make_id IN (1, 8);
+UPDATE IGNORE product_pricing_overrides SET vehicle_make_id = 47 WHERE vehicle_make_id = 8;
+UPDATE IGNORE product_pricing_overrides SET vehicle_make_id = 41 WHERE vehicle_make_id = 1;
+DELETE FROM product_pricing_overrides WHERE vehicle_make_id IN (1, 8);
 
 -- Update accessory_fitment
 UPDATE IGNORE accessory_fitment SET make_id = 47 WHERE make_id = 8;
