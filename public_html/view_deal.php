@@ -1443,9 +1443,15 @@ $freq_ratio = match($payment_frequency) { 'Semi-Monthly' => 12/24, 'Bi-Weekly' =
 $payment_display = number_format($payment * $freq_ratio, 2);
 
 // Application Status
-$app_check = $db->prepare("SELECT started_at, submitted_at FROM applications WHERE deal_id = ?");
+$app_check = $db->prepare("SELECT started_at, submitted_at, intro_text FROM applications WHERE deal_id = ?");
 $app_check->execute([$deal_id]);
 $app_data = $app_check->fetch(PDO::FETCH_ASSOC);
+$introText = $app_data['intro_text'] ?? '';
+
+// Recommended products with AI explanations
+$ai_recs_stmt = $db->prepare("SELECT product_name, ai_explanation FROM product_recommendations WHERE deal_id = ? AND ai_explanation IS NOT NULL AND ai_explanation != ''");
+$ai_recs_stmt->execute([$deal_id]);
+$ai_recs = $ai_recs_stmt->fetchAll(PDO::FETCH_ASSOC);
 $status = "Not Started";
 if ($app_data) {
     if ($app_data['submitted_at']) $status = "✅ Submitted";
@@ -2077,7 +2083,16 @@ function calculate_payment($total_to_finance, $interest_rate, $term) {
             </div>
             <div style="display: flex; justify-content: space-between; align-items: center;">
               <span class="financial-label">Lock Status</span>
-              <span class="status-pill"><?= $lockStatus ?></span>
+              <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <span class="status-pill"><?= $lockStatus ?></span>
+                <?php if ($creditAppLocked && ($isAdmin || ($isManager ?? false))): ?>
+                  <form action="unlock_credit_app.php" method="POST" style="margin: 0;">
+                    <input type="hidden" name="deal_id" value="<?= (int)$deal_id ?>">
+                    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
+                    <button type="submit" class="btn btn-secondary btn-sm" style="padding: 2px 8px; font-size: 0.7rem;" onclick="return confirm('Unlock this application for editing?');">Unlock</button>
+                  </form>
+                <?php endif; ?>
+              </div>
             </div>
             <div style="margin-top: 1.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
               <button type="button" class="btn btn-secondary btn-sm" id="email_customer_button" <?= $emailDisabled ?>><i class="fa-solid fa-envelope"></i> Email Invite</button>
@@ -2120,6 +2135,37 @@ function calculate_payment($total_to_finance, $interest_rate, $term) {
             </div>
           </div>
 
+          <?php if ($introText !== '' || !empty($ai_recs)): ?>
+            <div class="card" style="border-left: 4px solid var(--brand-color);">
+              <div class="section-header">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                <h3 style="margin: 0; font-size: 1rem; font-weight: 800;">Product Presentation Snapshot</h3>
+              </div>
+              <div style="flex: 1;">
+                <?php if ($introText !== ''): ?>
+                  <div style="background: rgba(var(--brand-hsl), 0.05); padding: 1.25rem; border-radius: 8px; margin-bottom: 1.5rem; position: relative;">
+                    <i class="fa-solid fa-quote-left" style="position: absolute; top: 10px; left: 10px; opacity: 0.1; font-size: 1.5rem;"></i>
+                    <p style="font-style: italic; color: #1e293b; margin: 0; line-height: 1.6; font-size: 0.9rem; position: relative; z-index: 1;">
+                      <?= nl2br(htmlspecialchars($introText)) ?>
+                    </p>
+                  </div>
+                <?php endif; ?>
+
+                <?php if (!empty($ai_recs)): ?>
+                  <h4 style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; margin-bottom: 1rem; font-weight: 700;">AI Recommendation Explanations</h4>
+                  <div style="display: flex; flex-direction: column; gap: 1rem;">
+                    <?php foreach ($ai_recs as $r): ?>
+                      <div style="padding-bottom: 1rem; border-bottom: 1px solid rgba(0,0,0,0.05);">
+                        <div style="font-weight: 700; font-size: 0.875rem; color: #0f172a; margin-bottom: 0.25rem;"><?= htmlspecialchars($r['product_name']) ?></div>
+                        <div style="font-size: 0.8rem; color: #475569; line-height: 1.4;"><?= htmlspecialchars($r['ai_explanation']) ?></div>
+                      </div>
+                    <?php endforeach; ?>
+                  </div>
+                <?php endif; ?>
+              </div>
+            </div>
+          <?php endif; ?>
+
           <div class="card">
             <div class="section-header">
               <i class="fa-solid fa-clock-rotate-left"></i>
@@ -2136,6 +2182,11 @@ function calculate_payment($total_to_finance, $interest_rate, $term) {
                       <div style="color: #64748b; font-size: 0.75rem; margin-top: 0.25rem;">
                         By: <?= htmlspecialchars($entry['user_name'] ?? 'System') ?> · 
                         Type: <?= htmlspecialchars($entry['change_type'] ?? 'Selection') ?>
+                      </div>
+                      <div style="margin-top: 0.5rem;">
+                        <a href="recommendations.php?id=<?= urlencode($deal_id) ?>&snapshot_id=<?= $entry['id'] ?>" target="_blank" class="btn btn-sm" style="padding: 2px 8px; font-size: 0.7rem; background: var(--brand-color); color: white;">
+                          <i class="fa-solid fa-eye" style="margin-right: 4px;"></i> View Presentation
+                        </a>
                       </div>
                     </div>
                   <?php endforeach; ?>

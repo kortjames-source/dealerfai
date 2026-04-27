@@ -39,6 +39,7 @@ $recommendations = $_POST['recommendations'] ?? [];
 $xpel_package = $_POST['xpel_package'] ?? null;
 $term_options = $_POST['term_option'] ?? [];
 $variant_options = $_POST['variant_option'] ?? [];
+$aiNarrative = $_POST['ai_narrative'] ?? '';
 
 if (!is_array($selected)) $selected = [];
 if (!is_array($recommendations)) $recommendations = [];
@@ -176,15 +177,16 @@ $changeMeta = json_encode([
     'removed' => $removed
 ]);
 $changeType = $app_exists ? 'resubmit' : 'initial_submit';
-$audit = $db->prepare("INSERT INTO protection_audit_log (deal_id, selected_protections, all_recommendations, user_id, change_type, change_meta, submitted_at)
-                       VALUES (?, ?, ?, ?, ?, ?, NOW())");
+$audit = $db->prepare("INSERT INTO protection_audit_log (deal_id, selected_protections, all_recommendations, user_id, change_type, change_meta, ai_narrative, submitted_at)
+                       VALUES (?, ?, ?, ?, ?, ?, ?, NOW())");
 $audit->execute([
     $deal_id,
     json_encode($selected),
     json_encode($recommendations),
     $_SESSION['user_id'] ?? null,
     $changeType,
-    $changeMeta
+    $changeMeta,
+    $aiNarrative
 ]);
 
 // Lock the credit app after the first completed selection.

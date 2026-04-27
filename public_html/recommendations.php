@@ -80,13 +80,14 @@ $snapshotRecommended = [];
 $snapshotSubmittedAt = null;
 
 if ($snapshot_id) {
-    $snapStmt = $db->prepare("SELECT selected_protections, all_recommendations, submitted_at FROM protection_audit_log WHERE id = ? AND deal_id = ?");
+    $snapStmt = $db->prepare("SELECT selected_protections, all_recommendations, ai_narrative, submitted_at FROM protection_audit_log WHERE id = ? AND deal_id = ?");
     $snapStmt->execute([$snapshot_id, $deal_id]);
     $snapshot = $snapStmt->fetch(PDO::FETCH_ASSOC);
     if ($snapshot) {
         $snapshotMode = true;
         $snapshotSelected = json_decode($snapshot['selected_protections'] ?? '[]', true) ?: [];
         $snapshotRecommended = json_decode($snapshot['all_recommendations'] ?? '[]', true) ?: [];
+        $snapshotNarrative = $snapshot['ai_narrative'] ?? null;
         $snapshotSubmittedAt = $snapshot['submitted_at'] ?? null;
     }
 }
@@ -748,7 +749,18 @@ if ($vehicleMake === '' && !empty($deal['vehicle_make_id'])) {
         && !$snapshotMode
         && function_exists('scoring_ai_async_enabled')
         && scoring_ai_async_enabled($db);
-	$introText = generate_recommendation_intro($deal, $profileSummary, $voicePrompts, $aiReasoningEnabled);
+	$introText = '';
+	if ($snapshotMode && isset($snapshotNarrative)) {
+		$introText = $snapshotNarrative;
+	} else {
+		$introText = generate_recommendation_intro($deal, $profileSummary, $voicePrompts, $aiReasoningEnabled);
+        if ($introText !== '' && !$snapshotMode) {
+            try {
+                $updIntro = $db->prepare("UPDATE applications SET intro_text = ? WHERE deal_id = ?");
+                $updIntro->execute([$introText, $deal_id]);
+            } catch (Exception $e) {}
+        }
+	}
 $isLuxuryVehicle = is_luxury_vehicle_make($vehicleMake);
 	$preferXpelIntermediateDefault = (float)($deal['sale_price'] ?? 0) >= 80000;
 
@@ -1584,6 +1596,7 @@ header('Content-Type: text/html; charset=utf-8');
         </section>
       <?php endif; ?>
       <form method="post" action="<?= $snapshotMode ? '#' : 'submit_protections.php' ?>" id="custom-builder"<?= $snapshotMode ? ' onsubmit="return false;"' : '' ?>>
+        <input type="hidden" name="ai_narrative" value="<?= htmlspecialchars($introText) ?>">
       <input type="hidden" name="deal_id" value="<?= htmlspecialchars($deal_id) ?>">
       <h3>Fully customizable protections</h3>
 
