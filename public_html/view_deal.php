@@ -2135,39 +2135,7 @@ function calculate_payment($total_to_finance, $interest_rate, $term) {
             </div>
           </div>
 
-          <?php if ($introText !== '' || !empty($ai_recs)): ?>
-            <div class="card" style="border-left: 4px solid var(--brand-color);">
-              <div class="section-header">
-                <i class="fa-solid fa-wand-magic-sparkles"></i>
-                <h3 style="margin: 0; font-size: 1rem; font-weight: 800;">Product Presentation Snapshot</h3>
-              </div>
-              <div style="flex: 1;">
-                <?php if ($introText !== ''): ?>
-                  <div style="background: rgba(var(--brand-hsl), 0.05); padding: 1.25rem; border-radius: 8px; margin-bottom: 1.5rem; position: relative;">
-                    <i class="fa-solid fa-quote-left" style="position: absolute; top: 10px; left: 10px; opacity: 0.1; font-size: 1.5rem;"></i>
-                    <p style="font-style: italic; color: #1e293b; margin: 0; line-height: 1.6; font-size: 0.9rem; position: relative; z-index: 1;">
-                      <?= nl2br(htmlspecialchars($introText)) ?>
-                    </p>
-                    <div style="margin-top: 1rem; font-size: 0.7rem; color: #94a3b8; text-align: right;">
-                      <i class="fa-solid fa-clock" style="margin-right: 4px;"></i> Latest capture: <?= !empty($audit_entries) ? date('M j, Y, g:i a', strtotime($audit_entries[0]['submitted_at'])) : 'Recent' ?>
-                    </div>
-                  </div>
-                <?php endif; ?>
 
-                <?php if (!empty($ai_recs)): ?>
-                  <h4 style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; margin-bottom: 1rem; font-weight: 700;">AI Recommendation Explanations</h4>
-                  <div style="display: flex; flex-direction: column; gap: 1rem;">
-                    <?php foreach ($ai_recs as $r): ?>
-                      <div style="padding-bottom: 1rem; border-bottom: 1px solid rgba(0,0,0,0.05);">
-                        <div style="font-weight: 700; font-size: 0.875rem; color: #0f172a; margin-bottom: 0.25rem;"><?= htmlspecialchars($r['product_name']) ?></div>
-                        <div style="font-size: 0.8rem; color: #475569; line-height: 1.4;"><?= htmlspecialchars($r['ai_explanation']) ?></div>
-                      </div>
-                    <?php endforeach; ?>
-                  </div>
-                <?php endif; ?>
-              </div>
-            </div>
-          <?php endif; ?>
 
           <div class="card">
             <div class="section-header">
