@@ -2706,6 +2706,7 @@ function generate_ai_explanation($product, $dealInfo = [], ?PDO $db = null) {
             CURLOPT_HTTPHEADER => [
                 "Content-Type: application/json"
             ],
+            CURLOPT_REFERER => 'https://www.dealerfai.com/',
             CURLOPT_TIMEOUT => 8,
             CURLOPT_CONNECTTIMEOUT => 3,
             CURLOPT_POSTFIELDS => json_encode([

@@ -352,6 +352,7 @@ function generate_recommendation_intro(array $deal, string $profileSummary, arra
         CURLOPT_HTTPHEADER => [
             "Content-Type: application/json"
         ],
+        CURLOPT_REFERER => 'https://www.dealerfai.com/',
         CURLOPT_POSTFIELDS => json_encode([
             "contents" => [
                 ["parts" => [["text" => $prompt]]]

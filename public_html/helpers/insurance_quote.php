@@ -297,6 +297,7 @@ if (!function_exists('insurance_quote_provider_http_json')) {
             CURLOPT_URL => (string)$config['base_url'],
             CURLOPT_POST => true,
             CURLOPT_HTTPHEADER => $headers,
+            CURLOPT_REFERER => 'https://www.dealerfai.com/',
             CURLOPT_POSTFIELDS => json_encode($payload),
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_CONNECTTIMEOUT_MS => min($timeoutMs, 2000),
