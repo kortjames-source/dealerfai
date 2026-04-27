@@ -127,60 +127,69 @@ $app_exists = $check->fetchColumn();
 
 if ($app_exists) {
     // UPDATE existing
-    $stmt = $db->prepare("
-        UPDATE applications SET
-            full_name = ?, email = ?, phone = ?, address = ?, city = ?, province = ?, postal_code = ?,
-            housing = ?, years_at_address = ?, monthly_payment = ?,
-            has_cosigner = ?, co_full_name = ?, co_email = ?, co_phone = ?, co_address = ?, co_city = ?, co_province = ?, co_postal_code = ?, co_housing = ?, co_years_at_address = ?, co_monthly_payment = ?,
-            employer = ?, work_address = ?, position = ?, employment_length = ?, prev_employer = ?, prev_phone = ?, prev_address = ?, prev_length = ?, income = ?, other_income = ?, other_income_source = ?,
-            co_employer = ?, co_work_address = ?, co_position = ?, co_employment_length = ?, co_prev_employer = ?, co_prev_phone = ?, co_prev_address = ?, co_prev_length = ?, co_income = ?, co_other_income = ?, co_other_income_source = ?,
-            vehicle_make = ?, vehicle_model = ?,
-            usage_data = ?, highway_driving = ?, extra_answers_json = ?, submitted_at = NOW()
-        WHERE deal_id = ?
-    ");
-    $success = $stmt->execute([
-        $step1['full_name'] ?? '', $step1['email'] ?? '', $step1['phone'] ?? '', $step1['address'] ?? '', $step1['city'] ?? '', $step1['province'] ?? '', $step1['postal_code'] ?? '',
-        $step1['housing'] ?? '', $years_at_address, $monthly_payment,
-        $step1['has_cosigner'] ?? '', $step1['co_full_name'] ?? '', $step1['co_email'] ?? '', $step1['co_phone'] ?? '', $step1['co_address'] ?? '', $step1['co_city'] ?? '', $step1['co_province'] ?? '', $step1['co_postal_code'] ?? '', $step1['co_housing'] ?? '', $co_years_at_address, $co_monthly_payment,
-        $step2['employer'] ?? '', $step2['work_address'] ?? '', $step2['position'] ?? '', $employment_length, $step2['prev_employer'] ?? '', $step2['prev_phone'] ?? '', $step2['prev_address'] ?? '', $prev_length, $income, $other_income, $other_income_source,
-        $step2['co_employer'] ?? '', $step2['co_work_address'] ?? '', $step2['co_position'] ?? '', $co_employment_length, $step2['co_prev_employer'] ?? '', $step2['co_prev_phone'] ?? '', $step2['co_prev_address'] ?? '', $co_prev_length, $co_income, $co_other_income, $co_other_income_source,
-        $vehicle_make, $vehicle_model,
-        $usage_json, $highway, $extra_answers_json, $deal_id
-    ]);
-    if (!$success) {
-        error_log("process_usage: failed to update application for deal_id $deal_id");
+    try {
+        $stmt = $db->prepare("
+            UPDATE applications SET
+                full_name = ?, email = ?, phone = ?, address = ?, city = ?, province = ?, postal_code = ?,
+                housing = ?, years_at_address = ?, monthly_payment = ?,
+                has_cosigner = ?, co_full_name = ?, co_email = ?, co_phone = ?, co_address = ?, co_city = ?, co_province = ?, co_postal_code = ?, co_housing = ?, co_years_at_address = ?, co_monthly_payment = ?,
+                employer = ?, work_address = ?, position = ?, employment_length = ?, prev_employer = ?, prev_phone = ?, prev_address = ?, prev_length = ?, income = ?, other_income = ?, other_income_source = ?,
+                co_employer = ?, co_work_address = ?, co_position = ?, co_employment_length = ?, co_prev_employer = ?, co_prev_phone = ?, co_prev_address = ?, co_prev_length = ?, co_income = ?, co_other_income = ?, co_other_income_source = ?,
+                vehicle_make = ?, vehicle_model = ?,
+                usage_data = ?, highway_driving = ?, extra_answers_json = ?, submitted_at = NOW()
+            WHERE deal_id = ?
+        ");
+        $stmt->execute([
+            $step1['full_name'] ?? '', $step1['email'] ?? '', $step1['phone'] ?? '', $step1['address'] ?? '', $step1['city'] ?? '', $step1['province'] ?? '', $step1['postal_code'] ?? '',
+            $step1['housing'] ?? '', $years_at_address, $monthly_payment,
+            $step1['has_cosigner'] ?? '', $step1['co_full_name'] ?? '', $step1['co_email'] ?? '', $step1['co_phone'] ?? '', $step1['co_address'] ?? '', $step1['co_city'] ?? '', $step1['co_province'] ?? '', $step1['co_postal_code'] ?? '', $step1['co_housing'] ?? '', $co_years_at_address, $co_monthly_payment,
+            $step2['employer'] ?? '', $step2['work_address'] ?? '', $step2['position'] ?? '', $employment_length, $step2['prev_employer'] ?? '', $step2['prev_phone'] ?? '', $step2['prev_address'] ?? '', $prev_length, $income, $other_income, $other_income_source,
+            $step2['co_employer'] ?? '', $step2['co_work_address'] ?? '', $step2['co_position'] ?? '', $co_employment_length, $step2['co_prev_employer'] ?? '', $step2['co_prev_phone'] ?? '', $step2['co_prev_address'] ?? '', $co_prev_length, $co_income, $co_other_income, $co_other_income_source,
+            $vehicle_make, $vehicle_model,
+            $usage_json, $highway, $extra_answers_json, $deal_id
+        ]);
+    } catch (Exception $e) {
+        http_response_code(500);
+        echo json_encode(['success' => false, 'error' => 'Database error during update: ' . $e->getMessage()]);
+        exit;
     }
 } else {
     // INSERT new
-    $stmt = $db->prepare("
-        INSERT INTO applications (
-            deal_id, full_name, email, phone, address, city, province, postal_code,
-            housing, years_at_address, monthly_payment,
-            has_cosigner, co_full_name, co_email, co_phone, co_address, co_city, co_province, co_postal_code, co_housing, co_years_at_address, co_monthly_payment,
-            employer, work_address, position, employment_length, prev_employer, prev_phone, prev_address, prev_length, income, other_income, other_income_source,
-            co_employer, co_work_address, co_position, co_employment_length, co_prev_employer, co_prev_phone, co_prev_address, co_prev_length, co_income, co_other_income, co_other_income_source,
-            vehicle_make, vehicle_model,
-            usage_data, highway_driving, extra_answers_json, started_at, submitted_at
-        ) VALUES (
-            ?, ?, ?, ?, ?, ?, ?, ?, 
-            ?, ?, ?, 
-            ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
-            ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
-            ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
-            ?, ?, 
-            ?, ?, ?, ?, ?
-        )
-    ");
-    $stmt->execute([
-        $deal_id,
-        $step1['full_name'] ?? '', $step1['email'] ?? '', $step1['phone'] ?? '', $step1['address'] ?? '', $step1['city'] ?? '', $step1['province'] ?? '', $step1['postal_code'] ?? '',
-        $step1['housing'] ?? '', $years_at_address, $monthly_payment,
-        $step1['has_cosigner'] ?? '', $step1['co_full_name'] ?? '', $step1['co_email'] ?? '', $step1['co_phone'] ?? '', $step1['co_address'] ?? '', $step1['co_city'] ?? '', $step1['co_province'] ?? '', $step1['co_postal_code'] ?? '', $step1['co_housing'] ?? '', $co_years_at_address, $co_monthly_payment,
-        $step2['employer'] ?? '', $step2['work_address'] ?? '', $step2['position'] ?? '', $employment_length, $step2['prev_employer'] ?? '', $step2['prev_phone'] ?? '', $step2['prev_address'] ?? '', $prev_length, $income, $other_income, $other_income_source,
-        $step2['co_employer'] ?? '', $step2['co_work_address'] ?? '', $step2['co_position'] ?? '', $co_employment_length, $step2['co_prev_employer'] ?? '', $step2['co_prev_phone'] ?? '', $step2['co_prev_address'] ?? '', $co_prev_length, $co_income, $co_other_income, $co_other_income_source,
-        $vehicle_make, $vehicle_model,
-        $usage_json, $highway, $extra_answers_json,
-    ]);
+    try {
+        $stmt = $db->prepare("
+            INSERT INTO applications (
+                deal_id, full_name, email, phone, address, city, province, postal_code,
+                housing, years_at_address, monthly_payment,
+                has_cosigner, co_full_name, co_email, co_phone, co_address, co_city, co_province, co_postal_code, co_housing, co_years_at_address, co_monthly_payment,
+                employer, work_address, position, employment_length, prev_employer, prev_phone, prev_address, prev_length, income, other_income, other_income_source,
+                co_employer, co_work_address, co_position, co_employment_length, co_prev_employer, co_prev_phone, co_prev_address, co_prev_length, co_income, co_other_income, co_other_income_source,
+                vehicle_make, vehicle_model,
+                usage_data, highway_driving, extra_answers_json, started_at, submitted_at
+            ) VALUES (
+                ?, ?, ?, ?, ?, ?, ?, ?, 
+                ?, ?, ?, 
+                ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
+                ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
+                ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
+                ?, ?, 
+                ?, ?, ?, NOW(), NOW()
+            )
+        ");
+        $stmt->execute([
+            $deal_id,
+            $step1['full_name'] ?? '', $step1['email'] ?? '', $step1['phone'] ?? '', $step1['address'] ?? '', $step1['city'] ?? '', $step1['province'] ?? '', $step1['postal_code'] ?? '',
+            $step1['housing'] ?? '', $years_at_address, $monthly_payment,
+            $step1['has_cosigner'] ?? '', $step1['co_full_name'] ?? '', $step1['co_email'] ?? '', $step1['co_phone'] ?? '', $step1['co_address'] ?? '', $step1['co_city'] ?? '', $step1['co_province'] ?? '', $step1['co_postal_code'] ?? '', $step1['co_housing'] ?? '', $co_years_at_address, $co_monthly_payment,
+            $step2['employer'] ?? '', $step2['work_address'] ?? '', $step2['position'] ?? '', $employment_length, $step2['prev_employer'] ?? '', $step2['prev_phone'] ?? '', $step2['prev_address'] ?? '', $prev_length, $income, $other_income, $other_income_source,
+            $step2['co_employer'] ?? '', $step2['co_work_address'] ?? '', $step2['co_position'] ?? '', $co_employment_length, $step2['co_prev_employer'] ?? '', $step2['co_prev_phone'] ?? '', $step2['co_prev_address'] ?? '', $co_prev_length, $co_income, $co_other_income, $co_other_income_source,
+            $vehicle_make, $vehicle_model,
+            $usage_json, $highway, $extra_answers_json
+        ]);
+    } catch (Exception $e) {
+        http_response_code(500);
+        echo json_encode(['success' => false, 'error' => 'Database error: ' . $e->getMessage()]);
+        exit;
+    }
 }
 
 // Lock the credit app after Step 3 submission.
