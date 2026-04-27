@@ -41,6 +41,10 @@ if (empty($draft['draft_csrf_token']) || !is_string($draft['draft_csrf_token']))
   $draft['draft_csrf_token'] = bin2hex(random_bytes(32));
 }
 $csrfToken = $draft['draft_csrf_token'];
+$residualPercentValue = '';
+if (!empty($draft['msrp']) && !empty($draft['residual'])) {
+  $residualPercentValue = round(((float)$draft['residual'] / (float)$draft['msrp']) * 100, 2);
+}
 $formError = '';
 $productCatalog = [];
 $includeIncluded = false;
@@ -485,10 +489,6 @@ try {
   error_log("Unable to load product catalog: " . $e->getMessage());
 }
 
-$residualPercentValue = '';
-if (!empty($draft['msrp']) && !empty($draft['residual'])) {
-  $residualPercentValue = round(((float)$draft['residual'] / (float)$draft['msrp']) * 100, 2);
-}
 
 if ($orgId > 0) {
   try {
