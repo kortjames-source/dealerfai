@@ -89,6 +89,11 @@ if ($snapshot_id) {
         $snapshotRecommended = json_decode($snapshot['all_recommendations'] ?? '[]', true) ?: [];
         $snapshotNarrative = $snapshot['ai_narrative'] ?? null;
         $snapshotSubmittedAt = $snapshot['submitted_at'] ?? null;
+        
+        // When in snapshot mode, we prioritize the recommendations saved at that time
+        if (!empty($snapshotRecommended)) {
+            $recs = $snapshotRecommended;
+        }
     }
 }
 
@@ -510,8 +515,9 @@ if ($vehicleCondition === 'new') {
 }
 $snapshotRecommendedLookup = [];
 if ($snapshotMode && !empty($snapshotRecommended)) {
-    foreach ($snapshotRecommended as $code) {
-        $snapshotRecommendedLookup[(string)$code] = true;
+    foreach ($snapshotRecommended as $rec) {
+        $code = is_array($rec) ? ($rec['product_code'] ?? '') : $rec;
+        if ($code !== '') $snapshotRecommendedLookup[(string)$code] = true;
     }
     $recs = array_values(array_filter($recs, function ($row) use ($snapshotRecommendedLookup) {
         $code = $row['product_code'] ?? '';
@@ -1508,11 +1514,17 @@ header('Content-Type: text/html; charset=utf-8');
   <?php else: ?>
     <h1>DealerFAI Application</h1>
   <?php endif; ?>
+  <?php if ($snapshotMode && $snapshotSubmittedAt): ?>
+    <div class="snapshot-notice" style="background: #fff3cd; color: #856404; padding: 1rem; text-align: center; border-bottom: 1px solid #ffeeba; position: sticky; top: 0; z-index: 2000; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
+      <i class="fa-solid fa-clock-rotate-left" style="margin-right: 8px;"></i>
+      <strong>Historical Snapshot:</strong> This view reflects the recommendations and AI presentation presented to the client on <strong><?= date('F j, Y, g:i a', strtotime($snapshotSubmittedAt)) ?></strong>.
+    </div>
+  <?php endif; ?>
 </header>
 
 <?php if ($snapshotMode): ?>
   <div class="snapshot-note">
-    <span>Snapshot view<?= $snapshotSubmittedAt ? ' from ' . htmlspecialchars(date('F j, Y, g:i a', strtotime($snapshotSubmittedAt))) : '' ?>. Printing will match the client-facing layout.</span>
+    <span>Snapshot view. Printing will match the client-facing layout.</span>
     <button type="button" onclick="window.print()">Print</button>
   </div>
 <?php endif; ?>
@@ -2056,14 +2068,19 @@ header('Content-Type: text/html; charset=utf-8');
       </div>
       <?php endforeach; ?>
 
-      <?php foreach ($recs as $r): ?>
+      <?php foreach ($recs as $i => $r): ?>
       <?php
         $productCode = $r['product_code'] ?? '';
         $variant = $productCode !== '' ? ($productVariantByCode[$productCode] ?? null) : null;
         $leaseCapExempt = !empty($variant['lease_cap_exempt']);
         $financeCapExempt = !empty($variant['finance_cap_exempt']);
       ?>
-        <input type="hidden" name="recommendations[]" value="<?= htmlspecialchars($r['product_code']) ?>">
+        <input type="hidden" name="recommendations[<?= $i ?>][product_code]" value="<?= htmlspecialchars($r['product_code']) ?>">
+        <input type="hidden" name="recommendations[<?= $i ?>][product_name]" value="<?= htmlspecialchars($r['product_name']) ?>">
+        <input type="hidden" name="recommendations[<?= $i ?>][sale_price]" value="<?= htmlspecialchars($r['sale_price']) ?>">
+        <input type="hidden" name="recommendations[<?= $i ?>][description]" value="<?= htmlspecialchars($r['description']) ?>">
+        <input type="hidden" name="recommendations[<?= $i ?>][score]" value="<?= (int)($r['score'] ?? 0) ?>">
+        <input type="hidden" name="recommendations[<?= $i ?>][ai_explanation]" value="<?= htmlspecialchars($r['ai_explanation'] ?? '') ?>">
       <?php endforeach; ?>
 
       <button type="submit" class="btn">Submit Selections</button>

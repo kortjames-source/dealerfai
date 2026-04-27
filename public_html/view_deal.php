@@ -2148,6 +2148,9 @@ function calculate_payment($total_to_finance, $interest_rate, $term) {
                     <p style="font-style: italic; color: #1e293b; margin: 0; line-height: 1.6; font-size: 0.9rem; position: relative; z-index: 1;">
                       <?= nl2br(htmlspecialchars($introText)) ?>
                     </p>
+                    <div style="margin-top: 1rem; font-size: 0.7rem; color: #94a3b8; text-align: right;">
+                      <i class="fa-solid fa-clock" style="margin-right: 4px;"></i> Latest capture: <?= !empty($audit_entries) ? date('M j, Y, g:i a', strtotime($audit_entries[0]['submitted_at'])) : 'Recent' ?>
+                    </div>
                   </div>
                 <?php endif; ?>
 
@@ -2177,15 +2180,21 @@ function calculate_payment($total_to_finance, $interest_rate, $term) {
               <?php else: ?>
                 <div class="audit-list">
                   <?php foreach ($audit_entries as $entry): ?>
-                    <div class="audit-item">
-                      <div style="font-weight: 700; color: #1e293b; font-size: 0.875rem;"><?= date('M j, Y, g:i a', strtotime($entry['submitted_at'])) ?></div>
+                    <div class="audit-item" style="border-left: 3px solid <?= ($entry['change_type'] ?? '') === 'resubmit' ? '#0ea5e9' : '#10b981' ?>;">
+                      <div style="font-weight: 700; color: #1e293b; font-size: 0.875rem; display: flex; justify-content: space-between; align-items: center;">
+                        <span><?= date('M j, Y, g:i a', strtotime($entry['submitted_at'])) ?></span>
+                        <?php 
+                          $selCount = count(json_decode($entry['selected_protections'] ?? '[]', true));
+                        ?>
+                        <span style="font-weight: 400; color: #64748b; font-size: 0.7rem; background: #f1f5f9; padding: 1px 6px; border-radius: 4px;"><?= $selCount ?> items</span>
+                      </div>
                       <div style="color: #64748b; font-size: 0.75rem; margin-top: 0.25rem;">
                         By: <?= htmlspecialchars($entry['user_name'] ?? 'System') ?> · 
                         Type: <?= htmlspecialchars($entry['change_type'] ?? 'Selection') ?>
                       </div>
                       <div style="margin-top: 0.5rem;">
-                        <a href="recommendations.php?id=<?= urlencode($deal_id) ?>&snapshot_id=<?= $entry['id'] ?>" target="_blank" class="btn btn-sm" style="padding: 2px 8px; font-size: 0.7rem; background: var(--brand-color); color: white;">
-                          <i class="fa-solid fa-eye" style="margin-right: 4px;"></i> View Presentation
+                        <a href="recommendations.php?id=<?= urlencode($deal_id) ?>&snapshot_id=<?= $entry['id'] ?>" target="_blank" class="btn btn-sm" style="padding: 2px 8px; font-size: 0.7rem; background: var(--brand-color); color: white; border: none; border-radius: 4px; display: inline-flex; align-items: center; gap: 4px;">
+                          <i class="fa-solid fa-eye" style="font-size: 0.7rem;"></i> View Presentation Snapshot
                         </a>
                       </div>
                     </div>

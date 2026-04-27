@@ -84,14 +84,14 @@ if (!empty($recommendations)) {
     $clear = $db->prepare("DELETE FROM product_recommendations WHERE deal_id = ?");
     $clear->execute([$deal_id]);
 
-    $ins = $db->prepare("INSERT INTO product_recommendations (deal_id, product_code, product_name, score, ai_explanation, created_at) VALUES (?, ?, ?, ?, ?, NOW())");
+    $ins = $db->prepare("INSERT INTO product_recommendations (deal_id, product_code, product_name, score, ai_explanation, created_at) VALUES (:deal_id, :product_code, :product_name, :score, :ai_explanation, NOW())");
     foreach ($recommendations as $rec) {
         $ins->execute([
-            $deal_id,
-            $rec['code'] ?? '',
-            $rec['name'] ?? '',
-            (int)($rec['score'] ?? 0),
-            $rec['explanation'] ?? ''
+            'deal_id' => $deal_id,
+            'product_code' => $rec['product_code'] ?? '',
+            'product_name' => $rec['product_name'] ?? '',
+            'score' => (int)($rec['score'] ?? 0),
+            'ai_explanation' => $rec['ai_explanation'] ?? ''
         ]);
     }
 }
