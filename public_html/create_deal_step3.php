@@ -485,6 +485,11 @@ try {
   error_log("Unable to load product catalog: " . $e->getMessage());
 }
 
+$residualPercentValue = '';
+if (!empty($draft['msrp']) && !empty($draft['residual'])) {
+  $residualPercentValue = round(((float)$draft['residual'] / (float)$draft['msrp']) * 100, 2);
+}
+
 if ($orgId > 0) {
   try {
     $accessories = fetch_accessories_for_org($db, $orgId);
@@ -820,7 +825,7 @@ if (!$formError) {
 <meta charset="UTF-8">
   <title>Step 3 – Final Deal Terms</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <?php dealerfai_theme_head(); ?>
+  <?php dealerfai_theme_head($theme); ?>
   <style nonce="<?= dealerfai_csp_nonce() ?>">
     /* Specific page overrides */
     .form-section { background: white; padding: 2rem; border-radius: var(--radius-lg); border: 1px solid #e2e8f0; box-shadow: var(--shadow-sm); }
@@ -1142,7 +1147,7 @@ if (!$formError) {
 
         <div style="margin-top: 2.5rem; display: flex; justify-content: space-between;">
           <a href="create_deal_step2" class="btn btn-secondary" style="padding: 1rem 2rem;"><i class="fa-solid fa-arrow-left" style="margin-right: 0.75rem;"></i> Back</a>
-          <button type="submit" class="btn btn-primary" style="padding: 1rem 3rem; font-weight: 700; background: var(--success-color);">Complete & Create Deal <i class="fa-solid fa-check" style="margin-left: 0.75rem;"></i></button>
+          <button type="submit" class="btn btn-success" style="padding: 1rem 3rem; font-weight: 700;">Complete & Create Deal <i class="fa-solid fa-check" style="margin-left: 0.75rem;"></i></button>
         </div>
       </form>
     </main>
@@ -1151,8 +1156,5 @@ if (!$formError) {
       &copy; <?= date("Y") ?> DealerFAI. All rights reserved.
     </footer>
   </div>
-</body>
-</html>
-
 </body>
 </html>
