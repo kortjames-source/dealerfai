@@ -1773,20 +1773,49 @@ function calculate_payment($total_to_finance, $interest_rate, $term) {
   </script>
   <style nonce="<?= dealerfai_csp_nonce() ?>">
     /* Specific page overrides */
-    .detail-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem; }
+    .detail-grid { 
+      display: grid; 
+      grid-template-columns: repeat(3, 1fr); 
+      gap: 1.5rem; 
+      margin-bottom: 1.5rem; 
+      align-items: start;
+    }
+    @media (max-width: 1200px) {
+      .detail-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 900px) {
+      .detail-grid { grid-template-columns: 1fr; }
+    }
+
+    .card { 
+      margin: 0 !important; 
+      height: 100%; 
+      display: flex; 
+      flex-direction: column;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    
+    .card-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
     .status-pill { display: inline-flex; align-items: center; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; background: #f1f5f9; color: #475569; }
     .status-pill.success { background: #ecfdf5; color: #059669; }
     .status-pill.warning { background: #fffbeb; color: #d97706; }
     .payment-highlight { font-size: 2rem; font-weight: 800; color: var(--brand-color); display: block; margin-bottom: 0.25rem; }
-    .financial-row { display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid #f1f5f9; font-size: 0.875rem; }
+    .financial-row { display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid rgba(0,0,0,0.05); font-size: 0.875rem; }
     .financial-row:last-child { border-bottom: none; }
     .financial-label { color: #64748b; font-weight: 500; }
     .financial-value { color: #1e293b; font-weight: 700; }
-    .section-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem; color: #0f172a; border-bottom: 1px solid #f1f5f9; padding-bottom: 0.75rem; }
-    .section-header i { color: var(--brand-color); }
+    .section-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem; color: #0f172a; border-bottom: 1px solid rgba(0,0,0,0.05); padding-bottom: 0.75rem; }
+    .section-header i { color: var(--brand-color); font-size: 1.1rem; }
     .audit-list { list-style: none; padding: 0; margin: 0; }
-    .audit-item { padding: 1rem; border-left: 2px solid #e2e8f0; margin-left: 0.5rem; position: relative; }
-    .audit-item::before { content: ''; position: absolute; left: -5px; top: 1.25rem; width: 8px; height: 8px; border-radius: 50%; background: #cbd5e1; }
+    .audit-item { padding: 1rem; border-left: 2px solid var(--brand-color); margin-left: 0.5rem; position: relative; background: rgba(var(--brand-hsl), 0.03); margin-bottom: 0.5rem; border-radius: 0 4px 4px 0; }
+    .audit-item::before { content: ''; position: absolute; left: -5px; top: 1.25rem; width: 8px; height: 8px; border-radius: 50%; background: var(--brand-color); }
     dialog#deliver-dialog { border: none; border-radius: var(--radius-lg); padding: 0; width: 400px; box-shadow: var(--shadow-xl); overflow: hidden; }
     dialog#deliver-dialog::backdrop { background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(4px); }
   </style>
@@ -1878,8 +1907,8 @@ function calculate_payment($total_to_finance, $interest_rate, $term) {
       </div>
 
       <div class="detail-grid">
-        <!-- Customer & Vehicle Info -->
-        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+        <!-- Column 1: Info Stack -->
+        <div class="card-stack">
           <div class="card">
             <div class="section-header">
               <i class="fa-solid fa-user"></i>
@@ -1933,15 +1962,15 @@ function calculate_payment($total_to_finance, $interest_rate, $term) {
           </div>
         </div>
 
-        <!-- Financial Summary -->
-        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
-          <div class="card" style="background: #f8fafc; border: 1px solid var(--brand-color);">
+        <!-- Column 2: Financial Stack -->
+        <div class="card-stack">
+          <div class="card" style="border-top: 4px solid var(--brand-color);">
             <div class="section-header">
               <i class="fa-solid fa-money-bill-trend-up"></i>
               <h3 style="margin: 0; font-size: 1rem; font-weight: 800;">Financial Summary</h3>
             </div>
-            <div style="text-align: center; padding: 1rem 0; border-bottom: 1px solid #e2e8f0; margin-bottom: 1rem;">
-              <span class="financial-label" style="text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.75rem; font-weight: 700;">Estimated Payment (<?= htmlspecialchars($payment_frequency) ?>)</span>
+            <div style="text-align: center; padding: 1.5rem 0; border-bottom: 1px solid rgba(0,0,0,0.05); margin-bottom: 1rem; background: rgba(var(--brand-hsl), 0.03); border-radius: var(--radius-md);">
+              <span class="financial-label" style="text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.75rem; font-weight: 700; margin-bottom: 0.5rem; display: block;">Estimated Payment (<?= htmlspecialchars($payment_frequency) ?>)</span>
               <span id="payment_display" class="payment-highlight"><?= $deal['deal_type'] !== 'Cash' ? ('$' . $payment_display) : '$' . number_format($total_with_taxes, 2) ?></span>
               <span class="status-pill success"><?= htmlspecialchars($deal['deal_type']) ?></span>
             </div>
@@ -1963,9 +1992,9 @@ function calculate_payment($total_to_finance, $interest_rate, $term) {
               <span class="financial-label">Accessories</span>
               <span class="financial-value">$<?= number_format($accessories_total, 2) ?></span>
             </div>
-            <div class="financial-row" style="margin-top: 0.5rem; padding-top: 1rem; border-top: 2px solid #e2e8f0;">
+            <div class="financial-row" style="margin-top: 0.5rem; padding-top: 1rem; border-top: 2px solid rgba(0,0,0,0.05);">
               <span class="financial-label" style="font-weight: 800; color: #0f172a;">Total with Taxes</span>
-              <span class="financial-value" style="font-size: 1rem;">$<?= number_format($total_with_taxes, 2) ?></span>
+              <span class="financial-value" style="font-size: 1.25rem; color: var(--brand-color);">$<?= number_format($total_with_taxes, 2) ?></span>
             </div>
           </div>
 
@@ -1983,67 +2012,68 @@ function calculate_payment($total_to_finance, $interest_rate, $term) {
               <span class="status-pill"><?= $lockStatus ?></span>
             </div>
             <div style="margin-top: 1.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
-              <button type="button" class="btn btn-secondary" style="font-size: 0.75rem;" id="email_customer_button" <?= $emailDisabled ?>><i class="fa-solid fa-envelope" style="margin-right: 0.5rem;"></i> Email Invite</button>
-              <button type="button" class="btn btn-secondary" style="font-size: 0.75rem;" id="copy_credit_link"><i class="fa-solid fa-copy" style="margin-right: 0.5rem;"></i> Copy Link</button>
+              <button type="button" class="btn btn-secondary btn-sm" id="email_customer_button" <?= $emailDisabled ?>><i class="fa-solid fa-envelope"></i> Email Invite</button>
+              <button type="button" class="btn btn-secondary btn-sm" id="copy_credit_link"><i class="fa-solid fa-copy"></i> Copy Link</button>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="detail-grid" style="grid-template-columns: 1fr 1fr;">
-        <!-- Protection & Accessories List -->
-        <div class="card">
-          <div class="section-header">
-            <i class="fa-solid fa-list-check"></i>
-            <h3 style="margin: 0; font-size: 1rem; font-weight: 800;">Selected Items</h3>
-          </div>
-          <?php if (empty($unique_selected) && empty($selected_accessories) && empty($included_display)): ?>
-            <p class="text-muted" style="text-align: center; padding: 2rem 0;">No protection products or accessories selected.</p>
-          <?php else: ?>
-            <?php foreach ($included_display as $item): ?>
-              <div class="financial-row">
-                <span class="financial-label"><i class="fa-solid fa-circle-check" style="color: #22c55e; margin-right: 0.5rem;"></i> <?= htmlspecialchars($item['name']) ?> <small>(Included)</small></span>
-                <span class="financial-value">$<?= number_format((float)$item['price'], 2) ?></span>
-              </div>
-            <?php endforeach; ?>
-            <?php foreach ($unique_selected as $code): ?>
-              <?php $p = $productMap[$code] ?? null; if (!$p) continue; ?>
-              <div class="financial-row">
-                <span class="financial-label"><i class="fa-solid fa-circle-check" style="color: #22c55e; margin-right: 0.5rem;"></i> <?= htmlspecialchars($p['name']) ?></span>
-                <span class="financial-value">$<?= number_format($p['price'], 2) ?></span>
-              </div>
-            <?php endforeach; ?>
-            <?php foreach ($selected_accessories as $item): ?>
-              <div class="financial-row">
-                <span class="financial-label"><i class="fa-solid fa-plus-circle" style="color: var(--brand-color); margin-right: 0.5rem;"></i> <?= htmlspecialchars($item['name']) ?></span>
-                <span class="financial-value">$<?= number_format((float)$item['price'], 2) ?></span>
-              </div>
-            <?php endforeach; ?>
-          <?php endif; ?>
-        </div>
-
-        <!-- Audit Log -->
-        <div class="card">
-          <div class="section-header">
-            <i class="fa-solid fa-clock-rotate-left"></i>
-            <h3 style="margin: 0; font-size: 1rem; font-weight: 800;">Audit History</h3>
-          </div>
-          <div style="max-height: 400px; overflow-y: auto;">
-            <?php if (empty($audit_entries)): ?>
-              <p class="text-muted" style="text-align: center; padding: 2rem 0;">No audit records available.</p>
-            <?php else: ?>
-              <div class="audit-list">
-                <?php foreach ($audit_entries as $entry): ?>
-                  <div class="audit-item">
-                    <div style="font-weight: 700; color: #1e293b; font-size: 0.875rem;"><?= date('M j, Y, g:i a', strtotime($entry['submitted_at'])) ?></div>
-                    <div style="color: #64748b; font-size: 0.75rem; margin-top: 0.25rem;">
-                      By: <?= htmlspecialchars($entry['user_name'] ?? 'System') ?> · 
-                      Type: <?= htmlspecialchars($entry['change_type'] ?? 'Selection') ?>
-                    </div>
+        <!-- Column 3: Items & History -->
+        <div class="card-stack">
+          <div class="card">
+            <div class="section-header">
+              <i class="fa-solid fa-list-check"></i>
+              <h3 style="margin: 0; font-size: 1rem; font-weight: 800;">Selected Items</h3>
+            </div>
+            <div style="flex: 1;">
+              <?php if (empty($unique_selected) && empty($selected_accessories) && empty($included_display)): ?>
+                <p class="text-muted" style="text-align: center; padding: 2rem 0;">No protection products or accessories selected.</p>
+              <?php else: ?>
+                <?php foreach ($included_display as $item): ?>
+                  <div class="financial-row">
+                    <span class="financial-label"><i class="fa-solid fa-circle-check" style="color: #22c55e; margin-right: 0.5rem;"></i> <?= htmlspecialchars($item['name']) ?> <small>(Included)</small></span>
+                    <span class="financial-value">$<?= number_format((float)$item['price'], 2) ?></span>
                   </div>
                 <?php endforeach; ?>
-              </div>
-            <?php endif; ?>
+                <?php foreach ($unique_selected as $code): ?>
+                  <?php $p = $productMap[$code] ?? null; if (!$p) continue; ?>
+                  <div class="financial-row">
+                    <span class="financial-label"><i class="fa-solid fa-circle-check" style="color: #22c55e; margin-right: 0.5rem;"></i> <?= htmlspecialchars($p['name']) ?></span>
+                    <span class="financial-value">$<?= number_format($p['price'], 2) ?></span>
+                  </div>
+                <?php endforeach; ?>
+                <?php foreach ($selected_accessories as $item): ?>
+                  <div class="financial-row">
+                    <span class="financial-label"><i class="fa-solid fa-plus-circle" style="color: var(--brand-color); margin-right: 0.5rem;"></i> <?= htmlspecialchars($item['name']) ?></span>
+                    <span class="financial-value">$<?= number_format((float)$item['price'], 2) ?></span>
+                  </div>
+                <?php endforeach; ?>
+              <?php endif; ?>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="section-header">
+              <i class="fa-solid fa-clock-rotate-left"></i>
+              <h3 style="margin: 0; font-size: 1rem; font-weight: 800;">Audit History</h3>
+            </div>
+            <div style="max-height: 350px; overflow-y: auto; padding-right: 0.5rem;">
+              <?php if (empty($audit_entries)): ?>
+                <p class="text-muted" style="text-align: center; padding: 2rem 0;">No audit records available.</p>
+              <?php else: ?>
+                <div class="audit-list">
+                  <?php foreach ($audit_entries as $entry): ?>
+                    <div class="audit-item">
+                      <div style="font-weight: 700; color: #1e293b; font-size: 0.875rem;"><?= date('M j, Y, g:i a', strtotime($entry['submitted_at'])) ?></div>
+                      <div style="color: #64748b; font-size: 0.75rem; margin-top: 0.25rem;">
+                        By: <?= htmlspecialchars($entry['user_name'] ?? 'System') ?> · 
+                        Type: <?= htmlspecialchars($entry['change_type'] ?? 'Selection') ?>
+                      </div>
+                    </div>
+                  <?php endforeach; ?>
+                </div>
+              <?php endif; ?>
+            </div>
           </div>
         </div>
       </div>
