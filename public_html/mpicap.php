@@ -780,6 +780,159 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
       border-radius: 4px;
     }
 
+    .cap-term-badge.selected {
+      background: var(--brand-color);
+      color: #ffffff;
+    }
+
+    .cap-term-badge.match {
+      background: #ecfdf5;
+      color: #047857;
+      border: 1px solid #a7f3d0;
+    }
+
+    .cap-relation-pill {
+      font-size: 0.72rem;
+      font-weight: 600;
+      border-radius: 4px;
+      padding: 3px 6px;
+      display: inline-block;
+      line-height: 1.2;
+    }
+
+    .cap-relation-pill.partial {
+      color: #b45309;
+      background: #fffbeb;
+      border: 1px solid #fef3c7;
+    }
+
+    .cap-relation-pill.match {
+      color: #047857;
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+    }
+
+    .cap-relation-pill.extended {
+      color: #1d4ed8;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+    }
+
+    /* Timeline & Financing vs Protection Explainer */
+    .timeline-container {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      margin-top: 1.5rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    .timeline-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .timeline-subtitle {
+      font-size: 0.85rem;
+      color: #64748b;
+      margin-bottom: 1.25rem;
+    }
+
+    .timeline-track-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .timeline-row {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .timeline-label-bar {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #334155;
+    }
+
+    .timeline-track {
+      height: 32px;
+      background: #f1f5f9;
+      border-radius: 6px;
+      overflow: hidden;
+      display: flex;
+      position: relative;
+      border: 1px solid #e2e8f0;
+    }
+
+    .timeline-fill-loan {
+      background: #2563eb;
+      color: #ffffff;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      padding: 0 0.85rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 100%;
+    }
+
+    .timeline-fill-cap {
+      background: #059669;
+      color: #ffffff;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      padding: 0 0.85rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transition: width 0.3s ease;
+    }
+
+    .timeline-fill-remaining {
+      background: #f8fafc;
+      color: #64748b;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      padding: 0 0.75rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      border-left: 1px dashed #cbd5e1;
+    }
+
+    .timeline-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .timeline-card-box {
+      background: #f8fafc;
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      border: 1px solid #e2e8f0;
+    }
+
     /* Presentation Mode: Hides Sidebar & Navigation */
     body.presentation-mode .sidebar,
     body.presentation-mode .top-bar,
@@ -1304,7 +1457,8 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
             <div class="hero-card-subtext">
               <strong id="disp-cap-term-label">60-Month (5-Year)</strong> Replacement Protection<br>
               Includes: <strong>Up to $60,000 Top-Up + 30 Days Rental</strong><br>
-              Daily Cost: Just <strong id="disp-cap-per-day">$1.47/day</strong> for peace of mind.
+              Daily Cost: Just <strong id="disp-cap-per-day">$1.47/day</strong> for peace of mind.<br>
+              <span id="disp-cap-loan-sub" style="font-size: 0.8rem; color: #475569;">Financed over your <strong><?= (int)$prefillTerm ?>-month</strong> vehicle loan.</span>
             </div>
             <div class="fixed-badge">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
@@ -1543,14 +1697,18 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
                   : 'Select your preferred coverage term below (up to 84 months / 7 years) to update the monthly and bi-weekly payment comparison.' ?>
               </p>
             </div>
-            <div style="font-size: 0.85rem; color: #64748b; background: #f8fafc; padding: 0.4rem 0.75rem; border-radius: var(--radius-md); border: 1px solid #e2e8f0;">
-              Financed at <strong id="disp-apr-badge"><?= (float)$prefillRate ?>% APR</strong> over <strong id="disp-loan-term-badge"><?= (int)$prefillTerm ?> months</strong>
+            <div style="font-size: 0.85rem; color: #334155; background: #f8fafc; padding: 0.5rem 0.85rem; border-radius: var(--radius-md); border: 1px solid #cbd5e1; display: flex; align-items: center; gap: 0.5rem;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+              <span>Vehicle Loan: <strong id="disp-loan-term-badge"><?= (int)$prefillTerm ?> Months</strong> @ <strong id="disp-apr-badge"><?= (float)$prefillRate ?>% APR</strong></span>
             </div>
           </div>
 
           <div class="cap-terms-grid" id="cap-terms-cards">
             <!-- Dynamic Cards generated by JavaScript based on populated terms -->
           </div>
+
+          <!-- Interactive Loan Term vs Protection Coverage Visual Breakdown -->
+          <div id="cap-timeline-explainer"></div>
         </div>
 
         <!-- ========================================================================= -->
@@ -2046,14 +2204,38 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
               const years = opt.term / 12;
               const termLabel = `${opt.term} Months (${years} Year${years > 1 ? 's' : ''})`;
 
+              let badgeText = 'OFFERED';
+              let badgeClass = 'cap-term-badge';
+              if (isSel) {
+                badgeText = 'SELECTED';
+                badgeClass = 'cap-term-badge selected';
+              } else if (opt.term === loanTerm) {
+                badgeText = 'MATCHES LOAN';
+                badgeClass = 'cap-term-badge match';
+              }
+
+              let relationPill = '';
+              if (opt.term < loanTerm) {
+                relationPill = `<div class="cap-relation-pill partial">🛡️ Covers Years 1–${years} of ${loanTerm}-Mo Loan</div>`;
+              } else if (opt.term === loanTerm) {
+                relationPill = `<div class="cap-relation-pill match">✓ Full ${loanTerm}-Mo Loan Match</div>`;
+              } else {
+                relationPill = `<div class="cap-relation-pill extended">★ Extends Beyond Loan Payoff</div>`;
+              }
+
               card.innerHTML = `
-                <div class="cap-term-badge">${isSel ? 'SELECTED' : 'OFFERED'}</div>
-                <div style="font-weight: 700; color: #0f172a; font-size: 1.05rem; margin-bottom: 0.25rem;">${termLabel}</div>
-                <div style="font-size: 0.8rem; color: #64748b; margin-bottom: 0.75rem;">Retail Price: ${fmt(opt.price)}</div>
-                <div style="font-size: 1.5rem; font-weight: 800; color: var(--cap-green); margin-bottom: 0.25rem;">
-                  ${fmtDec(opt.payment)}<span style="font-size: 0.85rem; font-weight: 600; color: #64748b;">${freqSuffix}</span>
+                <div class="${badgeClass}">${badgeText}</div>
+                <div style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: var(--cap-green); letter-spacing: 0.05em; margin-bottom: 0.2rem;">Protection Window</div>
+                <div style="font-weight: 800; color: #0f172a; font-size: 1.15rem; margin-bottom: 0.35rem;">${termLabel}</div>
+                ${relationPill}
+                <div style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid #f1f5f9;">
+                  <div style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: #64748b; letter-spacing: 0.04em;">Loan Payment Impact</div>
+                  <div style="font-size: 1.5rem; font-weight: 800; color: var(--cap-green); margin: 0.2rem 0;">
+                    +${fmtDec(opt.payment)}<span style="font-size: 0.85rem; font-weight: 600; color: #64748b;">${freqSuffix}</span>
+                  </div>
+                  <div style="font-size: 0.78rem; color: #475569; font-weight: 600;">For all ${loanTerm} months of vehicle loan</div>
+                  <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 0.35rem;">Retail: ${fmt(opt.price)} (Just ${fmtDec(opt.perDay)}/day)</div>
                 </div>
-                <div style="font-size: 0.75rem; color: #64748b;">Just ${fmtDec(opt.perDay)}/day</div>
               `;
 
               card.addEventListener('click', () => {
@@ -2097,6 +2279,132 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
         if (elCapTermLabel) elCapTermLabel.textContent = capTermLabel;
         const elCapPerDay = document.getElementById('disp-cap-per-day');
         if (elCapPerDay) elCapPerDay.textContent = `${fmtDec(capPerDay)}/day`;
+
+        const elCapLoanSub = document.getElementById('disp-cap-loan-sub');
+        if (elCapLoanSub) {
+          if (selectedCapTerm < loanTerm) {
+            elCapLoanSub.innerHTML = `Protects Years 1–${capYears} • Financed over full <strong>${loanTerm}-month</strong> loan`;
+          } else if (selectedCapTerm === loanTerm) {
+            elCapLoanSub.innerHTML = `✓ <strong>100% Match</strong> with your <strong>${loanTerm}-month</strong> loan term`;
+          } else {
+            elCapLoanSub.innerHTML = `Covers ${capYears} Years • Financed over <strong>${loanTerm}-month</strong> loan`;
+          }
+        }
+
+        // Render Timeline & Financing vs Protection Explainer
+        const timelineContainer = document.getElementById('cap-timeline-explainer');
+        if (timelineContainer && currentCap) {
+          const isTermShorter = currentCap.term < loanTerm;
+          const isTermEqual = currentCap.term === loanTerm;
+          const isTermLonger = currentCap.term > loanTerm;
+          
+          const capPct = Math.min(100, Math.round((currentCap.term / loanTerm) * 100));
+          const remPct = Math.max(0, 100 - capPct);
+
+          let explanationBadge = '';
+          let explanationHtml = '';
+          let activeWindowLabel = '';
+
+          if (isTermShorter) {
+            explanationBadge = `<span style="background: #fef3c7; color: #92400e; font-weight: 700; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem;">Years 1–${capYears} Protection • ${loanTerm}-Mo Financing</span>`;
+            explanationHtml = `
+              <strong>How your financing &amp; coverage work together:</strong><br>
+              The one-time policy price of <strong>${fmt(currentCap.price)}</strong> is rolled directly into your vehicle loan, adding just <strong>+${fmtDec(capPmt)}${freqSuffix}</strong> (a modest <strong>${fmtDec(capPerDay)}/day</strong>) across all <strong>${loanTerm} months of your loan</strong>.<br><br>
+              <strong>Why this is a smart financial strategy:</strong><br>
+              Vehicles suffer their steepest market depreciation during the first 5 years (Months 1–60). Having 60-Month CAP gives you 100% Replacement Value Top-Up and deductible protection during your highest-risk ownership window, while your ${loanTerm}-month financing keeps the monthly payment ultra-affordable. By Month 60, your remaining loan balance has significantly dropped, naturally closing the equity gap.
+            `;
+            activeWindowLabel = `Active Months 1–${currentCap.term} (First ${capYears} Years of Ownership)`;
+          } else if (isTermEqual) {
+            explanationBadge = `<span style="background: #dcfce7; color: #166534; font-weight: 700; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem;">✓ 100% Loan Term Match</span>`;
+            explanationHtml = `
+              <strong>Complete Loan Coverage Match:</strong><br>
+              Your Companion Asset Protection term matches your <strong>${loanTerm}-month vehicle loan</strong> 100%. 
+              For <strong>+${fmtDec(capPmt)}${freqSuffix}</strong> (<strong>${fmtDec(capPerDay)}/day</strong>), you have complete replacement value and deductible protection from the day you drive off the lot until your final loan payment is made!
+            `;
+            activeWindowLabel = `Active for 100% of Loan Term (All ${loanTerm} Months)`;
+          } else {
+            explanationBadge = `<span style="background: #dbeafe; color: #1e40af; font-weight: 700; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem;">Extends Past Loan Payoff</span>`;
+            explanationHtml = `
+              <strong>Extended Protection Beyond Loan Payoff:</strong><br>
+              Your CAP coverage protects your vehicle for <strong>${currentCap.term} months (${capYears} years)</strong>—remaining active for an extra <strong>${currentCap.term - loanTerm} months</strong> even after your <strong>${loanTerm}-month vehicle loan</strong> is paid in full!
+            `;
+            activeWindowLabel = `Active for ${currentCap.term} Months (${currentCap.term - loanTerm} mo past loan payoff)`;
+          }
+
+          timelineContainer.innerHTML = `
+            <div class="timeline-container">
+              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 0.5rem;">
+                <div class="timeline-title">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--brand-color)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  <span>Coverage Window vs. Loan Payment Breakdown</span>
+                </div>
+                <div>${explanationBadge}</div>
+              </div>
+              <div class="timeline-subtitle">
+                Visualizing your <strong>${loanTerm}-month vehicle loan financing</strong> alongside your <strong>${currentCap.term}-month (${capYears}-year) CAP protection window</strong>:
+              </div>
+
+              <div class="timeline-track-wrap">
+                <div class="timeline-row">
+                  <div class="timeline-label-bar">
+                    <span>Vehicle Loan Term (${loanTerm} Months)</span>
+                    <span style="color: #2563eb;">Payment Impact: +${fmtDec(capPmt)}${freqSuffix} (Months 1–${loanTerm})</span>
+                  </div>
+                  <div class="timeline-track">
+                    <div class="timeline-fill-loan">
+                      <span>💳 Full ${loanTerm}-Month Vehicle Loan (+${fmtDec(capPmt)}${freqSuffix} on every payment)</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="timeline-row">
+                  <div class="timeline-label-bar">
+                    <span>Companion Asset Protection (${currentCap.term} Months / ${capYears} Years)</span>
+                    <span style="color: #059669;">${activeWindowLabel}</span>
+                  </div>
+                  <div class="timeline-track">
+                    <div class="timeline-fill-cap" style="width: ${capPct}%;">
+                      <span>🛡️ ACTIVE PROTECTION (Months 1 to ${currentCap.term})</span>
+                    </div>
+                    ${remPct > 0 ? `
+                      <div class="timeline-fill-remaining" style="width: ${remPct}%;">
+                        <span>Months ${currentCap.term + 1}–${loanTerm} (Loan continues)</span>
+                      </div>
+                    ` : ''}
+                  </div>
+                </div>
+              </div>
+
+              <div class="timeline-cards-grid">
+                <div class="timeline-card-box">
+                  <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #2563eb; letter-spacing: 0.04em;">
+                    💳 Your Monthly Loan Payment
+                  </div>
+                  <div style="font-size: 1.6rem; font-weight: 800; color: #0f172a; margin: 0.25rem 0;">
+                    +${fmtDec(capPmt)} <span style="font-size: 0.9rem; font-weight: 600; color: #64748b;">${freqSuffix}</span>
+                  </div>
+                  <ul style="margin: 0.5rem 0 0 0; padding-left: 1.2rem; font-size: 0.85rem; color: #334155; line-height: 1.55;">
+                    <li><strong>Applied to all ${loanTerm} months of your loan:</strong> The one-time policy cost (${fmt(currentCap.price)}) is financed with your vehicle, keeping your payment steady and predictable.</li>
+                    <li><strong>Daily Cost:</strong> Just <strong>${fmtDec(capPerDay)}/day</strong> for comprehensive protection.</li>
+                    <li><strong>Locked Rate:</strong> Financed at <strong>${interestRate.toFixed(2)}% APR</strong> with zero separate insurance bills.</li>
+                  </ul>
+                </div>
+
+                <div class="timeline-card-box" style="background: #ecfdf5; border-color: #a7f3d0;">
+                  <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #047857; letter-spacing: 0.04em;">
+                    🛡️ Your Active Protection Window
+                  </div>
+                  <div style="font-size: 1.6rem; font-weight: 800; color: #065f46; margin: 0.25rem 0;">
+                    ${currentCap.term} Months <span style="font-size: 0.9rem; font-weight: 600; color: #047857;">(${capYears} Years)</span>
+                  </div>
+                  <div style="font-size: 0.85rem; color: #064e3b; line-height: 1.55; margin-top: 0.5rem;">
+                    ${explanationHtml}
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+        }
 
         // Update Card 3: Deductible Strategy ($500 MPI Deductible + CAP)
         const netCapPmt = Math.max(0, capPmt - dedSavingsPeriod26);
@@ -2154,7 +2462,21 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
         const elBoxCapPeriod = document.getElementById('disp-box-cap-period');
         if (elBoxCapPeriod) elBoxCapPeriod.textContent = `${fmtDec(capPmt)} ${freqSuffix}`;
         const elBoxCapAnnual = document.getElementById('disp-box-cap-annual');
-        if (elBoxCapAnnual) elBoxCapAnnual.textContent = currentCap ? `${fmt(currentCap.price)} financed (${fmtDec(capPmt)} ${freqSuffix})` : '$0';
+        if (elBoxCapAnnual) {
+          elBoxCapAnnual.textContent = currentCap 
+            ? `${fmt(currentCap.price)} financed into ${loanTerm}-mo loan (${fmtDec(capPmt)} ${freqSuffix})` 
+            : '$0';
+        }
+        const elBoxCapYearsBullet = document.getElementById('disp-box-cap-years-bullet');
+        if (elBoxCapYearsBullet && currentCap) {
+          if (selectedCapTerm < loanTerm) {
+            elBoxCapYearsBullet.innerHTML = `<strong>${capYears} Years (${selectedCapTerm} Months) Active Protection</strong> (Financed over ${loanTerm}-mo loan)`;
+          } else if (selectedCapTerm === loanTerm) {
+            elBoxCapYearsBullet.innerHTML = `<strong>Full ${loanTerm}-Month (100% Loan Match) Coverage</strong>`;
+          } else {
+            elBoxCapYearsBullet.innerHTML = `<strong>${capYears} Years (${selectedCapTerm} Months) Coverage</strong>`;
+          }
+        }
 
         const elBoxAllPeriod = document.getElementById('disp-box-mpi-all-period');
         if (elBoxAllPeriod) elBoxAllPeriod.textContent = `${fmtDec(mpiAllOptionalsPeriod26)} ${freqSuffix}`;
