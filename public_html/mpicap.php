@@ -1352,7 +1352,11 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
                 <h4 style="margin: 0; font-size: 0.95rem; font-weight: 700; color: #1e293b;">
                   Manitoba Public Insurance (MPI) Quote Inputs
                 </h4>
-                <div style="display: flex; gap: 0.5rem;">
+                <div style="display: flex; gap: 0.5rem; align-items: center;">
+                  <span id="storage-saved-badge" style="display: none; font-size: 0.75rem; color: #059669; background: #ecfdf5; border: 1px solid #a7f3d0; padding: 0.2rem 0.5rem; border-radius: 4px; align-items: center; gap: 0.25rem;">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                    Saved Locally
+                  </span>
                   <button type="button" id="btn-load-sample" class="btn btn-secondary btn-sm" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;">
                     Reset to Defender Sample
                   </button>
@@ -2037,6 +2041,128 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
       const managerToggle = document.getElementById('manager-panel-toggle');
       const toggleIndicator = document.getElementById('panel-toggle-indicator');
 
+      // =========================================================================
+      // Local Storage Persistence (Isolated per computer / deal)
+      // =========================================================================
+      const urlParams = new URLSearchParams(window.location.search);
+      const dealIdParam = urlParams.get('deal_id');
+      const STORAGE_KEY = dealIdParam 
+        ? `dealerfai_mpicap_state_deal_${dealIdParam}` 
+        : 'dealerfai_mpicap_state';
+
+      const PERSISTENT_INPUT_IDS = [
+        'inp-client-name',
+        'inp-vehicle-year',
+        'inp-vehicle-name',
+        'inp-dsr-level',
+        'inp-loan-term',
+        'inp-interest-rate',
+        'inp-veh-price',
+        'mpi-26-basic',
+        'mpi-25-basic',
+        'mpi-26-ded-750',
+        'mpi-25-ded-750',
+        'mpi-26-ded-500',
+        'mpi-25-ded-500',
+        'mpi-26-ded-300',
+        'mpi-25-ded-300',
+        'mpi-26-ded-200',
+        'mpi-25-ded-200',
+        'mpi-26-tpl',
+        'mpi-25-tpl',
+        'mpi-26-lossuse',
+        'mpi-25-lossuse',
+        'mpi-26-newveh',
+        'mpi-25-newveh',
+        'mpi-26-maxval',
+        'mpi-25-maxval',
+        'mpi-26-admin',
+        'mpi-25-admin',
+        'mpi-26-reg',
+        'mpi-25-reg',
+        'mpi-26-plate',
+        'mpi-25-plate',
+        'cap-price-36',
+        'cap-price-48',
+        'cap-price-60',
+        'cap-price-72',
+        'cap-price-84'
+      ];
+
+      function saveState() {
+        try {
+          const state = {
+            version: 1,
+            timestamp: Date.now(),
+            inputs: {},
+            paymentFrequency,
+            selectedCapTerm,
+            selectedDeductible,
+            selectedScenarioYear
+          };
+          PERSISTENT_INPUT_IDS.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+              state.inputs[id] = el.value;
+            }
+          });
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+
+          const savedBadge = document.getElementById('storage-saved-badge');
+          if (savedBadge) savedBadge.style.display = 'inline-flex';
+        } catch (err) {
+          // Ignore private mode or disabled localStorage
+        }
+      }
+
+      function loadState() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return false;
+          const state = JSON.parse(raw);
+          if (!state) return false;
+
+          if (state.inputs && typeof state.inputs === 'object') {
+            Object.keys(state.inputs).forEach(id => {
+              const el = document.getElementById(id);
+              if (el && state.inputs[id] !== undefined && state.inputs[id] !== null) {
+                el.value = state.inputs[id];
+              }
+            });
+          }
+
+          if (state.paymentFrequency === 'biweekly' || state.paymentFrequency === 'monthly') {
+            paymentFrequency = state.paymentFrequency;
+            if (btnMonthly && btnBiweekly) {
+              btnMonthly.classList.toggle('active', paymentFrequency === 'monthly');
+              btnBiweekly.classList.toggle('active', paymentFrequency === 'biweekly');
+            }
+          }
+
+          if (typeof state.selectedCapTerm === 'number' && state.selectedCapTerm > 0) {
+            selectedCapTerm = state.selectedCapTerm;
+          }
+
+          if (typeof state.selectedDeductible === 'number' && state.selectedDeductible > 0) {
+            selectedDeductible = state.selectedDeductible;
+          }
+
+          if (typeof state.selectedScenarioYear === 'number' && [3, 4, 5].includes(state.selectedScenarioYear)) {
+            selectedScenarioYear = state.selectedScenarioYear;
+            document.querySelectorAll('.scenario-year-btn').forEach(b => {
+              b.classList.toggle('active', parseInt(b.dataset.year, 10) === selectedScenarioYear);
+            });
+          }
+
+          const savedBadge = document.getElementById('storage-saved-badge');
+          if (savedBadge) savedBadge.style.display = 'inline-flex';
+
+          return true;
+        } catch (err) {
+          return false;
+        }
+      }
+
       // Presentation mode toggle
       if (btnTogglePres) {
         btnTogglePres.addEventListener('click', () => {
@@ -2147,7 +2273,10 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
           document.getElementById('mpi-25-reg').value = 119;
           document.getElementById('mpi-25-plate').value = 7;
 
+          const c36 = document.getElementById('cap-price-36'); if (c36) c36.value = '';
+          const c48 = document.getElementById('cap-price-48'); if (c48) c48.value = '';
           document.getElementById('cap-price-60').value = 2219;
+          const c72 = document.getElementById('cap-price-72'); if (c72) c72.value = '';
           document.getElementById('cap-price-84').value = 2617;
           if (dsrSelect) dsrSelect.value = "0";
           selectedDeductible = 200;
@@ -2155,6 +2284,9 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
           document.querySelectorAll('.scenario-year-btn').forEach(b => {
             b.classList.toggle('active', parseInt(b.dataset.year, 10) === 4);
           });
+          try {
+            localStorage.removeItem(STORAGE_KEY);
+          } catch (e) {}
           recalculate();
         });
       }
@@ -3242,7 +3374,13 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
         if (elRateLockYears) {
           elRateLockYears.textContent = `up to ${maxAllowedYears} years`;
         }
+
+        // Persist current state to localStorage (local to this computer/device)
+        saveState();
       }
+
+      // Restore user's previous inputs from localStorage if available
+      loadState();
 
       // Initial run
       recalculate();
