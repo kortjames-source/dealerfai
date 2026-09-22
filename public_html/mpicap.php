@@ -1586,19 +1586,19 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
           <div class="hero-card combined">
             <div class="hero-card-tag" style="color: var(--brand-color);">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              <span>Smart Deductible Strategy</span>
+              <span id="disp-card-strat-tag">Smart Deductible Strategy</span>
             </div>
             <div class="hero-amount" id="disp-net-cap-amount" style="color: var(--brand-color);">
-              $25<span class="period">.07/mo net</span>
+              $35<span class="period">.48/mo net</span>
             </div>
-            <div class="hero-card-subtext">
-              Select <strong>$500 MPI Deductible</strong> & save <strong id="disp-ded-savings-sub">$238/yr ($19.83/mo on MPI)</strong>.<br>
-              In a Total Loss: CAP pays $500 &rarr; <strong>$0 Out of Pocket</strong>!<br>
+            <div class="hero-card-subtext" id="disp-card-strat-subtext">
+              Select <strong>$500 MPI Deductible</strong> & save <strong id="disp-ded-savings-sub">$113/yr ($9.42/mo on MPI)</strong>.<br>
+              In a Total Loss: CAP pays $500 &rarr; <strong>$0 Out of Pocket</strong> ($200 saved)!<br>
               In a Partial Loss (repairs &amp; windshields): CAP pays $250 &rarr; <strong>Only $250 Out of Pocket</strong>!
             </div>
             <div class="fixed-badge" style="background: #e0f2fe; color: #0369a1;">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-              <span id="disp-strategy-badge-text">Save $238/yr on MPI + $0 Deductible on Write-off</span>
+              <span id="disp-strategy-badge-text">Save $113/yr on MPI + $0 Deductible on Write-off</span>
             </div>
           </div>
         </div>
@@ -1618,8 +1618,8 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
               </p>
             </div>
             <div style="text-align: right;">
-              <div style="font-size: 0.75rem; text-transform: uppercase; color: #64748b; font-weight: 700;">Annual MPI Savings by Choosing $500 Deductible</div>
-              <div style="font-size: 1.5rem; font-weight: 800; color: #059669;" id="disp-ded-savings-headline">Save $238 / year</div>
+              <div style="font-size: 0.75rem; text-transform: uppercase; color: #64748b; font-weight: 700;" id="disp-ded-savings-label">Annual MPI Savings by Choosing $500 Buy-Down</div>
+              <div style="font-size: 1.5rem; font-weight: 800; color: #059669;" id="disp-ded-savings-headline">Save $113 / year</div>
             </div>
           </div>
 
@@ -1684,7 +1684,7 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
                 <tr>
                   <th style="width: 28%;">Protection Feature / Scenario</th>
                   <th style="width: 24%; color: var(--mpi-blue);" id="th-mpi-ded-name">MPI with $200 Deductible Buy-Down</th>
-                  <th style="width: 28%; color: var(--cap-green);">MPI $500 Deductible + Companion Asset Protection (CAP)</th>
+                  <th style="width: 28%; color: var(--cap-green);" id="th-cap-col-name">MPI $500 Deductible + Companion Asset Protection (CAP)</th>
                   <th style="width: 20%;">Your Advantage</th>
                 </tr>
               </thead>
@@ -1696,11 +1696,11 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
                     <span style="font-size: 0.8rem; color: #64748b;" id="table-mpi-ded-period">(+$19.83 / month on MPI)</span>
                   </td>
                   <td>
-                    <span style="font-weight: 700; color: #059669;">$0.00 Extra Fee</span><br>
-                    <span style="font-size: 0.8rem; color: #64748b;">(Standard $500 deductible)</span>
+                    <span style="font-weight: 700; color: #059669;" id="table-cap-ded-fee">+$125.00 / year</span><br>
+                    <span style="font-size: 0.8rem; color: #64748b;" id="table-cap-ded-fee-sub">($500 buy-down vs $1,000 base)</span>
                   </td>
                   <td>
-                    <span class="badge-win" id="table-ded-savings-pill">Save $238 / year on MPI</span>
+                    <span class="badge-win" id="table-ded-savings-pill">Save $113 / year on MPI</span>
                   </td>
                 </tr>
                 <tr>
@@ -1922,7 +1922,7 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
 
           <div class="callout-box">
             <strong>Key Takeaway:</strong>
-            While basic MPI rates increased by <strong>+15.1%</strong> across Manitoba, Companion Asset Protection (CAP) provides a <strong>100% Rate Lock Guarantee</strong> for your entire term (<span id="disp-ratelock-years">up to <?= $initialMaxYears ?> years</span>). By choosing the $500 MPI deductible and pairing it with CAP, you mitigate rate increases and protect yourself against depreciation.
+            While basic MPI rates increased by <strong>+15.1%</strong> across Manitoba, Companion Asset Protection (CAP) provides a <strong>100% Rate Lock Guarantee</strong> for your entire term (<span id="disp-ratelock-years">up to <?= $initialMaxYears ?> years</span>). By pairing your vehicle with CAP, you mitigate annual MPI rate increases, protect your deductible against write-offs, and safeguard your financial equity against depreciation.
           </div>
         </div>
 
@@ -2676,40 +2676,74 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
           `;
         }
 
+        // Pull all entered tier fees from Manager Setup
+        const fee1000 = 0;
+        const fee750 = dedRates26[750];
+        const fee500 = dedRates26[500];
+        const fee300 = dedRates26[300];
+        const fee200 = dedRates26[200];
+
         // Update Card 3: Deductible Strategy
-        const netCapPmt = Math.max(0, capPmt - dedSavingsLoanPeriod26);
         const elNetCap = document.getElementById('disp-net-cap-amount');
-        if (elNetCap) {
-          if (curDedFee26 > 0) {
-            elNetCap.innerHTML = `${fmtDec(netCapPmt)}<span class="period">${loanFreqSuffix} net</span>`;
-          } else {
-            elNetCap.innerHTML = `${fmtDec(capPmt)}<span class="period">${loanFreqSuffix}</span>`;
-          }
-        }
-        const elDedSavingsSub = document.getElementById('disp-ded-savings-sub');
-        if (elDedSavingsSub) {
-          if (selectedDeductible === 200 || selectedDeductible === 300) {
-            elDedSavingsSub.textContent = paymentFrequency === 'biweekly'
-              ? `${fmt(dedSavingsAnnual26)}/yr ($${fmtDec(dedSavingsMonthly26)}/mo on MPI • $${fmtDec(dedSavingsLoanPeriod26)}/bi-wk loan credit)`
-              : `${fmt(dedSavingsAnnual26)}/yr ($${fmtDec(dedSavingsMonthly26)}/mo on MPI)`;
-          } else if (selectedDeductible === 500) {
-            elDedSavingsSub.textContent = `Saves $500 on total loss & $250 on repairs (+$${fmtDec(dedSavingsMonthly26)}/mo buy-down fee)`;
-          } else if (selectedDeductible === 750) {
-            elDedSavingsSub.textContent = `Saves $500 on total loss & $250 on repairs (+$${fmtDec(dedSavingsMonthly26)}/mo buy-down fee)`;
-          } else {
-            elDedSavingsSub.textContent = `Base MPI rate ($0 buy-down fee) • CAP reimburses $500 on total loss & $250 on repairs`;
-          }
-        }
+        const elCardStratTag = document.getElementById('disp-card-strat-tag');
+        const elCardStratSubtext = document.getElementById('disp-card-strat-subtext');
         const elStratBadge = document.getElementById('disp-strategy-badge-text');
-        if (elStratBadge) {
-          if (selectedDeductible === 200 || selectedDeductible === 300) {
-            elStratBadge.textContent = `Save ${fmt(dedSavingsAnnual26)}/yr on MPI + $0 Deductible on Write-off`;
-          } else if (selectedDeductible === 500) {
+
+        if (selectedDeductible === 200 || selectedDeductible === 300) {
+          const dedSavAnnual = Math.max(0, curDedFee26 - fee500);
+          const dedSavLoanPeriod = dedSavAnnual / loanPeriodDivisor;
+          const netCapPmt = Math.max(0, capPmt - dedSavLoanPeriod);
+
+          if (elCardStratTag) elCardStratTag.textContent = 'Smart Deductible Strategy';
+          if (elNetCap) elNetCap.innerHTML = `${fmtDec(netCapPmt)}<span class="period">${loanFreqSuffix} net</span>`;
+          if (elCardStratSubtext) {
+            elCardStratSubtext.innerHTML = `
+              Choose <strong>$500 MPI Deductible</strong> & save <strong>${fmt(dedSavAnnual)}/yr ($${fmtDec(dedSavAnnual / 12)}/mo on MPI)</strong>.<br>
+              In a Total Loss: CAP pays $500 &rarr; <strong>$0 Out of Pocket</strong> ($${selectedDeductible} saved)!<br>
+              In a Partial Loss (repairs &amp; windshields): CAP pays $250 &rarr; <strong>Only $250 Out of Pocket</strong>!
+            `;
+          }
+          if (elStratBadge) {
+            elStratBadge.textContent = `Save ${fmt(dedSavAnnual)}/yr on MPI + $0 Deductible on Write-off`;
+          }
+        } else if (selectedDeductible === 500) {
+          if (elCardStratTag) elCardStratTag.textContent = 'Zero-Deductible Total Loss';
+          if (elNetCap) elNetCap.innerHTML = `${fmtDec(capPmt)}<span class="period">${loanFreqSuffix}</span>`;
+          if (elCardStratSubtext) {
+            elCardStratSubtext.innerHTML = `
+              Keep your <strong>$500 MPI Deductible</strong> (${fmt(fee500)}/yr) with CAP:<br>
+              In a Total Loss: CAP pays $500 &rarr; <strong>$0 Out of Pocket</strong> ($500 saved)!<br>
+              In a Partial Loss (repairs &amp; windshields): CAP pays $250 &rarr; <strong>Cuts deductible in half to $250</strong>!
+            `;
+          }
+          if (elStratBadge) {
             elStratBadge.textContent = `CAP Pays $500 Deductible on Write-Off + $250 on Repairs`;
-          } else if (selectedDeductible === 750) {
+          }
+        } else if (selectedDeductible === 750) {
+          if (elCardStratTag) elCardStratTag.textContent = 'Deductible Protection ($750)';
+          if (elNetCap) elNetCap.innerHTML = `${fmtDec(capPmt)}<span class="period">${loanFreqSuffix}</span>`;
+          if (elCardStratSubtext) {
+            elCardStratSubtext.innerHTML = `
+              Keep your <strong>$750 MPI Deductible</strong> (${fmt(fee750)}/yr) with CAP:<br>
+              In a Total Loss: CAP pays $500 &rarr; <strong>Pay only $250 out of pocket</strong> ($500 saved)!<br>
+              In a Partial Loss (repairs &amp; windshields): CAP pays $250 &rarr; <strong>Pay only $500 out of pocket</strong> ($250 saved)!
+            `;
+          }
+          if (elStratBadge) {
             elStratBadge.textContent = `CAP Reimburses $500 on Total Loss & $250 on Repairs`;
-          } else {
-            elStratBadge.textContent = `Zero MPI Buy-Down Fees + CAP Reimburses $500`;
+          }
+        } else { // 1000
+          if (elCardStratTag) elCardStratTag.textContent = 'Deductible Protection (Base $1,000)';
+          if (elNetCap) elNetCap.innerHTML = `${fmtDec(capPmt)}<span class="period">${loanFreqSuffix}</span>`;
+          if (elCardStratSubtext) {
+            elCardStratSubtext.innerHTML = `
+              Keep MPI's <strong>$1,000 Base Deductible</strong> ($0 buy-down fees) with CAP:<br>
+              In a Total Loss: CAP pays $500 &rarr; <strong>Slashes your deductible by 50% to $500</strong>!<br>
+              In a Partial Loss (repairs &amp; windshields): CAP pays $250 &rarr; <strong>Reduces deductible to $750</strong>!
+            `;
+          }
+          if (elStratBadge) {
+            elStratBadge.textContent = `Zero MPI Buy-Down Fees • CAP Cuts Deductible by $500`;
           }
         }
 
@@ -2724,17 +2758,17 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
           } else if (selectedDeductible === 500) {
             elStratTitle.innerHTML = `
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--brand-color)" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-              Deductible Protection: MPI $500 Deductible with CAP
+              Zero-Deductible Total Loss Strategy: $500 MPI Deductible with CAP
             `;
           } else if (selectedDeductible === 750) {
             elStratTitle.innerHTML = `
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--brand-color)" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-              Deductible Protection: MPI $750 Deductible with CAP
+              Deductible Protection: $750 MPI Deductible with CAP
             `;
           } else {
             elStratTitle.innerHTML = `
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--brand-color)" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-              Deductible Protection: MPI $1,000 Base Deductible with CAP
+              Deductible Protection on Base Rate: MPI $1,000 Base with CAP
             `;
           }
         }
@@ -2742,23 +2776,28 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
         const elStratSub = document.getElementById('disp-ded-strategy-sub');
         if (elStratSub) {
           if (selectedDeductible === 200 || selectedDeductible === 300) {
-            elStratSub.textContent = `Why pay MPI extra every year for a $${selectedDeductible} deductible when Companion Asset Protection (CAP) covers your deductible for you?`;
+            elStratSub.textContent = `Why pay MPI extra every year for a $${selectedDeductible} deductible? Choosing the $500 buy-down saves you money on Autopac, while CAP eliminates your deductible on a write-off!`;
           } else if (selectedDeductible === 500) {
-            elStratSub.textContent = `See how Companion Asset Protection (CAP) reimburses your $500 MPI deductible on total loss and cuts repair claims in half.`;
+            elStratSub.textContent = `You chose MPI's $500 deductible buy-down. With CAP, your write-off deductible drops to $0.00, and repair/windshield deductibles are cut in half to $250!`;
           } else if (selectedDeductible === 750) {
-            elStratSub.textContent = `See how Companion Asset Protection (CAP) lowers your $750 out-of-pocket deductible by $500 on total loss and $250 on repairs.`;
+            elStratSub.textContent = `With MPI's $750 deductible buy-down, CAP reimburses $500 on write-offs (reducing your cost to $250) and $250 on repairs/windshields!`;
           } else {
-            elStratSub.textContent = `Avoid expensive MPI buy-down fees entirely: keep the $1,000 base rate and let CAP reimburse your deductible.`;
+            elStratSub.textContent = `Avoid expensive MPI buy-down fees entirely: keep the $1,000 base rate ($0 extra fee) and let CAP reimburse your deductible!`;
           }
         }
 
+        const elDedSavingsLabel = document.getElementById('disp-ded-savings-label');
         const elDedHead = document.getElementById('disp-ded-savings-headline');
-        if (elDedHead) {
-          if (curDedFee26 > 0) {
-            elDedHead.textContent = `Save ${fmt(curDedFee26)} / year ($${fmtDec(curDedFee26 / 12)}/mo)`;
-          } else {
-            elDedHead.textContent = `Zero MPI Buy-Down Fee • CAP Reimburses $500`;
-          }
+        if (selectedDeductible === 200 || selectedDeductible === 300) {
+          const savFrom500 = Math.max(0, curDedFee26 - fee500);
+          if (elDedSavingsLabel) elDedSavingsLabel.textContent = 'Annual MPI Savings by Choosing $500 Buy-Down';
+          if (elDedHead) elDedHead.textContent = `Save ${fmt(savFrom500)} / year ($${fmtDec(savFrom500 / 12)}/mo)`;
+        } else if (selectedDeductible === 500) {
+          if (elDedSavingsLabel) elDedSavingsLabel.textContent = 'Total Loss Deductible with CAP';
+          if (elDedHead) elDedHead.textContent = '$0.00 Out of Pocket on Total Loss';
+        } else {
+          if (elDedSavingsLabel) elDedSavingsLabel.textContent = 'CAP Deductible Reimbursement';
+          if (elDedHead) elDedHead.textContent = '$500 Write-Off / $250 Repair Benefit';
         }
 
         const elThDedName = document.getElementById('th-mpi-ded-name');
@@ -2768,6 +2807,18 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
             : `MPI with $${selectedDeductible} Deductible Buy-Down`;
         }
 
+        const elThCapCol = document.getElementById('th-cap-col-name');
+        if (elThCapCol) {
+          if (selectedDeductible === 200 || selectedDeductible === 300 || selectedDeductible === 500) {
+            elThCapCol.textContent = `MPI $500 Deductible + Companion Asset Protection (CAP)`;
+          } else if (selectedDeductible === 750) {
+            elThCapCol.textContent = `MPI $750 Deductible + Companion Asset Protection (CAP)`;
+          } else {
+            elThCapCol.textContent = `MPI $1,000 Base Deductible + Companion Asset Protection (CAP)`;
+          }
+        }
+
+        // Table Row 1: Annual MPI Deductible Fee
         const elTableDedFee = document.getElementById('table-mpi-ded-fee');
         if (elTableDedFee) elTableDedFee.textContent = curDedFee26 > 0 ? `+${fmt(curDedFee26)} / year` : `$0.00 / year`;
 
@@ -2778,33 +2829,52 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
             : `(Included in Basic Autopac)`;
         }
 
-        const elTableDedPill = document.getElementById('table-ded-savings-pill');
-        if (elTableDedPill) {
-          elTableDedPill.textContent = curDedFee26 > 0
-            ? `Save ${fmt(curDedFee26)} / year on MPI`
-            : `Zero MPI Buy-Down Fees`;
+        const elTableCapDedFee = document.getElementById('table-cap-ded-fee');
+        const elTableCapDedSub = document.getElementById('table-cap-ded-fee-sub');
+        if (selectedDeductible === 200 || selectedDeductible === 300 || selectedDeductible === 500) {
+          if (elTableCapDedFee) elTableCapDedFee.textContent = `+${fmt(fee500)} / year`;
+          if (elTableCapDedSub) elTableCapDedSub.textContent = `(+${fmtDec(fee500 / 12)} / month on MPI • $500 buy-down)`;
+        } else if (selectedDeductible === 750) {
+          if (elTableCapDedFee) elTableCapDedFee.textContent = `+${fmt(fee750)} / year`;
+          if (elTableCapDedSub) elTableCapDedSub.textContent = `(+${fmtDec(fee750 / 12)} / month on MPI • $750 buy-down)`;
+        } else {
+          if (elTableCapDedFee) elTableCapDedFee.textContent = `$0.00 Extra Fee`;
+          if (elTableCapDedSub) elTableCapDedSub.textContent = `(Included in Basic Autopac)`;
         }
 
-        const elTableDedSub = document.getElementById('table-ded-savings-sub');
-        if (elTableDedSub) elTableDedSub.textContent = fmt(curDedFee26);
+        const elTableDedPill = document.getElementById('table-ded-savings-pill');
+        if (elTableDedPill) {
+          if (selectedDeductible === 200 || selectedDeductible === 300) {
+            const sav = Math.max(0, curDedFee26 - fee500);
+            elTableDedPill.textContent = `Save ${fmt(sav)} / year on MPI`;
+          } else if (selectedDeductible === 500) {
+            elTableDedPill.textContent = `$0 Deductible on Write-Off`;
+          } else if (selectedDeductible === 750) {
+            elTableDedPill.textContent = `CAP Reimburses $500`;
+          } else {
+            elTableDedPill.textContent = `Zero Buy-Down Fee • Reimburses $500`;
+          }
+        }
 
-        // Update Total Loss & Partial Loss Table Cells
-        const capLossOop = Math.max(0, selectedDeductible - 500);
-        const capLossSavings = Math.min(500, selectedDeductible);
-
+        // Table Row 2: Total Loss (Vehicle Written Off)
         const elTableMpiLossOop = document.getElementById('table-mpi-ded-loss-oop');
         if (elTableMpiLossOop) elTableMpiLossOop.textContent = `Client Pays $${selectedDeductible.toLocaleString()}`;
 
         const elTableCapLossOop = document.getElementById('table-cap-ded-loss-oop');
-        if (elTableCapLossOop) {
-          elTableCapLossOop.textContent = capLossOop === 0 ? `Client Pays $0.00` : `Client Pays $${capLossOop.toLocaleString()}`;
-        }
-
         const elTableCapLossWin = document.getElementById('table-cap-ded-loss-win');
-        if (elTableCapLossWin) {
-          elTableCapLossWin.textContent = `CAP Saves You $${capLossSavings.toLocaleString()}!`;
+
+        if (selectedDeductible === 200 || selectedDeductible === 300 || selectedDeductible === 500) {
+          if (elTableCapLossOop) elTableCapLossOop.textContent = `Client Pays $0.00`;
+          if (elTableCapLossWin) elTableCapLossWin.textContent = `CAP Saves You $${selectedDeductible.toLocaleString()}!`;
+        } else if (selectedDeductible === 750) {
+          if (elTableCapLossOop) elTableCapLossOop.textContent = `Client Pays $250`;
+          if (elTableCapLossWin) elTableCapLossWin.textContent = `CAP Saves You $500!`;
+        } else { // 1000
+          if (elTableCapLossOop) elTableCapLossOop.textContent = `Client Pays $500`;
+          if (elTableCapLossWin) elTableCapLossWin.textContent = `CAP Saves You $500!`;
         }
 
+        // Table Row 3: Partial Loss (Repairable Claims & Windshields)
         const elTableMpiPartOop = document.getElementById('table-mpi-ded-part-oop');
         if (elTableMpiPartOop) elTableMpiPartOop.textContent = `Client Pays $${selectedDeductible.toLocaleString()}`;
 
@@ -2813,13 +2883,15 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
         const elTableCapPartWin = document.getElementById('table-cap-ded-part-win');
 
         if (selectedDeductible === 200) {
+          const sav200 = Math.max(0, fee200 - fee500);
           if (elTableCapPartOop) elTableCapPartOop.textContent = `Client Pays $250`;
           if (elTableCapPartSub) elTableCapPartSub.textContent = `$500 MPI minus $250 CAP reimbursement (includes windshield claims)`;
-          if (elTableCapPartWin) elTableCapPartWin.innerHTML = `<strong>Only $50 difference</strong>, while saving <strong>${fmt(curDedFee26)}</strong> every single year!`;
+          if (elTableCapPartWin) elTableCapPartWin.innerHTML = `<strong>Only $50 difference</strong>, while saving <strong>${fmt(sav200)}/yr</strong> on MPI!`;
         } else if (selectedDeductible === 300) {
+          const sav300 = Math.max(0, fee300 - fee500);
           if (elTableCapPartOop) elTableCapPartOop.textContent = `Client Pays $250`;
           if (elTableCapPartSub) elTableCapPartSub.textContent = `$500 MPI minus $250 CAP reimbursement (includes windshield claims)`;
-          if (elTableCapPartWin) elTableCapPartWin.innerHTML = `<strong>CAP is $50 cheaper out-of-pocket</strong> ($250 vs $300), AND you save <strong>${fmt(curDedFee26)}/yr</strong>!`;
+          if (elTableCapPartWin) elTableCapPartWin.innerHTML = `<strong>CAP is $50 cheaper out-of-pocket</strong> ($250 vs $300), AND you save <strong>${fmt(sav300)}/yr</strong> on MPI!`;
         } else if (selectedDeductible === 500) {
           if (elTableCapPartOop) elTableCapPartOop.textContent = `Client Pays $250`;
           if (elTableCapPartSub) elTableCapPartSub.textContent = `$500 MPI minus $250 CAP reimbursement (includes windshield claims)`;
@@ -2830,41 +2902,46 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
           if (elTableCapPartWin) elTableCapPartWin.innerHTML = `<strong>Saves $250 out-of-pocket</strong> on every partial loss or windshield claim`;
         } else { // 1000
           if (elTableCapPartOop) elTableCapPartOop.textContent = `Client Pays $750`;
-          if (elTableCapPartSub) elTableCapPartSub.textContent = `$1,000 MPI minus $250 CAP reimbursement (includes windshield claims)`;
+          if (elTableCapPartSub) elTableCapPartSub.textContent = `$1,000 base MPI minus $250 CAP reimbursement (includes windshield claims)`;
           if (elTableCapPartWin) elTableCapPartWin.innerHTML = `<strong>Saves $250 out-of-pocket</strong> on repairs & windshields without paying MPI fees!`;
         }
 
+        // Summary Callout Box Narrative
         const elStratSummary = document.getElementById('disp-strategy-summary');
         if (elStratSummary) {
           if (selectedDeductible === 200) {
+            const sav200 = Math.max(0, fee200 - fee500);
             elStratSummary.innerHTML = `
-              If you pay MPI for a $200 deductible, you are paying <strong>${fmt(curDedFee26)} extra every single year</strong> ($${fmtDec(curDedFee26 / 12)}/month on your MPI bill). 
-              By simply choosing MPI's standard $500 deductible and adding Companion Asset Protection (CAP), you save that <strong>${fmt(curDedFee26)}/year ($${fmtDec(curDedFee26 / 12)}/mo)</strong> on your insurance. 
-              In the event of a total loss, CAP reimburses your entire $500 deductible—leaving you with <strong>$0 out of pocket</strong> (which is $200 cheaper than paying MPI for a $200 deductible). 
-              Even in a partial loss (such as a body shop repair or windshield claim), you only pay $250 out of pocket (a modest $50 difference from $200), which is paid for many times over by your <strong>${fmt(curDedFee26)}</strong> annual premium savings!
+              If you pay MPI for a $200 deductible, you are paying <strong>${fmt(fee200)} extra every single year</strong> ($${fmtDec(fee200 / 12)}/month) to buy down from MPI's $1,000 base deductible. 
+              By choosing MPI's $500 deductible buy-down (${fmt(fee500)}/yr) and adding Companion Asset Protection (CAP), you save <strong>${fmt(sav200)}/year ($${fmtDec(sav200 / 12)}/mo)</strong> on your insurance bill. 
+              In the event of a total loss write-off, CAP reimburses your entire $500 deductible—leaving you with <strong>$0 out of pocket</strong> (which is $200 cheaper than paying MPI for a $200 deductible). 
+              Even on a partial loss or windshield claim, you only pay $250 out of pocket (a tiny $50 difference from $200), which is paid for many times over by your <strong>${fmt(sav200)}</strong> annual premium savings! 
+              <em>(Alternatively, you can choose MPI's $1,000 base deductible to pocket the full ${fmt(fee200)}/yr while CAP reimburses $500 on a write-off).</em>
             `;
           } else if (selectedDeductible === 300) {
+            const sav300 = Math.max(0, fee300 - fee500);
             elStratSummary.innerHTML = `
-              If you pay MPI for a $300 deductible, you are paying <strong>${fmt(curDedFee26)} extra every year</strong> ($${fmtDec(curDedFee26 / 12)}/month). 
-              By keeping MPI's standard $500 deductible with Companion Asset Protection (CAP), you save that <strong>${fmt(curDedFee26)}/year ($${fmtDec(curDedFee26 / 12)}/mo)</strong> on insurance. 
+              If you pay MPI for a $300 deductible, you are paying <strong>${fmt(fee300)} extra every year</strong> ($${fmtDec(fee300 / 12)}/month) to buy down from MPI's $1,000 base deductible. 
+              By choosing MPI's $500 deductible buy-down (${fmt(fee500)}/yr) with Companion Asset Protection (CAP), you save <strong>${fmt(sav300)}/year ($${fmtDec(sav300 / 12)}/mo)</strong> on insurance. 
               On a total loss, CAP reimburses your entire $500 deductible—leaving you with <strong>$0 out of pocket</strong> (saving $300). 
-              On a partial loss (such as a body shop repair or windshield claim), you pay only $250 out of pocket—which is actually <strong>$50 cheaper</strong> than MPI's $300 deductible, on top of saving <strong>${fmt(curDedFee26)}/year</strong> in premiums!
+              On a partial loss or windshield claim, you pay only $250 out of pocket—which is actually <strong>$50 cheaper</strong> than MPI's $300 deductible, on top of saving <strong>${fmt(sav300)}/year</strong> in premiums!
             `;
           } else if (selectedDeductible === 500) {
             elStratSummary.innerHTML = `
-              With a $500 MPI deductible, you normally pay $500 out-of-pocket on any write-off or repair. 
-              With Companion Asset Protection (CAP), a total loss triggers a full <strong>$500 deductible reimbursement—reducing your out-of-pocket to $0.00</strong>. 
-              On partial loss claims (including body shop collisions and windshield replacements), CAP reimburses $250, cutting your out-of-pocket deductible in half to just <strong>$250</strong>!
+              With MPI's $500 deductible buy-down (${fmt(fee500)}/yr), you normally face a $500 bill on any write-off or repair. 
+              With Companion Asset Protection (CAP), a total loss triggers a full <strong>$500 deductible reimbursement—reducing your out-of-pocket to $0.00</strong> (saving you $500). 
+              On partial loss claims (including body shop repairs and windshield replacements), CAP reimburses $250, cutting your out-of-pocket deductible in half to just <strong>$250</strong>! 
+              <em>(Tip: You can also choose MPI's Base $1,000 deductible with CAP to pocket ${fmt(fee500)}/year in insurance savings while CAP pays $500 on total loss).</em>
             `;
           } else if (selectedDeductible === 750) {
             elStratSummary.innerHTML = `
-              With a $750 MPI deductible, you face a $750 out-of-pocket bill on any claim. 
-              Companion Asset Protection (CAP) reimburses <strong>$500 on a total loss</strong> (bringing your cost down to just $250), and reimburses <strong>$250 on partial losses</strong> (including windshield claims), saving you hundreds in out-of-pocket expenses!
+              With MPI's $750 deductible buy-down (${fmt(fee750)}/yr), an accident claim costs you $750. 
+              Companion Asset Protection (CAP) reimburses <strong>$500 on a total loss</strong> (bringing your cost down to just $250), and reimburses <strong>$250 on partial losses and windshield replacements</strong> (reducing your out-of-pocket to $500)!
             `;
           } else { // 1000
             elStratSummary.innerHTML = `
-              MPI's standard base deductible is $1,000. By keeping the base $1,000 deductible, you pay <strong>$0 in buy-down fees to MPI</strong>. 
-              Adding Companion Asset Protection (CAP) gives you built-in deductible protection: CAP reimburses <strong>$500 on a total loss</strong> (slashing your out-of-pocket to $500) and reimburses <strong>$250 on partial losses and windshield replacements</strong>!
+              MPI's standard base deductible is $1,000 (included in basic Autopac at $0 extra fee). By keeping the $1,000 base deductible, you pay <strong>$0 in buy-down fees to MPI</strong>. 
+              Adding Companion Asset Protection (CAP) provides built-in deductible protection: CAP reimburses <strong>$500 on a total loss</strong> (slashing your out-of-pocket to $500) and reimburses <strong>$250 on partial losses and windshield replacements</strong>!
             `;
           }
         }
@@ -2941,7 +3018,15 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
 
         const elBoxNetSav = document.getElementById('disp-box-net-savings');
         if (elBoxNetSav && currentCap) {
-          const dedLead = selectedDeductible === 1000 ? 'By pairing Base MPI + CAP:' : 'By switching to $500 MPI + CAP:';
+          let dedLead = 'With Companion Asset Protection (CAP):';
+          if (selectedDeductible === 200 || selectedDeductible === 300) {
+            const dSav = curDedFee26 - fee500;
+            dedLead = `By choosing $500 MPI + CAP (saving ${fmt(dSav)}/yr on deductible):`;
+          } else if (selectedDeductible === 500) {
+            dedLead = 'By choosing $500 MPI + CAP ($0 write-off deductible):';
+          } else {
+            dedLead = 'By pairing Base $1,000 MPI + CAP:';
+          }
           if (paymentFrequency === 'biweekly') {
             const netMoDiff = mpiAllOptionalsMonthly26 - currentCap.paymentMonthly;
             elBoxNetSav.innerHTML = `<strong>${dedLead}</strong> You eliminate <strong>$${fmtDec(mpiAllOptionalsMonthly26)}/mo</strong> in optional MPI fees for just <strong>+${fmtDec(capPmt)} bi-weekly</strong> on your loan (saving <strong style="color: #059669;">$${fmtDec(netMoDiff)}/mo net</strong>)!`;
