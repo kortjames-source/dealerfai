@@ -95,7 +95,7 @@ if (!empty($accessible_orgs)) {
         <a href="create_deal" class="sidebar-link">
           <i class="fa-solid fa-plus-circle"></i> Create Deal
         </a>
-        <a href="mpi_cap_comparison" class="sidebar-link">
+        <a href="mpicap" class="sidebar-link">
           <i class="fa-solid fa-shield-halved"></i> MPI vs CAP Tool
         </a>
         
@@ -224,7 +224,7 @@ if (!empty($accessible_orgs)) {
               <i class="fa-solid fa-chart-pie" style="font-size: 2rem; margin-bottom: 1rem; display: block;"></i>
               View Reports
             </a>
-            <a href="mpi_cap_comparison" class="btn btn-outline" style="text-align: center; padding: 2rem 1rem;">
+            <a href="mpicap" class="btn btn-outline" style="text-align: center; padding: 2rem 1rem;">
               <i class="fa-solid fa-shield-halved" style="font-size: 2rem; margin-bottom: 1rem; display: block; color: var(--brand-color);"></i>
               MPI vs CAP Tool
             </a>

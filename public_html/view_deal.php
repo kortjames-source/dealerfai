@@ -1908,7 +1908,7 @@ function calculate_payment($total_to_finance, $interest_rate, $term) {
           <?php if ($canEditDeal): ?>
             <a href="edit_deal?id=<?= urlencode($deal_id) ?>" class="btn btn-secondary"><i class="fa-solid fa-pen-to-square" style="margin-right: 0.5rem;"></i> Edit Deal</a>
           <?php endif; ?>
-          <a href="mpi_cap_comparison?deal_id=<?= urlencode((string)$deal_id) ?>" class="btn btn-secondary" title="Compare MPI vs CAP Insurance"><i class="fa-solid fa-shield-halved" style="margin-right: 0.5rem;"></i> MPI vs CAP</a>
+          <a href="mpicap?deal_id=<?= urlencode((string)$deal_id) ?>" class="btn btn-secondary" title="Compare MPI vs CAP Insurance"><i class="fa-solid fa-shield-halved" style="margin-right: 0.5rem;"></i> MPI vs CAP</a>
           <button type="button" class="btn btn-primary" id="launch_credit_button" <?= $launchDisabled ?>><i class="fa-solid fa-rocket" style="margin-right: 0.5rem;"></i> <?= $launchLabel ?></button>
         </div>
       </div>
