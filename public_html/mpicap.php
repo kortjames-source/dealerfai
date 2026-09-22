@@ -3097,7 +3097,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
           if (elNetCap) elNetCap.innerHTML = `${fmtDec(netCapPmt)}<span class="period">${loanFreqSuffix} net</span>`;
           if (elCardStratSubtext) {
             elCardStratSubtext.innerHTML = `
-              Choose <strong>$500 MPI Deductible</strong> & save <strong>${fmt(dedSavAnnual)}/yr ($${fmtDec(dedSavAnnual / 12)}/mo on MPI)</strong>.<br>
+              Choose <strong>$500 MPI Deductible</strong> & save <strong>${fmt(dedSavAnnual)}/yr (${fmtDec(dedSavAnnual / 12)}/mo on MPI)</strong>.<br>
               In a Total Loss: CAP pays $500 &rarr; <strong>$0 Out of Pocket</strong> ($${selectedDeductible} saved)!<br>
               In a Partial Loss (repairs &amp; windshields): CAP pays $250 &rarr; <strong>Only $250 Out of Pocket</strong>!
             `;
@@ -3190,7 +3190,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
         if (selectedDeductible === 200 || selectedDeductible === 300) {
           const savFrom500 = Math.max(0, curDedFee26 - fee500);
           if (elDedSavingsLabel) elDedSavingsLabel.textContent = 'Annual MPI Savings by Choosing $500 Buy-Down';
-          if (elDedHead) elDedHead.textContent = `Save ${fmt(savFrom500)} / year ($${fmtDec(savFrom500 / 12)}/mo)`;
+          if (elDedHead) elDedHead.textContent = `Save ${fmt(savFrom500)} / year (${fmtDec(savFrom500 / 12)}/mo)`;
         } else if (selectedDeductible === 500) {
           if (elDedSavingsLabel) elDedSavingsLabel.textContent = 'Total Loss Deductible with CAP';
           if (elDedHead) elDedHead.textContent = '$0.00 Out of Pocket on Total Loss';
@@ -3311,8 +3311,8 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
           if (selectedDeductible === 200) {
             const sav200 = Math.max(0, fee200 - fee500);
             elStratSummary.innerHTML = `
-              If you pay MPI for a $200 deductible, you are paying <strong>${fmt(fee200)} extra every single year</strong> ($${fmtDec(fee200 / 12)}/month) to buy down from MPI's $1,000 base deductible. 
-              By choosing MPI's $500 deductible buy-down (${fmt(fee500)}/yr) and adding Companion Asset Protection (CAP), you save <strong>${fmt(sav200)}/year ($${fmtDec(sav200 / 12)}/mo)</strong> on your insurance bill. 
+              If you pay MPI for a $200 deductible, you are paying <strong>${fmt(fee200)} extra every single year</strong> (${fmtDec(fee200 / 12)}/month) to buy down from MPI's $1,000 base deductible. 
+              By choosing MPI's $500 deductible buy-down (${fmt(fee500)}/yr) and adding Companion Asset Protection (CAP), you save <strong>${fmt(sav200)}/year (${fmtDec(sav200 / 12)}/mo)</strong> on your insurance bill. 
               In the event of a total loss write-off, CAP reimburses your entire $500 deductible—leaving you with <strong>$0 out of pocket</strong> (which is $200 cheaper than paying MPI for a $200 deductible). 
               Even on a partial loss or windshield claim, you only pay $250 out of pocket (a tiny $50 difference from $200), which is paid for many times over by your <strong>${fmt(sav200)}</strong> annual premium savings! 
               <em>(Alternatively, you can choose MPI's $1,000 base deductible to pocket the full ${fmt(fee200)}/yr while CAP reimburses $500 on a write-off).</em>
@@ -3320,8 +3320,8 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
           } else if (selectedDeductible === 300) {
             const sav300 = Math.max(0, fee300 - fee500);
             elStratSummary.innerHTML = `
-              If you pay MPI for a $300 deductible, you are paying <strong>${fmt(fee300)} extra every year</strong> ($${fmtDec(fee300 / 12)}/month) to buy down from MPI's $1,000 base deductible. 
-              By choosing MPI's $500 deductible buy-down (${fmt(fee500)}/yr) with Companion Asset Protection (CAP), you save <strong>${fmt(sav300)}/year ($${fmtDec(sav300 / 12)}/mo)</strong> on insurance. 
+              If you pay MPI for a $300 deductible, you are paying <strong>${fmt(fee300)} extra every year</strong> (${fmtDec(fee300 / 12)}/month) to buy down from MPI's $1,000 base deductible. 
+              By choosing MPI's $500 deductible buy-down (${fmt(fee500)}/yr) with Companion Asset Protection (CAP), you save <strong>${fmt(sav300)}/year (${fmtDec(sav300 / 12)}/mo)</strong> on insurance. 
               On a total loss, CAP reimburses your entire $500 deductible—leaving you with <strong>$0 out of pocket</strong> (saving $300). 
               On a partial loss or windshield claim, you pay only $250 out of pocket—which is actually <strong>$50 cheaper</strong> than MPI's $300 deductible, on top of saving <strong>${fmt(sav300)}/year</strong> in premiums!
             `;
