@@ -416,6 +416,83 @@ if ($dealId && $dealId > 0 && isset($db) && ($db instanceof PDO)) {
       margin-top: auto;
     }
 
+    /* Deductible Strategy & Comparison Section */
+    .strategy-card {
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-color);
+      padding: 2rem;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 2.5rem;
+    }
+
+    .strategy-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .strategy-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1.5rem;
+      font-size: 0.9rem;
+    }
+
+    .strategy-table th {
+      text-align: left;
+      padding: 0.85rem 1rem;
+      background: #f8fafc;
+      font-weight: 700;
+      color: #334155;
+      border-bottom: 2px solid #cbd5e1;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.025em;
+    }
+
+    .strategy-table td {
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid #e2e8f0;
+      color: #1e293b;
+      vertical-align: middle;
+    }
+
+    .strategy-table tr:hover td {
+      background: #f8fafc;
+    }
+
+    .badge-win {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: #ecfdf5;
+      color: #047857;
+      border: 1px solid #a7f3d0;
+      padding: 0.25rem 0.6rem;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    .badge-mpi-warn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: #fef2f2;
+      color: #b91c1c;
+      border: 1px solid #fecaca;
+      padding: 0.25rem 0.6rem;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
     /* Rate Increase Deep-Dive Card */
     .rate-increase-card {
       background: #ffffff;
@@ -863,7 +940,7 @@ if ($dealId && $dealId > 0 && isset($db) && ($db instanceof PDO)) {
             </div>
             <div id="disp-dsr-badge" class="dsr-pill">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-              <span id="disp-dsr-text">Level +15 • 47% Vehicle Discount</span>
+              <span id="disp-dsr-text">Level 0 • Base Rate (0% Discount)</span>
             </div>
           </div>
 
@@ -957,7 +1034,7 @@ if ($dealId && $dealId > 0 && isset($db) && ($db instanceof PDO)) {
                       <td><input type="number" class="form-control-sm mpi-input" data-col="2025" id="mpi-25-basic" value="2824"></td>
                     </tr>
                     <tr>
-                      <td>Deductible</td>
+                      <td>Deductible ($200 Option Buy-Down Fee)</td>
                       <td><input type="number" class="form-control-sm mpi-input" data-col="2026" id="mpi-26-deductible" value="238"></td>
                       <td><input type="number" class="form-control-sm mpi-input" data-col="2025" id="mpi-25-deductible" value="117"></td>
                     </tr>
@@ -967,12 +1044,12 @@ if ($dealId && $dealId > 0 && isset($db) && ($db instanceof PDO)) {
                       <td><input type="number" class="form-control-sm mpi-input" data-col="2025" id="mpi-25-tpl" value="10"></td>
                     </tr>
                     <tr>
-                      <td>Loss of Use - Passenger Vehicle</td>
+                      <td>Loss of Use - Passenger Vehicle (Rental Car)</td>
                       <td><input type="number" class="form-control-sm mpi-input" data-col="2026" id="mpi-26-lossuse" value="143"></td>
                       <td><input type="number" class="form-control-sm mpi-input" data-col="2025" id="mpi-25-lossuse" value="136"></td>
                     </tr>
                     <tr>
-                      <td>New/Leased Vehicle Protection</td>
+                      <td>New/Leased Vehicle Protection (2-Year Max)</td>
                       <td><input type="number" class="form-control-sm mpi-input" data-col="2026" id="mpi-26-newveh" value="392"></td>
                       <td><input type="number" class="form-control-sm mpi-input" data-col="2025" id="mpi-25-newveh" value="412"></td>
                     </tr>
@@ -1054,26 +1131,27 @@ if ($dealId && $dealId > 0 && isset($db) && ($db instanceof PDO)) {
         <!-- CUSTOMER VIEW: EXECUTIVE COMPARISON HERO CARDS -->
         <!-- ========================================================================= -->
         <div class="comparison-grid">
-          <!-- Card 1: MPI Base Alone -->
+          <!-- Card 1: MPI Add-On Costs (New Car + Loss of Use) -->
           <div class="hero-card">
             <div class="hero-card-tag" style="color: var(--mpi-blue);">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-              <span>MPI Base Insurance Alone</span>
+              <span>MPI Add-Ons (New Car + Rental)</span>
             </div>
-            <div class="hero-amount" id="disp-mpi-amount">
-              $370<span class="period">/mo</span>
+            <div class="hero-amount" id="disp-mpi-addons-amount" style="color: var(--mpi-blue);">
+              $44<span class="period">.58/mo</span>
             </div>
             <div class="hero-card-subtext">
-              Annual Estimate: <strong id="disp-mpi-annual">$4,437</strong><br>
-              Covers basic road liability & depreciated cash value only.
+              MPI New Vehicle Protection: <strong id="disp-mpi-newveh-sub">$392/yr</strong><br>
+              MPI Loss of Use (Rental Car): <strong id="disp-mpi-lossuse-sub">$143/yr</strong><br>
+              Combined MPI Add-On Cost: <strong id="disp-mpi-addons-annual">$535/yr</strong>
             </div>
-            <div class="increase-badge" id="disp-mpi-increase-pill">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
-              <span id="disp-increase-pill-text">+15.1% (+48.50/mo) from 2025</span>
+            <div class="increase-badge" style="background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <span>Expires after 1–2 Years • $0 Deductible Reimbursed</span>
             </div>
           </div>
 
-          <!-- Card 2: CAP Asset Protection Alone -->
+          <!-- Card 2: Dealership CAP Protection -->
           <div class="hero-card highlight">
             <div class="hero-card-tag" style="color: var(--cap-green);">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
@@ -1084,77 +1162,225 @@ if ($dealId && $dealId > 0 && isset($db) && ($db instanceof PDO)) {
             </div>
             <div class="hero-card-subtext">
               <strong id="disp-cap-term-label">60-Month (5-Year)</strong> Replacement Protection<br>
+              Includes: <strong>Up to $60,000 Top-Up + 30 Days Rental</strong><br>
               Breakdown: Just <strong id="disp-cap-per-day">$1.47/day</strong> for peace of mind.
             </div>
             <div class="fixed-badge">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-              <span>100% Rate Lock Guarantee (No Yearly Hikes)</span>
+              <span>Up to 7 Years Locked • Reimburses Deductible</span>
             </div>
           </div>
 
-          <!-- Card 3: Combined Complete Protection -->
+          <!-- Card 3: Deductible Strategy ($500 MPI Deductible + CAP) -->
           <div class="hero-card combined">
             <div class="hero-card-tag" style="color: var(--brand-color);">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              <span>Complete Combined Protection</span>
+              <span>Smart Deductible Strategy</span>
             </div>
-            <div class="hero-amount" id="disp-combined-amount" style="color: var(--brand-color);">
-              $414<span class="period">.90/mo</span>
+            <div class="hero-amount" id="disp-net-cap-amount" style="color: var(--brand-color);">
+              $25<span class="period">.07/mo net</span>
             </div>
             <div class="hero-card-subtext">
-              MPI Basic + CAP Full Replacement Value Top-Up.<br>
-              Zero surprise depreciation loss in a total write-off.
+              Select <strong>$500 MPI Deductible</strong> & save <strong id="disp-ded-savings-sub">$238/yr ($19.83/mo)</strong>.<br>
+              In a Total Loss: CAP pays $500 &rarr; <strong>$0 Out of Pocket</strong>!<br>
+              In a Partial Loss: CAP pays $250 &rarr; <strong>Only $250 Out of Pocket</strong>!
             </div>
             <div class="fixed-badge" style="background: #e0f2fe; color: #0369a1;">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-              <span>Full Replacement Top-Up + $500 Deductible Paid</span>
+              <span id="disp-strategy-badge-text">Save $238/yr on MPI + $0 Deductible on Write-off</span>
             </div>
           </div>
         </div>
 
         <!-- ========================================================================= -->
-        <!-- SECTION: MPI 2025 vs 2026 RATE INCREASE ANALYSIS -->
+        <!-- SECTION: SMART DEDUCTIBLE COMPARISON ($500 DEDUCTIBLE + CAP) -->
         <!-- ========================================================================= -->
-        <div class="rate-increase-card">
-          <div class="rate-increase-header">
+        <div class="strategy-card">
+          <div class="strategy-header">
             <div>
-              <h3>
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
-                MPI Insurance Rate Increase: 2025 vs. 2026
+              <h3 style="margin: 0; font-size: 1.35rem; font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 0.5rem;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--brand-color)" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                The Smart Deductible Strategy: $500 MPI Deductible with CAP
               </h3>
               <p style="margin: 0.35rem 0 0 0; color: #64748b; font-size: 0.875rem;">
-                Official comparison based on Public Utilities Board (PUB) approved Manitoba Public Insurance rates.
+                Why pay MPI extra every year for a $200 deductible when Dealership CAP covers your deductible for you?
               </p>
             </div>
             <div style="text-align: right;">
-              <div style="font-size: 0.75rem; text-transform: uppercase; color: #64748b; font-weight: 700;">Year-over-Year Increase</div>
-              <div style="font-size: 1.5rem; font-weight: 800; color: #dc2626;" id="disp-increase-headline">+$582/year (+15.1%)</div>
+              <div style="font-size: 0.75rem; text-transform: uppercase; color: #64748b; font-weight: 700;">Annual MPI Savings by Choosing $500 Deductible</div>
+              <div style="font-size: 1.5rem; font-weight: 800; color: #059669;" id="disp-ded-savings-headline">Save $238 / year</div>
             </div>
           </div>
 
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem;">
-            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: var(--radius-md); padding: 1.25rem;">
-              <div style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">2025 MPI Cost</div>
-              <div style="font-size: 1.5rem; font-weight: 800; color: #0f172a; margin-top: 0.25rem;" id="disp-2025-cost">$3,855 / yr</div>
-              <div style="font-size: 0.85rem; color: #64748b; margin-top: 0.25rem;" id="disp-2025-period-cost">$321.25 / month ($148.27 bi-weekly)</div>
+          <div style="overflow-x: auto;">
+            <table class="strategy-table">
+              <thead>
+                <tr>
+                  <th style="width: 28%;">Protection Feature / Scenario</th>
+                  <th style="width: 24%; color: var(--mpi-blue);">MPI with $200 Deductible Buy-Down</th>
+                  <th style="width: 28%; color: var(--cap-green);">MPI $500 Deductible + Dealership CAP</th>
+                  <th style="width: 20%;">Your Advantage</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Annual MPI Deductible Fee</strong></td>
+                  <td>
+                    <span style="font-weight: 700; color: #b91c1c;" id="table-mpi-ded-fee">+$238.00 / year</span><br>
+                    <span style="font-size: 0.8rem; color: #64748b;" id="table-mpi-ded-period">(+$19.83 / month)</span>
+                  </td>
+                  <td>
+                    <span style="font-weight: 700; color: #059669;">$0.00 Extra Fee</span><br>
+                    <span style="font-size: 0.8rem; color: #64748b;">(Standard $500 deductible)</span>
+                  </td>
+                  <td>
+                    <span class="badge-win" id="table-ded-savings-pill">Save $238 / year on MPI</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Total Loss (Vehicle Written Off)</strong><br><span style="font-size: 0.8rem; color: #64748b;">Collision, Fire, Theft, Hail, or Flood</span></td>
+                  <td>
+                    <span style="font-weight: 700; color: #0f172a;">Client Pays $200</span><br>
+                    <span style="font-size: 0.8rem; color: #64748b;">Out-of-pocket deductible</span>
+                  </td>
+                  <td>
+                    <span style="font-weight: 700; color: #059669;">Client Pays $0.00</span><br>
+                    <span style="font-size: 0.8rem; color: #059669;">CAP reimburses up to $500 deductible</span>
+                  </td>
+                  <td>
+                    <span class="badge-win">CAP Saves You $200!</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Partial Loss (Accident Repair)</strong><br><span style="font-size: 0.8rem; color: #64748b;">Vehicle repaired at body shop</span></td>
+                  <td>
+                    <span style="font-weight: 700; color: #0f172a;">Client Pays $200</span><br>
+                    <span style="font-size: 0.8rem; color: #64748b;">Out-of-pocket deductible</span>
+                  </td>
+                  <td>
+                    <span style="font-weight: 700; color: #0f172a;">Client Pays $250</span><br>
+                    <span style="font-size: 0.8rem; color: #059669;">$500 MPI minus $250 CAP reimbursement</span>
+                  </td>
+                  <td>
+                    <span style="font-size: 0.85rem; color: #475569;"><strong>Only $50 difference</strong>, while saving <strong id="table-ded-savings-sub">$238</strong> every single year!</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Replacement Value Top-Up</strong><br><span style="font-size: 0.8rem; color: #64748b;">Credit towards your replacement car</span></td>
+                  <td>
+                    <span style="font-weight: 700; color: #b91c1c;">$0.00 from MPI</span><br>
+                    <span style="font-size: 0.8rem; color: #64748b;">MPI pays depreciated ACV only</span>
+                  </td>
+                  <td>
+                    <span style="font-weight: 700; color: #059669;">Up to $60,000 Saved</span><br>
+                    <span style="font-size: 0.8rem; color: #64748b;">Replaces same like, kind, model & trim</span>
+                  </td>
+                  <td>
+                    <span class="badge-win">Full Equity Top-Up</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Rental Car Protection</strong></td>
+                  <td>
+                    <span style="font-size: 0.85rem; color: #64748b;">MPI Basic limits (or +$143/yr extra)</span>
+                  </td>
+                  <td>
+                    <span style="font-weight: 700; color: #059669;">30 Full Days Included</span><br>
+                    <span style="font-size: 0.8rem; color: #64748b;">Keeps you on the road</span>
+                  </td>
+                  <td>
+                    <span class="badge-win">30 Days Rental Free</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Coverage Duration</strong></td>
+                  <td>
+                    <span style="font-size: 0.85rem; color: #64748b;">Subject to annual MPI rate increases</span>
+                  </td>
+                  <td>
+                    <span style="font-weight: 700; color: #059669;">Up to 7 Years Guaranteed</span><br>
+                    <span style="font-size: 0.8rem; color: #64748b;">100% Locked-in Rate</span>
+                  </td>
+                  <td>
+                    <span class="badge-win">No Price Hikes</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="callout-box" style="border-left-color: #059669; background: #ecfdf5;">
+            <strong style="color: #065f46;">The Financial Bottom Line:</strong>
+            <span style="color: #064e3b;" id="disp-strategy-summary">
+              If you pay MPI for a $200 deductible, you are paying <strong>$238.00 every year</strong>. 
+              By simply keeping MPI's standard $500 deductible and choosing Dealership CAP, you save that <strong>$238.00/year ($19.83/month)</strong>. 
+              In the event of a total loss, CAP reimburses your entire $500 deductible—leaving you with <strong>$0 out of pocket</strong>. 
+              Even in a partial loss, you only pay $250 out of pocket (a mere $50 difference from $200), which is paid for many times over by your annual MPI premium savings!
+            </span>
+          </div>
+        </div>
+
+        <!-- ========================================================================= -->
+        <!-- SECTION: MPI NEW CAR + RENTAL vs DEALERSHIP CAP -->
+        <!-- ========================================================================= -->
+        <div class="strategy-card">
+          <div class="strategy-header">
+            <div>
+              <h3 style="margin: 0; font-size: 1.35rem; font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 0.5rem;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--mpi-blue)" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                Comparing MPI Add-On Coverage vs. Dealership CAP Protection
+              </h3>
+              <p style="margin: 0.35rem 0 0 0; color: #64748b; font-size: 0.875rem;">
+                Evaluating what MPI charges for its optional 2-year New Vehicle Protection and Loss of Use vs. 7-Year Dealership CAP.
+              </p>
             </div>
-            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: var(--radius-md); padding: 1.25rem;">
-              <div style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">2026 MPI Cost</div>
-              <div style="font-size: 1.5rem; font-weight: 800; color: #0f172a; margin-top: 0.25rem;" id="disp-2026-cost">$4,437 / yr</div>
-              <div style="font-size: 0.85rem; color: #64748b; margin-top: 0.25rem;" id="disp-2026-period-cost">$369.75 / month ($170.65 bi-weekly)</div>
-            </div>
-            <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: var(--radius-md); padding: 1.25rem;">
-              <div style="font-size: 0.75rem; font-weight: 700; color: #dc2626; text-transform: uppercase;">Your Increase Amount</div>
-              <div style="font-size: 1.5rem; font-weight: 800; color: #dc2626; margin-top: 0.25rem;" id="disp-increase-cost">+$582 / yr</div>
-              <div style="font-size: 0.85rem; color: #991b1b; margin-top: 0.25rem;" id="disp-increase-period-cost">+$48.50 / month (+$22.38 bi-weekly)</div>
+            <div style="text-align: right;">
+              <div style="font-size: 0.75rem; text-transform: uppercase; color: #64748b; font-weight: 700;">Cost Comparison</div>
+              <div style="font-size: 1.35rem; font-weight: 800; color: #0f172a;" id="disp-addon-vs-cap-headline">Virtually Identical Cost</div>
             </div>
           </div>
 
-          <div class="callout-box">
-            <strong>Key Insight for Vehicle Owners:</strong>
-            MPI Basic insurance rates are subject to annual adjustments to match inflation, repair technologies, and vehicle claims. Even with safe driving discounts (like <strong>DSR Level <span id="disp-dsr-inline">+15</span></strong>), your base insurance rose by <strong id="disp-increase-inline">$48.50/month</strong> from 2025 to 2026. Furthermore, MPI's New Vehicle Protection costs <strong>$392–$412 per year</strong> and automatically terminates after just 2 years.
-            <br><br>
-            <strong>In contrast:</strong> Dealership CAP Insurance guarantees a <strong>100% locked-in rate for up to 7 years</strong>. It never increases, protecting your budget while delivering vastly superior replacement coverage.
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem;">
+            <!-- Box 1: MPI Add-Ons Cost -->
+            <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: var(--radius-md); padding: 1.25rem;">
+              <div style="font-size: 0.75rem; font-weight: 700; color: var(--mpi-blue); text-transform: uppercase;">MPI Optional Add-Ons</div>
+              <div style="font-size: 1.75rem; font-weight: 800; color: #0f172a; margin-top: 0.25rem;" id="disp-box-mpi-addons-period">$44.58 / mo</div>
+              <div style="font-size: 0.85rem; color: #64748b; margin-top: 0.25rem;" id="disp-box-mpi-addons-annual">$535.00 / year ($20.58 bi-weekly)</div>
+              <ul style="margin: 0.75rem 0 0 0; padding-left: 1.2rem; font-size: 0.85rem; color: #475569; line-height: 1.6;">
+                <li>New/Leased Vehicle Protection: <strong id="disp-box-mpi-newveh">$392/yr</strong></li>
+                <li>Loss of Use (Rental Car): <strong id="disp-box-mpi-lossuse">$143/yr</strong></li>
+                <li><span style="color: #dc2626; font-weight: 600;">Coverage terminates after 24 months</span></li>
+                <li>Settles depreciated ACV; no replacement credit</li>
+                <li>$0 deductible reimbursement</li>
+              </ul>
+            </div>
+
+            <!-- Box 2: CAP Protection Cost -->
+            <div style="background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: var(--radius-md); padding: 1.25rem;">
+              <div style="font-size: 0.75rem; font-weight: 700; color: var(--cap-green); text-transform: uppercase;">Dealership CAP Protection</div>
+              <div style="font-size: 1.75rem; font-weight: 800; color: var(--cap-green); margin-top: 0.25rem;" id="disp-box-cap-period">$44.90 / mo</div>
+              <div style="font-size: 0.85rem; color: #047857; margin-top: 0.25rem;" id="disp-box-cap-annual">$2,219 financed ($20.72 bi-weekly)</div>
+              <ul style="margin: 0.75rem 0 0 0; padding-left: 1.2rem; font-size: 0.85rem; color: #065f46; line-height: 1.6;">
+                <li><strong>Up to 7 Years (84 Months)</strong> Guaranteed Coverage</li>
+                <li><strong>Up to $60,000 Replacement Value Credit</strong> to buy next car</li>
+                <li><strong>30-Day Rental Vehicle</strong> included</li>
+                <li><strong>Up to $500 Deductible Reimbursed</strong> ($250 partial)</li>
+                <li>100% Rate Lock Guarantee (No annual rate hikes)</li>
+              </ul>
+            </div>
+
+            <!-- Box 3: Total MPI Optionals vs CAP -->
+            <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: var(--radius-md); padding: 1.25rem;">
+              <div style="font-size: 0.75rem; font-weight: 700; color: var(--brand-color); text-transform: uppercase;">All MPI Options (Incl. $200 Ded)</div>
+              <div style="font-size: 1.75rem; font-weight: 800; color: var(--brand-color); margin-top: 0.25rem;" id="disp-box-mpi-all-period">$64.42 / mo</div>
+              <div style="font-size: 0.85rem; color: #1e40af; margin-top: 0.25rem;" id="disp-box-mpi-all-annual">$773.00 / year ($29.73 bi-weekly)</div>
+              <ul style="margin: 0.75rem 0 0 0; padding-left: 1.2rem; font-size: 0.85rem; color: #1e3a8a; line-height: 1.6;">
+                <li>$200 Deductible Buy-Down: <strong id="disp-box-mpi-ded">$238/yr</strong></li>
+                <li>New Vehicle Protection: <strong id="disp-box-mpi-newveh2">$392/yr</strong></li>
+                <li>Loss of Use Rental: <strong id="disp-box-mpi-lossuse2">$143/yr</strong></li>
+                <li><strong>By switching to $500 MPI + CAP:</strong> You save <strong id="disp-box-net-savings" style="color: #059669;">$19.52 / month</strong> while gaining 7 years of full coverage!</li>
+              </ul>
+            </div>
           </div>
         </div>
 
@@ -1304,6 +1530,50 @@ if ($dealId && $dealId > 0 && isset($db) && ($db instanceof PDO)) {
           </div>
         </div>
 
+        <!-- ========================================================================= -->
+        <!-- REFERENCE SECTION: MPI 2025 vs 2026 RATE INCREASE REFERENCE -->
+        <!-- ========================================================================= -->
+        <div class="rate-increase-card" style="margin-top: 2rem;">
+          <div class="rate-increase-header">
+            <div>
+              <h3>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                Reference: MPI Total Rate Increase (2025 vs. 2026)
+              </h3>
+              <p style="margin: 0.35rem 0 0 0; color: #64748b; font-size: 0.875rem;">
+                Official comparison based on Public Utilities Board (PUB) approved Manitoba Public Insurance rates.
+              </p>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-size: 0.75rem; text-transform: uppercase; color: #64748b; font-weight: 700;">MPI Year-over-Year Increase</div>
+              <div style="font-size: 1.5rem; font-weight: 800; color: #dc2626;" id="disp-increase-headline">+$582/year (+15.1%)</div>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem;">
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: var(--radius-md); padding: 1.25rem;">
+              <div style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">2025 Total MPI Cost</div>
+              <div style="font-size: 1.5rem; font-weight: 800; color: #0f172a; margin-top: 0.25rem;" id="disp-2025-cost">$3,855 / yr</div>
+              <div style="font-size: 0.85rem; color: #64748b; margin-top: 0.25rem;" id="disp-2025-period-cost">$321.25 / month ($148.27 bi-weekly)</div>
+            </div>
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: var(--radius-md); padding: 1.25rem;">
+              <div style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">2026 Total MPI Cost</div>
+              <div style="font-size: 1.5rem; font-weight: 800; color: #0f172a; margin-top: 0.25rem;" id="disp-2026-cost">$4,437 / yr</div>
+              <div style="font-size: 0.85rem; color: #64748b; margin-top: 0.25rem;" id="disp-2026-period-cost">$369.75 / month ($170.65 bi-weekly)</div>
+            </div>
+            <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: var(--radius-md); padding: 1.25rem;">
+              <div style="font-size: 0.75rem; font-weight: 700; color: #dc2626; text-transform: uppercase;">MPI Increase Amount</div>
+              <div style="font-size: 1.5rem; font-weight: 800; color: #dc2626; margin-top: 0.25rem;" id="disp-increase-cost">+$582 / yr</div>
+              <div style="font-size: 0.85rem; color: #991b1b; margin-top: 0.25rem;" id="disp-increase-period-cost">+$48.50 / month (+$22.38 bi-weekly)</div>
+            </div>
+          </div>
+
+          <div class="callout-box">
+            <strong>Key Takeaway:</strong>
+            While basic MPI rates increased by <strong>+15.1%</strong> across Manitoba, Dealership CAP Insurance provides a <strong>100% Rate Lock Guarantee</strong> for your entire term (up to 7 years). By choosing the $500 MPI deductible and pairing it with CAP, you mitigate rate increases and protect yourself against depreciation.
+          </div>
+        </div>
+
       </div>
     </main>
 
@@ -1314,32 +1584,32 @@ if ($dealId && $dealId > 0 && isset($db) && ($db instanceof PDO)) {
 
   <script nonce="<?= $nonce ?>">
     document.addEventListener('DOMContentLoaded', () => {
-      // Driver Safety Rating (DSR) Scale: Level 0 to +20
+      // Driver Safety Rating (DSR) Scale: Level 0 to +20 (Level 0 Base default)
       const DSR_SCALE = [
-        { level: 20, discount: 53, driverFee: 25, isNew: true },
-        { level: 19, discount: 53, driverFee: 25 },
-        { level: 18, discount: 52, driverFee: 25 },
-        { level: 17, discount: 50, driverFee: 25 },
-        { level: 16, discount: 49, driverFee: 25 },
-        { level: 15, discount: 47, driverFee: 25 },
-        { level: 14, discount: 43, driverFee: 30 },
-        { level: 13, discount: 41, driverFee: 30 },
-        { level: 12, discount: 40, driverFee: 30 },
-        { level: 11, discount: 37, driverFee: 30 },
-        { level: 10, discount: 35, driverFee: 30 },
-        { level: 9,  discount: 33, driverFee: 35 },
-        { level: 8,  discount: 30, driverFee: 40 },
-        { level: 7,  discount: 29, driverFee: 40 },
-        { level: 6,  discount: 26, driverFee: 40 },
-        { level: 5,  discount: 22, driverFee: 40 },
-        { level: 4,  discount: 20, driverFee: 40 },
-        { level: 3,  discount: 15, driverFee: 45 },
-        { level: 2,  discount: 11, driverFee: 45 },
-        { level: 1,  discount: 5,  driverFee: 50 },
         { level: 0,  discount: 0,  driverFee: 55, isBase: true },
+        { level: 1,  discount: 5,  driverFee: 50 },
+        { level: 2,  discount: 11, driverFee: 45 },
+        { level: 3,  discount: 15, driverFee: 45 },
+        { level: 4,  discount: 20, driverFee: 40 },
+        { level: 5,  discount: 22, driverFee: 40 },
+        { level: 6,  discount: 26, driverFee: 40 },
+        { level: 7,  discount: 29, driverFee: 40 },
+        { level: 8,  discount: 30, driverFee: 40 },
+        { level: 9,  discount: 33, driverFee: 35 },
+        { level: 10, discount: 35, driverFee: 30 },
+        { level: 11, discount: 37, driverFee: 30 },
+        { level: 12, discount: 40, driverFee: 30 },
+        { level: 13, discount: 41, driverFee: 30 },
+        { level: 14, discount: 43, driverFee: 30 },
+        { level: 15, discount: 47, driverFee: 25 },
+        { level: 16, discount: 49, driverFee: 25 },
+        { level: 17, discount: 50, driverFee: 25 },
+        { level: 18, discount: 52, driverFee: 25 },
+        { level: 19, discount: 53, driverFee: 25 },
+        { level: 20, discount: 53, driverFee: 25, isNew: true },
       ];
 
-      // Populate DSR Select dropdown
+      // Populate DSR Select dropdown (Level 0 Base selected by default)
       const dsrSelect = document.getElementById('inp-dsr-level');
       if (dsrSelect) {
         DSR_SCALE.forEach(item => {
@@ -1348,7 +1618,7 @@ if ($dealId && $dealId > 0 && isset($db) && ($db instanceof PDO)) {
           const labelPrefix = item.level > 0 ? `+${item.level}` : '0 (Base)';
           const tag = item.isNew ? ' [NEW 2026]' : '';
           opt.textContent = `Level ${labelPrefix} — ${item.discount}% Vehicle Discount (Driver Fee $${item.driverFee})${tag}`;
-          if (item.level === 15) opt.selected = true;
+          if (item.level === 0) opt.selected = true;
           dsrSelect.appendChild(opt);
         });
       }
@@ -1437,6 +1707,7 @@ if ($dealId && $dealId > 0 && isset($db) && ($db instanceof PDO)) {
 
           document.getElementById('cap-price-60').value = 2219;
           document.getElementById('cap-price-84').value = 2617;
+          if (dsrSelect) dsrSelect.value = "0";
           recalculate();
         });
       }
@@ -1486,12 +1757,14 @@ if ($dealId && $dealId > 0 && isset($db) && ($db instanceof PDO)) {
         document.getElementById('disp-client-name').textContent = clientName;
         document.getElementById('disp-vehicle-name').textContent = vehName;
 
-        // DSR Badge update
+        // DSR Badge update (Base 0 default)
         const dsrLvl = parseInt(document.getElementById('inp-dsr-level').value, 10) || 0;
         const dsrObj = DSR_SCALE.find(d => d.level === dsrLvl) || { level: 0, discount: 0, driverFee: 55 };
         const dsrSign = dsrObj.level > 0 ? `+${dsrObj.level}` : '0';
-        document.getElementById('disp-dsr-text').textContent = `Level ${dsrSign} • ${dsrObj.discount}% Safe Driver Vehicle Discount`;
-        document.getElementById('disp-dsr-inline').textContent = dsrSign;
+        const dsrDiscText = dsrObj.level > 0 ? `${dsrObj.discount}% Safe Driver Vehicle Discount` : 'Base Rate (0% Discount)';
+        document.getElementById('disp-dsr-text').textContent = `Level ${dsrSign} • ${dsrDiscText}`;
+        const inlineDsr = document.getElementById('disp-dsr-inline');
+        if (inlineDsr) inlineDsr.textContent = dsrSign;
 
         // Terms and Financing Rate
         const loanTerm = parseInt(document.getElementById('inp-loan-term').value, 10) || 60;
@@ -1537,32 +1810,34 @@ if ($dealId && $dealId > 0 && isset($db) && ($db instanceof PDO)) {
         document.getElementById('sum-25-reg').textContent = fmt(sumReg25);
         document.getElementById('sum-25-total').textContent = fmt(total25);
 
-        // Increases
-        const diffTotal = total26 - total25;
-        const pctIncrease = total25 > 0 ? ((diffTotal / total25) * 100) : 0;
-
-        // Payment periods for MPI
-        const mpiPeriod26 = paymentFrequency === 'biweekly' ? (total26 / 26) : (total26 / 12);
-        const mpiPeriod25 = paymentFrequency === 'biweekly' ? (total25 / 26) : (total25 / 12);
-        const diffPeriod = mpiPeriod26 - mpiPeriod25;
-
+        // Frequency divisor & suffix
         const freqSuffix = paymentFrequency === 'biweekly' ? '/bi-wk' : '/mo';
+        const periodDivisor = paymentFrequency === 'biweekly' ? 26 : 12;
 
-        // Update MPI Hero Card
-        document.getElementById('disp-mpi-amount').innerHTML = `${fmt(mpiPeriod26)}<span class="period">${freqSuffix}</span>`;
-        document.getElementById('disp-mpi-annual').textContent = fmt(total26);
-        document.getElementById('disp-increase-pill-text').textContent = `+${pctIncrease.toFixed(1)}% (+${fmtDec(diffPeriod)}${freqSuffix}) from 2025`;
+        // MPI Add-Ons (New Vehicle Protection + Loss of Use)
+        const mpiAddonsAnnual26 = newveh26 + loss26;
+        const mpiAddonsPeriod26 = mpiAddonsAnnual26 / periodDivisor;
 
-        // Update Rate Increase Section
-        document.getElementById('disp-increase-headline').textContent = `+${fmt(diffTotal)}/year (+${pctIncrease.toFixed(1)}%)`;
-        document.getElementById('disp-2025-cost').textContent = `${fmt(total25)} / yr`;
-        document.getElementById('disp-2026-cost').textContent = `${fmt(total26)} / yr`;
-        document.getElementById('disp-increase-cost').textContent = `+${fmt(diffTotal)} / yr`;
+        // Deductible Savings (Difference between $200 buy-down fee and standard $500 deductible)
+        const dedSavingsAnnual26 = ded26; // e.g. $238
+        const dedSavingsPeriod26 = dedSavingsAnnual26 / periodDivisor;
 
-        document.getElementById('disp-2025-period-cost').textContent = `${fmtDec(total25 / 12)} / month (${fmtDec(total25 / 26)} bi-weekly)`;
-        document.getElementById('disp-2026-period-cost').textContent = `${fmtDec(total26 / 12)} / month (${fmtDec(total26 / 26)} bi-weekly)`;
-        document.getElementById('disp-increase-period-cost').textContent = `+${fmtDec(diffTotal / 12)} / month (+${fmtDec(diffTotal / 26)} bi-weekly)`;
-        document.getElementById('disp-increase-inline').textContent = `${fmtDec(diffTotal / 12)}/month`;
+        // Total MPI Optionals ($200 Deductible buy-down + New Vehicle + Loss of Use)
+        const mpiAllOptionalsAnnual26 = mpiAddonsAnnual26 + dedSavingsAnnual26;
+        const mpiAllOptionalsPeriod26 = mpiAllOptionalsAnnual26 / periodDivisor;
+
+        // Update Card 1: MPI Add-On Protection (New Car + Loss of Use)
+        const elAddonsAmt = document.getElementById('disp-mpi-addons-amount');
+        if (elAddonsAmt) elAddonsAmt.innerHTML = `${fmtDec(mpiAddonsPeriod26)}<span class="period">${freqSuffix}</span>`;
+
+        const elNewvehSub = document.getElementById('disp-mpi-newveh-sub');
+        if (elNewvehSub) elNewvehSub.textContent = `${fmt(newveh26)}/yr (${fmtDec(newveh26 / periodDivisor)}${freqSuffix})`;
+
+        const elLossSub = document.getElementById('disp-mpi-lossuse-sub');
+        if (elLossSub) elLossSub.textContent = `${fmt(loss26)}/yr (${fmtDec(loss26 / periodDivisor)}${freqSuffix})`;
+
+        const elAddonsAnnual = document.getElementById('disp-mpi-addons-annual');
+        if (elAddonsAnnual) elAddonsAnnual.textContent = `${fmt(mpiAddonsAnnual26)}/yr`;
 
         // Process CAP Term Prices
         const capInputs = [
@@ -1575,6 +1850,7 @@ if ($dealId && $dealId > 0 && isset($db) && ($db instanceof PDO)) {
 
         const activeCapOptions = [];
         capInputs.forEach(item => {
+          if (!item.el) return;
           const val = parseFloat(item.el.value);
           if (!isNaN(val) && val > 0) {
             const pmt = calcAmortization(val, interestRate, loanTerm, paymentFrequency);
@@ -1603,55 +1879,153 @@ if ($dealId && $dealId > 0 && isset($db) && ($db instanceof PDO)) {
 
         // Render CAP Term Cards
         const termsContainer = document.getElementById('cap-terms-cards');
-        termsContainer.innerHTML = '';
+        if (termsContainer) {
+          termsContainer.innerHTML = '';
+          if (activeCapOptions.length === 0) {
+            termsContainer.innerHTML = '<div style="color: #64748b; font-style: italic; padding: 1rem 0;">No CAP prices entered. Enter a price in the setup panel above to view customer terms.</div>';
+          } else {
+            activeCapOptions.forEach(opt => {
+              const isSel = opt.term === selectedCapTerm;
+              const card = document.createElement('div');
+              card.className = `cap-term-card ${isSel ? 'selected' : ''}`;
+              const years = opt.term / 12;
+              const termLabel = `${opt.term} Months (${years} Year${years > 1 ? 's' : ''})`;
 
-        if (activeCapOptions.length === 0) {
-          termsContainer.innerHTML = '<div style="color: #64748b; font-style: italic; padding: 1rem 0;">No CAP prices entered. Enter a price in the setup panel above to view customer terms.</div>';
-        } else {
-          activeCapOptions.forEach(opt => {
-            const isSel = opt.term === selectedCapTerm;
-            const card = document.createElement('div');
-            card.className = `cap-term-card ${isSel ? 'selected' : ''}`;
-            const years = opt.term / 12;
-            const termLabel = `${opt.term} Months (${years} Year${years > 1 ? 's' : ''})`;
+              card.innerHTML = `
+                <div class="cap-term-badge">${isSel ? 'SELECTED' : 'OFFERED'}</div>
+                <div style="font-weight: 700; color: #0f172a; font-size: 1.05rem; margin-bottom: 0.25rem;">${termLabel}</div>
+                <div style="font-size: 0.8rem; color: #64748b; margin-bottom: 0.75rem;">Retail Price: ${fmt(opt.price)}</div>
+                <div style="font-size: 1.5rem; font-weight: 800; color: var(--cap-green); margin-bottom: 0.25rem;">
+                  ${fmtDec(opt.payment)}<span style="font-size: 0.85rem; font-weight: 600; color: #64748b;">${freqSuffix}</span>
+                </div>
+                <div style="font-size: 0.75rem; color: #64748b;">Just ${fmtDec(opt.perDay)}/day</div>
+              `;
 
-            card.innerHTML = `
-              <div class="cap-term-badge">${isSel ? 'SELECTED' : 'OFFERED'}</div>
-              <div style="font-weight: 700; color: #0f172a; font-size: 1.05rem; margin-bottom: 0.25rem;">${termLabel}</div>
-              <div style="font-size: 0.8rem; color: #64748b; margin-bottom: 0.75rem;">Retail Price: ${fmt(opt.price)}</div>
-              <div style="font-size: 1.5rem; font-weight: 800; color: var(--cap-green); margin-bottom: 0.25rem;">
-                ${fmtDec(opt.payment)}<span style="font-size: 0.85rem; font-weight: 600; color: #64748b;">${freqSuffix}</span>
-              </div>
-              <div style="font-size: 0.75rem; color: #64748b;">Just ${fmtDec(opt.perDay)}/day</div>
-            `;
+              card.addEventListener('click', () => {
+                selectedCapTerm = opt.term;
+                recalculate();
+              });
 
-            card.addEventListener('click', () => {
-              selectedCapTerm = opt.term;
-              recalculate();
+              termsContainer.appendChild(card);
             });
-
-            termsContainer.appendChild(card);
-          });
+          }
         }
 
-        // Update Selected CAP Card & Combined Card
+        // Selected CAP item
         const currentCap = activeCapOptions.find(o => o.term === selectedCapTerm);
+        let capPmt = 0;
+        let capPerDay = 0;
+        let capYears = 5;
+        let capTermLabel = '60-Month (5-Year)';
+
         if (currentCap) {
-          const capPmt = currentCap.payment;
-          const combinedPmt = mpiPeriod26 + capPmt;
-          const capYears = currentCap.term / 12;
-
-          document.getElementById('disp-cap-amount').innerHTML = `${fmtDec(capPmt)}<span class="period">${freqSuffix}</span>`;
-          document.getElementById('disp-cap-term-label').textContent = `${currentCap.term}-Month (${capYears}-Year)`;
-          document.getElementById('disp-cap-per-day').textContent = `${fmtDec(currentCap.perDay)}/day`;
-
-          document.getElementById('disp-combined-amount').innerHTML = `${fmtDec(combinedPmt)}<span class="period">${freqSuffix}</span>`;
-        } else {
-          document.getElementById('disp-cap-amount').innerHTML = `$0<span class="period">${freqSuffix}</span>`;
-          document.getElementById('disp-cap-term-label').textContent = `No term selected`;
-          document.getElementById('disp-cap-per-day').textContent = `$0/day`;
-          document.getElementById('disp-combined-amount').innerHTML = `${fmtDec(mpiPeriod26)}<span class="period">${freqSuffix}</span>`;
+          capPmt = currentCap.payment;
+          capPerDay = currentCap.perDay;
+          capYears = currentCap.term / 12;
+          capTermLabel = `${currentCap.term}-Month (${capYears}-Year)`;
         }
+
+        // Update Card 2: Dealership CAP Insurance
+        const elCapAmt = document.getElementById('disp-cap-amount');
+        if (elCapAmt) elCapAmt.innerHTML = `${fmtDec(capPmt)}<span class="period">${freqSuffix}</span>`;
+        const elCapTermLabel = document.getElementById('disp-cap-term-label');
+        if (elCapTermLabel) elCapTermLabel.textContent = capTermLabel;
+        const elCapPerDay = document.getElementById('disp-cap-per-day');
+        if (elCapPerDay) elCapPerDay.textContent = `${fmtDec(capPerDay)}/day`;
+
+        // Update Card 3: Deductible Strategy ($500 MPI Deductible + CAP)
+        const netCapPmt = Math.max(0, capPmt - dedSavingsPeriod26);
+        const elNetCap = document.getElementById('disp-net-cap-amount');
+        if (elNetCap) elNetCap.innerHTML = `${fmtDec(netCapPmt)}<span class="period">${freqSuffix} net</span>`;
+        const elDedSavingsSub = document.getElementById('disp-ded-savings-sub');
+        if (elDedSavingsSub) elDedSavingsSub.textContent = `${fmt(dedSavingsAnnual26)}/yr (${fmtDec(dedSavingsPeriod26)}${freqSuffix})`;
+        const elStratBadge = document.getElementById('disp-strategy-badge-text');
+        if (elStratBadge) elStratBadge.textContent = `Save ${fmt(dedSavingsAnnual26)}/yr on MPI + $0 Deductible on Write-off`;
+
+        // Update Deductible Strategy Section
+        const elDedHead = document.getElementById('disp-ded-savings-headline');
+        if (elDedHead) elDedHead.textContent = `Save ${fmt(dedSavingsAnnual26)} / year`;
+        const elTableDedFee = document.getElementById('table-mpi-ded-fee');
+        if (elTableDedFee) elTableDedFee.textContent = `+${fmt(dedSavingsAnnual26)} / year`;
+        const elTableDedPeriod = document.getElementById('table-mpi-ded-period');
+        if (elTableDedPeriod) elTableDedPeriod.textContent = `(+${fmtDec(dedSavingsPeriod26)} ${freqSuffix})`;
+        const elTableDedPill = document.getElementById('table-ded-savings-pill');
+        if (elTableDedPill) elTableDedPill.textContent = `Save ${fmt(dedSavingsAnnual26)} / year on MPI`;
+        const elTableDedSub = document.getElementById('table-ded-savings-sub');
+        if (elTableDedSub) elTableDedSub.textContent = fmt(dedSavingsAnnual26);
+
+        const elStratSummary = document.getElementById('disp-strategy-summary');
+        if (elStratSummary) {
+          elStratSummary.innerHTML = `
+            If you pay MPI for a $200 deductible, you are paying <strong>${fmt(dedSavingsAnnual26)} extra every single year</strong> (${fmtDec(dedSavingsPeriod26)}${freqSuffix}). 
+            By simply keeping MPI's standard $500 deductible and choosing Dealership CAP, you save that <strong>${fmt(dedSavingsAnnual26)}/year</strong> on your insurance. 
+            In the event of a total loss, CAP reimburses your entire $500 deductible—leaving you with <strong>$0 out of pocket</strong> (which is $200 cheaper than paying MPI for a $200 deductible). 
+            Even in a partial loss, you only pay $250 out of pocket (a modest $50 difference from $200), which is paid for many times over by your <strong>${fmt(dedSavingsAnnual26)}</strong> annual premium savings!
+          `;
+        }
+
+        // Update Add-Ons Comparison Section
+        const elAddonHead = document.getElementById('disp-addon-vs-cap-headline');
+        if (elAddonHead) {
+          const diffMpiVsCap = Math.abs(mpiAddonsPeriod26 - capPmt);
+          if (diffMpiVsCap < 2) {
+            elAddonHead.textContent = 'Virtually Identical Cost';
+          } else if (mpiAddonsPeriod26 > capPmt) {
+            elAddonHead.textContent = `CAP Is ${fmtDec(mpiAddonsPeriod26 - capPmt)}/mo Cheaper!`;
+          } else {
+            elAddonHead.textContent = `Only ${fmtDec(capPmt - mpiAddonsPeriod26)}/mo Difference`;
+          }
+        }
+
+        const elBoxMpiPeriod = document.getElementById('disp-box-mpi-addons-period');
+        if (elBoxMpiPeriod) elBoxMpiPeriod.textContent = `${fmtDec(mpiAddonsPeriod26)} ${freqSuffix}`;
+        const elBoxMpiAnnual = document.getElementById('disp-box-mpi-addons-annual');
+        if (elBoxMpiAnnual) elBoxMpiAnnual.textContent = `${fmt(mpiAddonsAnnual26)} / year (${fmtDec(mpiAddonsPeriod26)} ${freqSuffix})`;
+        const elBoxMpiNew = document.getElementById('disp-box-mpi-newveh');
+        if (elBoxMpiNew) elBoxMpiNew.textContent = `${fmt(newveh26)}/yr`;
+        const elBoxMpiLoss = document.getElementById('disp-box-mpi-lossuse');
+        if (elBoxMpiLoss) elBoxMpiLoss.textContent = `${fmt(loss26)}/yr`;
+
+        const elBoxCapPeriod = document.getElementById('disp-box-cap-period');
+        if (elBoxCapPeriod) elBoxCapPeriod.textContent = `${fmtDec(capPmt)} ${freqSuffix}`;
+        const elBoxCapAnnual = document.getElementById('disp-box-cap-annual');
+        if (elBoxCapAnnual) elBoxCapAnnual.textContent = currentCap ? `${fmt(currentCap.price)} financed (${fmtDec(capPmt)} ${freqSuffix})` : '$0';
+
+        const elBoxAllPeriod = document.getElementById('disp-box-mpi-all-period');
+        if (elBoxAllPeriod) elBoxAllPeriod.textContent = `${fmtDec(mpiAllOptionalsPeriod26)} ${freqSuffix}`;
+        const elBoxAllAnnual = document.getElementById('disp-box-mpi-all-annual');
+        if (elBoxAllAnnual) elBoxAllAnnual.textContent = `${fmt(mpiAllOptionalsAnnual26)} / year (${fmtDec(mpiAllOptionalsPeriod26)} ${freqSuffix})`;
+        const elBoxMpiDed = document.getElementById('disp-box-mpi-ded');
+        if (elBoxMpiDed) elBoxMpiDed.textContent = `${fmt(ded26)}/yr`;
+        const elBoxMpiNew2 = document.getElementById('disp-box-mpi-newveh2');
+        if (elBoxMpiNew2) elBoxMpiNew2.textContent = `${fmt(newveh26)}/yr`;
+        const elBoxMpiLoss2 = document.getElementById('disp-box-mpi-lossuse2');
+        if (elBoxMpiLoss2) elBoxMpiLoss2.textContent = `${fmt(loss26)}/yr`;
+
+        const elBoxNetSav = document.getElementById('disp-box-net-savings');
+        if (elBoxNetSav) {
+          const netDiff = mpiAllOptionalsPeriod26 - capPmt;
+          elBoxNetSav.textContent = `${fmtDec(Math.abs(netDiff))} ${freqSuffix} ${netDiff >= 0 ? 'less' : 'more'}`;
+        }
+
+        // Update Rate Increase Reference Section
+        const diffTotal = total26 - total25;
+        const pctIncrease = total25 > 0 ? ((diffTotal / total25) * 100) : 0;
+        const elIncHead = document.getElementById('disp-increase-headline');
+        if (elIncHead) elIncHead.textContent = `+${fmt(diffTotal)}/year (+${pctIncrease.toFixed(1)}%)`;
+        const el25Cost = document.getElementById('disp-2025-cost');
+        if (el25Cost) el25Cost.textContent = `${fmt(total25)} / yr`;
+        const el26Cost = document.getElementById('disp-2026-cost');
+        if (el26Cost) el26Cost.textContent = `${fmt(total26)} / yr`;
+        const elIncCost = document.getElementById('disp-increase-cost');
+        if (elIncCost) elIncCost.textContent = `+${fmt(diffTotal)} / yr`;
+
+        const el25PerCost = document.getElementById('disp-2025-period-cost');
+        if (el25PerCost) el25PerCost.textContent = `${fmtDec(total25 / 12)} / month (${fmtDec(total25 / 26)} bi-weekly)`;
+        const el26PerCost = document.getElementById('disp-2026-period-cost');
+        if (el26PerCost) el26PerCost.textContent = `${fmtDec(total26 / 12)} / month (${fmtDec(total26 / 26)} bi-weekly)`;
+        const elIncPerCost = document.getElementById('disp-increase-period-cost');
+        if (elIncPerCost) elIncPerCost.textContent = `+${fmtDec(diffTotal / 12)} / month (+${fmtDec(diffTotal / 26)} bi-weekly)`;
       }
 
       // Initial run
