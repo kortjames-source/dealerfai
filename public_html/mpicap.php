@@ -1951,19 +1951,51 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
             <div style="flex: 1;">
               <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
                 <h3 style="margin: 0; font-size: 1.25rem; font-weight: 800; color: #064e3b; display: flex; align-items: center; gap: 0.5rem;">
-                  100% Rate Lock Guarantee vs. Rising MPI Premiums
+                  100% Rate Lock Guarantee vs. Rising MPI Premiums &amp; Merit Penalties
                 </h3>
                 <span id="disp-increase-headline" style="font-size: 0.85rem; font-weight: 800; color: #dc2626; background: #fee2e2; padding: 0.25rem 0.65rem; border-radius: 9999px; border: 1px solid #fca5a5;">
                   +15.1% Approved MPI Rate Increase
                 </span>
               </div>
               <p style="margin: 0.5rem 0 0 0; color: #047857; font-size: 0.9rem; line-height: 1.55;">
-                While annual basic MPI insurance premiums fluctuate with approved Public Utilities Board (PUB) rate hikes, your Companion Asset Protection (CAP) rate is <strong>100% locked and fixed for your entire term (<span id="disp-ratelock-years">up to <?= $initialMaxYears ?> years</span>)</strong>. Financed directly into your vehicle payment with zero surprise annual bills.
+                While annual basic MPI Autopac premiums fluctuate with approved Public Utilities Board (PUB) general rate hikes, your MPI bill can also jump unpredictably if an accident or speeding ticket reduces your Driver Safety Rating (DSR) merits—costing you hundreds in lost vehicle discounts and driver license surcharges year after year.
+                <br><br>
+                In contrast, Companion Asset Protection (CAP) provides an <strong>unconditional 100% Rate Lock Guarantee for your entire term (<span id="disp-ratelock-years">up to <?= $initialMaxYears ?> years</span>)</strong>. Your rate is financed into your vehicle payment at 0% change—<strong>claims, collisions, or traffic tickets will NEVER increase your rate or reduce your coverage</strong>.
               </p>
+
+              <!-- Comparison Mini-Grid: MPI Merit Fluctuation vs CAP Fixed Rate Lock -->
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0.85rem; margin-top: 1rem;">
+                <div style="background: rgba(220, 38, 38, 0.06); border: 1px solid rgba(220, 38, 38, 0.2); border-radius: var(--radius-md); padding: 0.85rem 1rem;">
+                  <div style="font-weight: 700; font-size: 0.85rem; color: #991b1b; display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.35rem;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    MPI Premiums &amp; Merit Penalties Fluctuate
+                  </div>
+                  <ul style="margin: 0; padding-left: 1.15rem; font-size: 0.8rem; color: #7f1d1d; line-height: 1.45;">
+                    <li>Annual PUB general rate increases (up to +15.1% approved)</li>
+                    <li>At-fault collisions drop you <strong>5 merit levels</strong></li>
+                    <li>Speeding tickets &amp; moving violations drop merits by <strong>2+ levels</strong></li>
+                    <li>Merit drops slash vehicle discounts &amp; add driver license surcharges</li>
+                  </ul>
+                </div>
+
+                <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: var(--radius-md); padding: 0.85rem 1rem;">
+                  <div style="font-weight: 700; font-size: 0.85rem; color: #065f46; display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.35rem;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                    CAP 100% Rate Lock Protection
+                  </div>
+                  <ul style="margin: 0; padding-left: 1.15rem; font-size: 0.8rem; color: #047857; line-height: 1.45;">
+                    <li><strong>100% fixed payment</strong> locked for your full term (up to 7 years)</li>
+                    <li>Accidents &amp; total loss claims <strong>never</strong> increase your CAP rate</li>
+                    <li>Speeding tickets or merit drops <strong>never</strong> alter your coverage</li>
+                    <li>Financed into vehicle payments with zero surprise annual bills</li>
+                  </ul>
+                </div>
+              </div>
             </div>
           </div>
           <div class="rate-lock-pills">
             <span class="rate-lock-pill"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> 100% Rate Lock Guarantee</span>
+            <span class="rate-lock-pill"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Accidents &amp; Tickets Never Increase Rate</span>
             <span class="rate-lock-pill"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Up to $60,000 Equity Protected</span>
             <span class="rate-lock-pill"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> $500 Write-Off Deductible Reimbursed</span>
             <span class="rate-lock-pill"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> 30-Day Rental Vehicle Included</span>
