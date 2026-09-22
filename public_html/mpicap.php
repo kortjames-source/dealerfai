@@ -1551,7 +1551,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
               </div>
               <div class="pillar-title">30-Day Rental Vehicle</div>
               <p class="pillar-desc">
-                Includes full rental car benefits for up to 30 days while your replacement vehicle is arranged, so you're never stranded.
+                Basic MPI includes $0 rental coverage (requires purchasing optional Loss of Use). CAP includes up to 30 days of rental benefits while your replacement is arranged.
               </p>
             </div>
 
@@ -1606,8 +1606,8 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
                   <span style="color: #fca5a5;">$0.00 from MPI</span>
                 </div>
                 <div class="scenario-row">
-                  <span>Rental Car Beyond MPI Basic</span>
-                  <span style="color: #fca5a5;">Client Pays</span>
+                  <span>Rental Car Coverage</span>
+                  <span style="color: #fca5a5;">$0 (Not in Basic • Client Pays)</span>
                 </div>
                 <div class="scenario-row highlight" style="color: #fca5a5;">
                   <span>Out-of-Pocket To Replace:</span>
@@ -1638,7 +1638,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
                 </div>
                 <div class="scenario-row">
                   <span>Rental Vehicle Coverage</span>
-                  <span style="color: #6ee7b7;">30 Days Included</span>
+                  <span style="color: #6ee7b7;">30 Days Included ($0 Extra)</span>
                 </div>
                 <div class="scenario-row highlight" style="color: #6ee7b7;">
                   <span>Out-of-Pocket To Replace:</span>
@@ -1890,29 +1890,37 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
                   </td>
                 </tr>
                 <tr>
-                  <td><strong>Rental Car Protection</strong></td>
                   <td>
-                    <span style="font-size: 0.85rem; color: #64748b;">MPI Basic limits (or +$143/yr extra)</span>
+                    <strong>Rental Car Coverage</strong><br>
+                    <span style="font-size: 0.8rem; color: #64748b;">Transportation while vehicle is repaired or replaced</span>
+                  </td>
+                  <td>
+                    <span style="font-weight: 700; color: #b91c1c;">$0 (Not in Basic MPI)</span><br>
+                    <span style="font-size: 0.8rem; color: #64748b;">Requires purchasing optional $143/yr Loss of Use; otherwise $0</span>
                   </td>
                   <td>
                     <span style="font-weight: 700; color: #059669;">30 Full Days Included</span><br>
-                    <span style="font-size: 0.8rem; color: #64748b;">Keeps you on the road</span>
+                    <span style="font-size: 0.8rem; color: #64748b;">Keeps you on the road ($0 out of pocket)</span>
                   </td>
                   <td>
-                    <span class="badge-win">30 Days Rental Free</span>
+                    <span class="badge-win">30 Days Included ($0 Extra)</span>
                   </td>
                 </tr>
                 <tr>
-                  <td><strong>Coverage Duration</strong></td>
                   <td>
-                    <span style="font-size: 0.85rem; color: #64748b;" id="disp-table-mpi-duration"><?= $isVehIneligibleMpiNew ? '0 Years (Ineligible for New Vehicle Protection)' : ($isVehOneYearMpiNew ? 'Max 1 Year (12 Months Max on 2025 Models)' : 'Max 2 Years (24 Months Max on New Models)') ?></span>
+                    <strong>Depreciation Protection Term</strong><br>
+                    <span style="font-size: 0.8rem; color: #64748b;">How long your vehicle is protected against total loss depreciation</span>
+                  </td>
+                  <td>
+                    <span style="font-weight: 700; color: #b91c1c;" id="disp-table-mpi-duration"><?= $isVehIneligibleMpiNew ? '0 Years (Ineligible)' : ($isVehOneYearMpiNew ? 'Max 1 Year Only' : 'Max 2 Years Only') ?></span><br>
+                    <span style="font-size: 0.8rem; color: #64748b;" id="disp-table-mpi-duration-sub"><?= $isVehIneligibleMpiNew ? 'MPI offers zero replacement protection on pre-owned vehicles' : ($isVehOneYearMpiNew ? 'MPI New Vehicle Protection expires after 12 months' : 'MPI New Vehicle Protection expires after 24 months') ?></span>
                   </td>
                   <td>
                     <span style="font-weight: 700; color: #059669;" id="disp-table-cap-duration">Up to <?= $initialMaxYears ?> Years Guaranteed</span><br>
-                    <span style="font-size: 0.8rem; color: #64748b;" id="disp-table-cap-duration-sub"><?= $isOver75k ? 'Max term for vehicles over $75k' : '100% Locked-in Rate' ?></span>
+                    <span style="font-size: 0.8rem; color: #64748b;" id="disp-table-cap-duration-sub"><?= $isOver75k ? 'Covers full term up to 60 months' : 'Covers full loan term up to 84 months' ?></span>
                   </td>
                   <td>
-                    <span class="badge-win" id="disp-table-cap-extra-years"><?= $isVehIneligibleMpiNew ? "Full {$initialMaxYears} Extra Years vs $0 MPI" : ($isVehOneYearMpiNew ? max(1, $initialMaxYears - 1) . " Extra Years of Protection" : max(1, $initialMaxYears - 2) . " Extra Years of Protection") ?></span>
+                    <span class="badge-win" id="disp-table-cap-extra-years"><?= $isVehIneligibleMpiNew ? "Full {$initialMaxYears} Extra Years vs $0 MPI" : ($isVehOneYearMpiNew ? max(1, $initialMaxYears - 1) . " Extra Years of Coverage" : max(1, $initialMaxYears - 2) . " Extra Years of Coverage") ?></span>
                   </td>
                 </tr>
               </tbody>
@@ -2605,15 +2613,24 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
         if (elTableDuration) elTableDuration.textContent = `${maxYearsText} Guaranteed`;
 
         const elTableDurationSub = document.getElementById('disp-table-cap-duration-sub');
-        if (elTableDurationSub) elTableDurationSub.textContent = isLuxuryOrOver75k ? 'Max term for vehicles over $75,000' : '100% Locked-in Rate';
+        if (elTableDurationSub) elTableDurationSub.textContent = isLuxuryOrOver75k ? 'Covers full term up to 60 months' : 'Covers full loan term up to 84 months';
 
         const elTableMpiDuration = document.getElementById('disp-table-mpi-duration');
         if (elTableMpiDuration) {
           elTableMpiDuration.textContent = isVehIneligibleMpiNew
-            ? '0 Years (Ineligible for New Vehicle Protection)'
+            ? '0 Years (Ineligible)'
             : (isVehOneYearMpiNew
-              ? 'Max 1 Year (12 Months Max on 2025 Models)'
-              : 'Max 2 Years (24 Months Max on New Models)');
+              ? 'Max 1 Year Only'
+              : 'Max 2 Years Only');
+        }
+
+        const elTableMpiDurationSub = document.getElementById('disp-table-mpi-duration-sub');
+        if (elTableMpiDurationSub) {
+          elTableMpiDurationSub.textContent = isVehIneligibleMpiNew
+            ? 'MPI offers zero replacement protection on pre-owned vehicles'
+            : (isVehOneYearMpiNew
+              ? 'MPI New Vehicle Protection expires after 12 months'
+              : 'MPI New Vehicle Protection expires after 24 months');
         }
 
         const elTableMpiReplVal = document.getElementById('table-mpi-repl-val');
@@ -2643,10 +2660,10 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
             elTableExtraYears.textContent = `Full ${maxAllowedYears} Extra Years vs $0 MPI`;
           } else if (isVehOneYearMpiNew) {
             const extraYears = Math.max(1, maxAllowedYears - 1);
-            elTableExtraYears.textContent = `${extraYears} Extra Year${extraYears > 1 ? 's' : ''} of Protection`;
+            elTableExtraYears.textContent = `${extraYears} Extra Year${extraYears > 1 ? 's' : ''} of Coverage`;
           } else {
             const extraYears = Math.max(1, maxAllowedYears - 2);
-            elTableExtraYears.textContent = `${extraYears} Extra Year${extraYears > 1 ? 's' : ''} of Protection`;
+            elTableExtraYears.textContent = `${extraYears} Extra Year${extraYears > 1 ? 's' : ''} of Coverage`;
           }
         }
 
