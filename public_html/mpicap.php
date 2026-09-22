@@ -1128,7 +1128,130 @@ if ($dealId && $dealId > 0 && isset($db) && ($db instanceof PDO)) {
         </div>
 
         <!-- ========================================================================= -->
-        <!-- CUSTOMER VIEW: EXECUTIVE COMPARISON HERO CARDS -->
+        <!-- SECTION 1: BUILD VALUE FIRST — WHY CAP ASSET PROTECTION IS ESSENTIAL -->
+        <!-- ========================================================================= -->
+        <div class="replacement-showcase-card">
+          <div class="showcase-header">
+            <span class="badge-tag">Why CAP Insurance Is Essential</span>
+            <h2>When a Vehicle Is Written Off, You Have to Buy Another Car.</h2>
+            <p>
+              In the event of a total loss (collision, fire, theft, flood, or hail), <strong>MPI only settles for depreciated Actual Cash Value (ACV)</strong>. 
+              CAP Insurance provides the crucial <strong>Replacement Value Top-Up</strong> directly towards purchasing your replacement vehicle—so you get back into the same vehicle class without thousands of dollars out of pocket.
+            </p>
+          </div>
+
+          <!-- 4 Pillars Grid -->
+          <div class="pillars-grid">
+            <div class="pillar-item">
+              <div class="pillar-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+              </div>
+              <div class="pillar-title">Up to $60,000 Saved</div>
+              <p class="pillar-desc">
+                Protects you against rapid vehicle depreciation, saving you up to $60,000 to replace like or kind, model, year, and trim level.
+              </p>
+            </div>
+
+            <div class="pillar-item">
+              <div class="pillar-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              </div>
+              <div class="pillar-title">Guaranteed Active for 7 Years</div>
+              <p class="pillar-desc">
+                Covers New or Pre-Owned vehicles for up to 7 years. Remains active regardless of your driving experience, claims, or losses.
+              </p>
+            </div>
+
+            <div class="pillar-item">
+              <div class="pillar-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+              </div>
+              <div class="pillar-title">30-Day Rental Vehicle</div>
+              <p class="pillar-desc">
+                Includes full rental car benefits for up to 30 days while your replacement vehicle is arranged, so you're never stranded.
+              </p>
+            </div>
+
+            <div class="pillar-item">
+              <div class="pillar-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              </div>
+              <div class="pillar-title">Deductible Reimbursement</div>
+              <p class="pillar-desc">
+                Provides up to $500 deductible coverage on total loss (or $250 on partial loss). Includes GAP benefit if replacement credit is under $5,000.
+              </p>
+            </div>
+          </div>
+
+          <!-- Total Loss Scenario Side-by-Side -->
+          <div class="scenario-box">
+            <h4 style="margin: 0 0 0.5rem 0; font-size: 1.15rem; font-weight: 700; color: #ffffff;">
+              Total Loss Write-Off Reality: What Happens Without vs. With CAP?
+            </h4>
+            <p style="margin: 0 0 1rem 0; font-size: 0.85rem; color: rgba(255, 255, 255, 0.75);">
+              Example based on a $85,000 vehicle written off in Year 3 with an outstanding balance or replacement need:
+            </p>
+
+            <div class="scenario-grid">
+              <div class="scenario-column mpi">
+                <div class="scenario-title" style="color: #fca5a5;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                  <span>MPI Base Alone (Without CAP)</span>
+                </div>
+                <div class="scenario-row">
+                  <span>MPI Payout</span>
+                  <strong>Depreciated Value (~$52,000)</strong>
+                </div>
+                <div class="scenario-row">
+                  <span>Deductible Paid by Client</span>
+                  <span style="color: #fca5a5;">-$500 out-of-pocket</span>
+                </div>
+                <div class="scenario-row">
+                  <span>Next Vehicle Top-Up</span>
+                  <span style="color: #fca5a5;">$0.00 from MPI</span>
+                </div>
+                <div class="scenario-row">
+                  <span>Rental Car Beyond MPI Basic</span>
+                  <span style="color: #fca5a5;">Client Pays</span>
+                </div>
+                <div class="scenario-row highlight" style="color: #fca5a5;">
+                  <span>Out-of-Pocket To Replace:</span>
+                  <span>$25,000+ Deprec. Loss</span>
+                </div>
+              </div>
+
+              <div class="scenario-column cap">
+                <div class="scenario-title" style="color: #6ee7b7;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="9 11 12 14 22 4"/></svg>
+                  <span>With Dealership CAP Insurance</span>
+                </div>
+                <div class="scenario-row">
+                  <span>MPI Base Payout</span>
+                  <strong>~$52,000 Depreciated Value</strong>
+                </div>
+                <div class="scenario-row">
+                  <span>CAP Replacement Credit Top-Up</span>
+                  <span style="color: #6ee7b7;">+$25,000+ Direct Credit</span>
+                </div>
+                <div class="scenario-row">
+                  <span>Deductible Reimbursement</span>
+                  <span style="color: #6ee7b7;">+$500 Paid Back</span>
+                </div>
+                <div class="scenario-row">
+                  <span>Rental Vehicle Coverage</span>
+                  <span style="color: #6ee7b7;">30 Days Included</span>
+                </div>
+                <div class="scenario-row highlight" style="color: #6ee7b7;">
+                  <span>Out-of-Pocket To Replace:</span>
+                  <span>$0.00 (Like / Kind Replaced)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================================================= -->
+        <!-- SECTION 2: PRICING & FINANCIAL VALUE — EXECUTIVE COMPARISON -->
         <!-- ========================================================================= -->
         <div class="comparison-grid">
           <!-- Card 1: MPI Add-On Costs (New Car + Loss of Use) -->
@@ -1385,130 +1508,7 @@ if ($dealId && $dealId > 0 && isset($db) && ($db instanceof PDO)) {
         </div>
 
         <!-- ========================================================================= -->
-        <!-- SECTION: REPLACEMENT VALUE TOP-UP SHOWCASE (BROCHURE HIGHLIGHTS) -->
-        <!-- ========================================================================= -->
-        <div class="replacement-showcase-card">
-          <div class="showcase-header">
-            <span class="badge-tag">Why CAP Insurance Is Essential</span>
-            <h2>When a Vehicle Is Written Off, You Have to Buy Another Car.</h2>
-            <p>
-              In the event of a total loss (collision, fire, theft, flood, or hail), <strong>MPI only settles for depreciated Actual Cash Value (ACV)</strong>. 
-              CAP Insurance provides the crucial <strong>Replacement Value Top-Up</strong> directly towards purchasing your replacement vehicle—so you get back into the same vehicle class without thousands of dollars out of pocket.
-            </p>
-          </div>
-
-          <!-- 4 Pillars Grid -->
-          <div class="pillars-grid">
-            <div class="pillar-item">
-              <div class="pillar-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
-              </div>
-              <div class="pillar-title">Up to $60,000 Saved</div>
-              <p class="pillar-desc">
-                Protects you against rapid vehicle depreciation, saving you up to $60,000 to replace like or kind, model, year, and trim level.
-              </p>
-            </div>
-
-            <div class="pillar-item">
-              <div class="pillar-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-              </div>
-              <div class="pillar-title">Guaranteed Active for 7 Years</div>
-              <p class="pillar-desc">
-                Covers New or Pre-Owned vehicles for up to 7 years. Remains active regardless of your driving experience, claims, or losses.
-              </p>
-            </div>
-
-            <div class="pillar-item">
-              <div class="pillar-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-              </div>
-              <div class="pillar-title">30-Day Rental Vehicle</div>
-              <p class="pillar-desc">
-                Includes full rental car benefits for up to 30 days while your replacement vehicle is arranged, so you're never stranded.
-              </p>
-            </div>
-
-            <div class="pillar-item">
-              <div class="pillar-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-              </div>
-              <div class="pillar-title">Deductible Reimbursement</div>
-              <p class="pillar-desc">
-                Provides up to $500 deductible coverage on total loss (or $250 on partial loss). Includes GAP benefit if replacement credit is under $5,000.
-              </p>
-            </div>
-          </div>
-
-          <!-- Total Loss Scenario Side-by-Side -->
-          <div class="scenario-box">
-            <h4 style="margin: 0 0 0.5rem 0; font-size: 1.15rem; font-weight: 700; color: #ffffff;">
-              Total Loss Write-Off Reality: What Happens Without vs. With CAP?
-            </h4>
-            <p style="margin: 0 0 1rem 0; font-size: 0.85rem; color: rgba(255, 255, 255, 0.75);">
-              Example based on a $85,000 vehicle written off in Year 3 with an outstanding balance or replacement need:
-            </p>
-
-            <div class="scenario-grid">
-              <div class="scenario-column mpi">
-                <div class="scenario-title" style="color: #fca5a5;">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
-                  <span>MPI Base Alone (Without CAP)</span>
-                </div>
-                <div class="scenario-row">
-                  <span>MPI Payout</span>
-                  <strong>Depreciated Value (~$52,000)</strong>
-                </div>
-                <div class="scenario-row">
-                  <span>Deductible Paid by Client</span>
-                  <span style="color: #fca5a5;">-$500 out-of-pocket</span>
-                </div>
-                <div class="scenario-row">
-                  <span>Next Vehicle Top-Up</span>
-                  <span style="color: #fca5a5;">$0.00 from MPI</span>
-                </div>
-                <div class="scenario-row">
-                  <span>Rental Car Beyond MPI Basic</span>
-                  <span style="color: #fca5a5;">Client Pays</span>
-                </div>
-                <div class="scenario-row highlight" style="color: #fca5a5;">
-                  <span>Out-of-Pocket To Replace:</span>
-                  <span>$25,000+ Deprec. Loss</span>
-                </div>
-              </div>
-
-              <div class="scenario-column cap">
-                <div class="scenario-title" style="color: #6ee7b7;">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="9 11 12 14 22 4"/></svg>
-                  <span>With Dealership CAP Insurance</span>
-                </div>
-                <div class="scenario-row">
-                  <span>MPI Base Payout</span>
-                  <strong>~$52,000 Depreciated Value</strong>
-                </div>
-                <div class="scenario-row">
-                  <span>CAP Replacement Credit Top-Up</span>
-                  <span style="color: #6ee7b7;">+$25,000+ Direct Credit</span>
-                </div>
-                <div class="scenario-row">
-                  <span>Deductible Reimbursement</span>
-                  <span style="color: #6ee7b7;">+$500 Paid Back</span>
-                </div>
-                <div class="scenario-row">
-                  <span>Rental Vehicle Coverage</span>
-                  <span style="color: #6ee7b7;">30 Days Included</span>
-                </div>
-                <div class="scenario-row highlight" style="color: #6ee7b7;">
-                  <span>Out-of-Pocket To Replace:</span>
-                  <span>$0.00 (Like / Kind Replaced)</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ========================================================================= -->
-        <!-- SECTION: CAP AVAILABLE TERMS & PAYMENT OPTIONS -->
+        <!-- SECTION 3: CAP AVAILABLE TERMS & PAYMENT OPTIONS -->
         <!-- ========================================================================= -->
         <div class="cap-terms-container" id="cap-terms-section">
           <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
