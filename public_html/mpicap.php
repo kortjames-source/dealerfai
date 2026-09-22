@@ -1657,7 +1657,7 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
             <div style="background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: var(--radius-md); padding: 1.25rem;">
               <div style="font-size: 0.75rem; font-weight: 700; color: var(--cap-green); text-transform: uppercase;">Companion Asset Protection (CAP)</div>
               <div style="font-size: 1.75rem; font-weight: 800; color: var(--cap-green); margin-top: 0.25rem;" id="disp-box-cap-period">$44.90 / mo</div>
-              <div style="font-size: 0.85rem; color: #047857; margin-top: 0.25rem;" id="disp-box-cap-annual">$2,219 financed ($20.72 bi-weekly)</div>
+              <div style="font-size: 0.85rem; color: #047857; margin-top: 0.25rem;" id="disp-box-cap-annual">Just $20.72 bi-weekly ($1.47/day)</div>
               <ul style="margin: 0.75rem 0 0 0; padding-left: 1.2rem; font-size: 0.85rem; color: #065f46; line-height: 1.6;">
                 <li id="disp-box-cap-years-bullet"><strong>Up to <?= $initialMaxYears ?> Years (<?= $initialMaxTermMonths ?> Months)</strong> Guaranteed Coverage</li>
                 <li><strong>Up to $60,000 Replacement Value Credit</strong> to buy next car</li>
@@ -2234,7 +2234,7 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
                     +${fmtDec(opt.payment)}<span style="font-size: 0.85rem; font-weight: 600; color: #64748b;">${freqSuffix}</span>
                   </div>
                   <div style="font-size: 0.78rem; color: #475569; font-weight: 600;">For all ${loanTerm} months of vehicle loan</div>
-                  <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 0.35rem;">Retail: ${fmt(opt.price)} (Just ${fmtDec(opt.perDay)}/day)</div>
+                  <div style="font-size: 0.75rem; color: #047857; margin-top: 0.25rem; font-weight: 600;">${paymentFrequency === 'biweekly' ? `Equivalent to ${fmtDec(opt.paymentMonthly)}/mo` : `Just ${fmtDec(opt.paymentBiweekly)} bi-weekly`} • ${fmtDec(opt.perDay)}/day</div>
                 </div>
               `;
 
@@ -2309,7 +2309,7 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
             explanationBadge = `<span style="background: #fef3c7; color: #92400e; font-weight: 700; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem;">Years 1–${capYears} Protection • ${loanTerm}-Mo Financing</span>`;
             explanationHtml = `
               <strong>How your financing &amp; coverage work together:</strong><br>
-              The one-time policy price of <strong>${fmt(currentCap.price)}</strong> is rolled directly into your vehicle loan, adding just <strong>+${fmtDec(capPmt)}${freqSuffix}</strong> (a modest <strong>${fmtDec(capPerDay)}/day</strong>) across all <strong>${loanTerm} months of your loan</strong>.<br><br>
+              Your Companion Asset Protection is financed directly into your vehicle loan, adding just <strong>+${fmtDec(capPmt)}${freqSuffix}</strong> (a modest <strong>${fmtDec(capPerDay)}/day</strong>) across all <strong>${loanTerm} months of your loan</strong> with zero out-of-pocket cost today.<br><br>
               <strong>Why this is a smart financial strategy:</strong><br>
               Vehicles suffer their steepest market depreciation during the first 5 years (Months 1–60). Having 60-Month CAP gives you 100% Replacement Value Top-Up and deductible protection during your highest-risk ownership window, while your ${loanTerm}-month financing keeps the monthly payment ultra-affordable. By Month 60, your remaining loan balance has significantly dropped, naturally closing the equity gap.
             `;
@@ -2384,8 +2384,8 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
                     +${fmtDec(capPmt)} <span style="font-size: 0.9rem; font-weight: 600; color: #64748b;">${freqSuffix}</span>
                   </div>
                   <ul style="margin: 0.5rem 0 0 0; padding-left: 1.2rem; font-size: 0.85rem; color: #334155; line-height: 1.55;">
-                    <li><strong>Applied to all ${loanTerm} months of your loan:</strong> The one-time policy cost (${fmt(currentCap.price)}) is financed with your vehicle, keeping your payment steady and predictable.</li>
-                    <li><strong>Daily Cost:</strong> Just <strong>${fmtDec(capPerDay)}/day</strong> for comprehensive protection.</li>
+                    <li><strong>Applied to all ${loanTerm} months of your loan:</strong> Financed with your vehicle so your payment stays predictable without any out-of-pocket payment today.</li>
+                    <li><strong>Alternate Frequency:</strong> ${paymentFrequency === 'biweekly' ? `Equivalent to <strong>${fmtDec(currentCap.paymentMonthly)} / mo</strong>` : `Just <strong>${fmtDec(currentCap.paymentBiweekly)} bi-weekly</strong>`} (<strong>${fmtDec(capPerDay)}/day</strong>).</li>
                     <li><strong>Locked Rate:</strong> Financed at <strong>${interestRate.toFixed(2)}% APR</strong> with zero separate insurance bills.</li>
                   </ul>
                 </div>
@@ -2463,9 +2463,15 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
         if (elBoxCapPeriod) elBoxCapPeriod.textContent = `${fmtDec(capPmt)} ${freqSuffix}`;
         const elBoxCapAnnual = document.getElementById('disp-box-cap-annual');
         if (elBoxCapAnnual) {
-          elBoxCapAnnual.textContent = currentCap 
-            ? `${fmt(currentCap.price)} financed into ${loanTerm}-mo loan (${fmtDec(capPmt)} ${freqSuffix})` 
-            : '$0';
+          if (currentCap) {
+            if (paymentFrequency === 'biweekly') {
+              elBoxCapAnnual.textContent = `Equivalent to ${fmtDec(currentCap.paymentMonthly)} / mo (Just ${fmtDec(currentCap.perDay)}/day)`;
+            } else {
+              elBoxCapAnnual.textContent = `Just ${fmtDec(currentCap.paymentBiweekly)} bi-weekly (Just ${fmtDec(currentCap.perDay)}/day)`;
+            }
+          } else {
+            elBoxCapAnnual.textContent = '$0';
+          }
         }
         const elBoxCapYearsBullet = document.getElementById('disp-box-cap-years-bullet');
         if (elBoxCapYearsBullet && currentCap) {
