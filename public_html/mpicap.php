@@ -942,7 +942,7 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
                 <span id="disp-vehicle-name" style="font-weight: 600; color: var(--brand-color);"><?= htmlspecialchars($prefillVehicle) ?></span>
               </div>
               <div class="client-subtitle">
-                MPI Manitoba Public Insurance & Dealership CAP Asset Protection Analysis
+                MPI Manitoba Public Insurance & Companion Asset Protection (CAP) Analysis
               </div>
             </div>
             <div id="disp-dsr-badge" class="dsr-pill">
@@ -1104,7 +1104,7 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
             <div style="margin-top: 1.5rem; border-top: 1px solid #e2e8f0; padding-top: 1.25rem;">
               <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem;">
                 <h4 style="margin: 0; font-size: 0.95rem; font-weight: 700; color: #1e293b;">
-                  Dealership CAP Insurance Term Prices ($)
+                  Companion Asset Protection (CAP) Term Prices ($)
                 </h4>
                 <div id="disp-luxury-rule-badge" class="badge-tag" style="background: <?= $isOver75k ? '#fef3c7' : '#ecfdf5' ?>; color: <?= $isOver75k ? '#92400e' : '#047857' ?>; border: 1px solid <?= $isOver75k ? '#fde68a' : '#a7f3d0' ?>; font-size: 0.75rem; padding: 0.2rem 0.5rem; border-radius: 4px;">
                   <?= $isOver75k ? '⚠️ Over $75,000 Rule: Max 5-Year Term (60 Mo)' : 'Standard Rule: Up to 7-Year Term Allowed' ?>
@@ -1146,11 +1146,11 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
         <!-- ========================================================================= -->
         <div class="replacement-showcase-card">
           <div class="showcase-header">
-            <span class="badge-tag">Why CAP Insurance Is Essential</span>
+            <span class="badge-tag">Why Companion Asset Protection (CAP) Is Essential</span>
             <h2>When a Vehicle Is Written Off, You Have to Buy Another Car.</h2>
             <p>
               In the event of a total loss (collision, fire, theft, flood, or hail), <strong>MPI only settles for depreciated Actual Cash Value (ACV)</strong>. 
-              CAP Insurance provides the crucial <strong>Replacement Value Top-Up</strong> directly towards purchasing your replacement vehicle—so you get back into the same vehicle class without thousands of dollars out of pocket.
+              Companion Asset Protection (CAP) provides the crucial <strong>Replacement Value Top-Up</strong> directly towards purchasing your replacement vehicle—so you get back into the same vehicle class without thousands of dollars out of pocket.
             </p>
           </div>
 
@@ -1237,7 +1237,7 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
               <div class="scenario-column cap">
                 <div class="scenario-title" style="color: #6ee7b7;">
                   <svg width="18" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="9 11 12 14 22 4"/></svg>
-                  <span>With Dealership CAP Insurance</span>
+                  <span>With Companion Asset Protection (CAP)</span>
                 </div>
                 <div class="scenario-row">
                   <span>MPI Base Payout</span>
@@ -1292,11 +1292,11 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
             </div>
           </div>
 
-          <!-- Card 2: Dealership CAP Protection -->
+          <!-- Card 2: Companion Asset Protection (CAP) -->
           <div class="hero-card highlight">
             <div class="hero-card-tag" style="color: var(--cap-green);">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
-              <span>Dealership CAP Insurance</span>
+              <span>Companion Asset Protection (CAP)</span>
             </div>
             <div class="hero-amount" id="disp-cap-amount" style="color: var(--cap-green);">
               $44<span class="period">.90/mo</span>
@@ -1304,7 +1304,7 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
             <div class="hero-card-subtext">
               <strong id="disp-cap-term-label">60-Month (5-Year)</strong> Replacement Protection<br>
               Includes: <strong>Up to $60,000 Top-Up + 30 Days Rental</strong><br>
-              Breakdown: Just <strong id="disp-cap-per-day">$1.47/day</strong> for peace of mind.
+              Daily Cost: Just <strong id="disp-cap-per-day">$1.47/day</strong> for peace of mind.
             </div>
             <div class="fixed-badge">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
@@ -1344,7 +1344,7 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
                 The Smart Deductible Strategy: $500 MPI Deductible with CAP
               </h3>
               <p style="margin: 0.35rem 0 0 0; color: #64748b; font-size: 0.875rem;">
-                Why pay MPI extra every year for a $200 deductible when Dealership CAP covers your deductible for you?
+                Why pay MPI extra every year for a $200 deductible when Companion Asset Protection (CAP) covers your deductible for you?
               </p>
             </div>
             <div style="text-align: right;">
@@ -1359,7 +1359,7 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
                 <tr>
                   <th style="width: 28%;">Protection Feature / Scenario</th>
                   <th style="width: 24%; color: var(--mpi-blue);">MPI with $200 Deductible Buy-Down</th>
-                  <th style="width: 28%; color: var(--cap-green);">MPI $500 Deductible + Dealership CAP</th>
+                  <th style="width: 28%; color: var(--cap-green);">MPI $500 Deductible + Companion Asset Protection (CAP)</th>
                   <th style="width: 20%;">Your Advantage</th>
                 </tr>
               </thead>
@@ -1454,7 +1454,7 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
             <strong style="color: #065f46;">The Financial Bottom Line:</strong>
             <span style="color: #064e3b;" id="disp-strategy-summary">
               If you pay MPI for a $200 deductible, you are paying <strong>$238.00 every year</strong>. 
-              By simply keeping MPI's standard $500 deductible and choosing Dealership CAP, you save that <strong>$238.00/year ($19.83/month)</strong>. 
+              By simply keeping MPI's standard $500 deductible and choosing Companion Asset Protection (CAP), you save that <strong>$238.00/year ($19.83/month)</strong>. 
               In the event of a total loss, CAP reimburses your entire $500 deductible—leaving you with <strong>$0 out of pocket</strong>. 
               Even in a partial loss, you only pay $250 out of pocket (a mere $50 difference from $200), which is paid for many times over by your annual MPI premium savings!
             </span>
@@ -1462,17 +1462,17 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
         </div>
 
         <!-- ========================================================================= -->
-        <!-- SECTION: MPI NEW CAR + RENTAL vs DEALERSHIP CAP -->
+        <!-- SECTION: MPI NEW CAR + RENTAL vs COMPANION ASSET PROTECTION (CAP) -->
         <!-- ========================================================================= -->
         <div class="strategy-card">
           <div class="strategy-header">
             <div>
               <h3 style="margin: 0; font-size: 1.35rem; font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 0.5rem;">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--mpi-blue)" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                Comparing MPI Add-On Coverage vs. Dealership CAP Protection
+                Comparing MPI Add-On Coverage vs. Companion Asset Protection (CAP)
               </h3>
               <p style="margin: 0.35rem 0 0 0; color: #64748b; font-size: 0.875rem;">
-                Evaluating what MPI charges for its optional 2-year New Vehicle Protection and Loss of Use vs. <span id="disp-addon-cap-term-desc">Up to <?= $initialMaxYears ?>-Year</span> Dealership CAP.
+                Evaluating what MPI charges for its optional 2-year New Vehicle Protection and Loss of Use vs. <span id="disp-addon-cap-term-desc">Up to <?= $initialMaxYears ?>-Year</span> Companion Asset Protection (CAP).
               </p>
             </div>
             <div style="text-align: right;">
@@ -1498,7 +1498,7 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
 
             <!-- Box 2: CAP Protection Cost -->
             <div style="background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: var(--radius-md); padding: 1.25rem;">
-              <div style="font-size: 0.75rem; font-weight: 700; color: var(--cap-green); text-transform: uppercase;">Dealership CAP Protection</div>
+              <div style="font-size: 0.75rem; font-weight: 700; color: var(--cap-green); text-transform: uppercase;">Companion Asset Protection (CAP)</div>
               <div style="font-size: 1.75rem; font-weight: 800; color: var(--cap-green); margin-top: 0.25rem;" id="disp-box-cap-period">$44.90 / mo</div>
               <div style="font-size: 0.85rem; color: #047857; margin-top: 0.25rem;" id="disp-box-cap-annual">$2,219 financed ($20.72 bi-weekly)</div>
               <ul style="margin: 0.75rem 0 0 0; padding-left: 1.2rem; font-size: 0.85rem; color: #065f46; line-height: 1.6;">
@@ -1532,7 +1532,7 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
           <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
             <div>
               <h3 style="margin: 0; font-size: 1.25rem; font-weight: 700; color: #0f172a;">
-                Choose Your CAP Protection Term
+                Choose Your Companion Asset Protection (CAP) Term
               </h3>
               <p style="margin: 0.25rem 0 0 0; color: #64748b; font-size: 0.85rem;" id="disp-terms-subtext">
                 <?= $isOver75k 
@@ -1590,7 +1590,7 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
 
           <div class="callout-box">
             <strong>Key Takeaway:</strong>
-            While basic MPI rates increased by <strong>+15.1%</strong> across Manitoba, Dealership CAP Insurance provides a <strong>100% Rate Lock Guarantee</strong> for your entire term (<span id="disp-ratelock-years">up to <?= $initialMaxYears ?> years</span>). By choosing the $500 MPI deductible and pairing it with CAP, you mitigate rate increases and protect yourself against depreciation.
+            While basic MPI rates increased by <strong>+15.1%</strong> across Manitoba, Companion Asset Protection (CAP) provides a <strong>100% Rate Lock Guarantee</strong> for your entire term (<span id="disp-ratelock-years">up to <?= $initialMaxYears ?> years</span>). By choosing the $500 MPI deductible and pairing it with CAP, you mitigate rate increases and protect yourself against depreciation.
           </div>
         </div>
 
@@ -2087,7 +2087,7 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
           capTermLabel = `${currentCap.term}-Month (${capYears}-Year)`;
         }
 
-        // Update Card 2: Dealership CAP Insurance
+        // Update Card 2: Companion Asset Protection (CAP)
         const elCapAmt = document.getElementById('disp-cap-amount');
         if (elCapAmt) elCapAmt.innerHTML = `${fmtDec(capPmt)}<span class="period">${freqSuffix}</span>`;
         const elCapTermLabel = document.getElementById('disp-cap-term-label');
@@ -2120,7 +2120,7 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
         if (elStratSummary) {
           elStratSummary.innerHTML = `
             If you pay MPI for a $200 deductible, you are paying <strong>${fmt(dedSavingsAnnual26)} extra every single year</strong> (${fmtDec(dedSavingsPeriod26)}${freqSuffix}). 
-            By simply keeping MPI's standard $500 deductible and choosing Dealership CAP, you save that <strong>${fmt(dedSavingsAnnual26)}/year</strong> on your insurance. 
+            By simply keeping MPI's standard $500 deductible and choosing Companion Asset Protection (CAP), you save that <strong>${fmt(dedSavingsAnnual26)}/year</strong> on your insurance. 
             In the event of a total loss, CAP reimburses your entire $500 deductible—leaving you with <strong>$0 out of pocket</strong> (which is $200 cheaper than paying MPI for a $200 deductible). 
             Even in a partial loss, you only pay $250 out of pocket (a modest $50 difference from $200), which is paid for many times over by your <strong>${fmt(dedSavingsAnnual26)}</strong> annual premium savings!
           `;
