@@ -80,6 +80,11 @@ if ($dealId && $dealId > 0 && isset($db) && ($db instanceof PDO)) {
         // Fall back to defaults
     }
 }
+
+// Vehicle sale price rule: luxury vehicles over $75,000 are restricted to a max 5-year (60 mo) term
+$isOver75k = ($prefillSalePrice > 75000);
+$initialMaxYears = $isOver75k ? 5 : 7;
+$initialMaxTermMonths = $isOver75k ? 60 : 84;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -1095,32 +1100,39 @@ if ($dealId && $dealId > 0 && isset($db) && ($db instanceof PDO)) {
 
             <!-- CAP Term Pricing Setup -->
             <div style="margin-top: 1.5rem; border-top: 1px solid #e2e8f0; padding-top: 1.25rem;">
-              <h4 style="margin: 0 0 0.5rem 0; font-size: 0.95rem; font-weight: 700; color: #1e293b;">
-                Dealership CAP Insurance Term Prices ($)
-              </h4>
-              <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 1rem;">
-                Enter prices only for the terms you wish to offer. Terms left blank will automatically be hidden on the customer view.
+              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem;">
+                <h4 style="margin: 0; font-size: 0.95rem; font-weight: 700; color: #1e293b;">
+                  Dealership CAP Insurance Term Prices ($)
+                </h4>
+                <div id="disp-luxury-rule-badge" class="badge-tag" style="background: <?= $isOver75k ? '#fef3c7' : '#ecfdf5' ?>; color: <?= $isOver75k ? '#92400e' : '#047857' ?>; border: 1px solid <?= $isOver75k ? '#fde68a' : '#a7f3d0' ?>; font-size: 0.75rem; padding: 0.2rem 0.5rem; border-radius: 4px;">
+                  <?= $isOver75k ? '⚠️ Over $75,000 Rule: Max 5-Year Term (60 Mo)' : 'Standard Rule: Up to 7-Year Term Allowed' ?>
+                </div>
+              </div>
+              <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 1rem;" id="disp-luxury-rule-note">
+                <?= $isOver75k 
+                  ? 'Vehicles with a sale price over $75,000 are restricted to a maximum of 5 years (60 months) coverage. Terms beyond 60 months are disabled.' 
+                  : 'Enter prices only for the terms you wish to offer. Terms left blank will automatically be hidden on the customer view.' ?>
               </p>
               <div class="grid-3col" style="grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));">
                 <div class="form-group">
-                  <label for="cap-price-36">36 Months</label>
+                  <label for="cap-price-36">36 Months (3 Years)</label>
                   <input type="number" id="cap-price-36" class="form-control-sm cap-input" placeholder="Optional" data-term="36">
                 </div>
                 <div class="form-group">
-                  <label for="cap-price-48">48 Months</label>
+                  <label for="cap-price-48">48 Months (4 Years)</label>
                   <input type="number" id="cap-price-48" class="form-control-sm cap-input" placeholder="Optional" data-term="48">
                 </div>
                 <div class="form-group">
-                  <label for="cap-price-60">60 Months (Default)</label>
+                  <label for="cap-price-60">60 Months (5 Years)</label>
                   <input type="number" id="cap-price-60" class="form-control-sm cap-input" placeholder="e.g. 2219" value="2219" data-term="60">
                 </div>
-                <div class="form-group">
-                  <label for="cap-price-72">72 Months</label>
-                  <input type="number" id="cap-price-72" class="form-control-sm cap-input" placeholder="Optional" data-term="72">
+                <div class="form-group" id="group-cap-72" style="<?= $isOver75k ? 'opacity: 0.45;' : '' ?>">
+                  <label for="cap-price-72" id="lbl-cap-price-72">72 Months <?= $isOver75k ? '(N/A >$75k)' : '(6 Years)' ?></label>
+                  <input type="number" id="cap-price-72" class="form-control-sm cap-input" placeholder="Optional" data-term="72" <?= $isOver75k ? 'disabled' : '' ?>>
                 </div>
-                <div class="form-group">
-                  <label for="cap-price-84">84 Months (7 Years)</label>
-                  <input type="number" id="cap-price-84" class="form-control-sm cap-input" placeholder="e.g. 2617" value="2617" data-term="84">
+                <div class="form-group" id="group-cap-84" style="<?= $isOver75k ? 'opacity: 0.45;' : '' ?>">
+                  <label for="cap-price-84" id="lbl-cap-price-84">84 Months <?= $isOver75k ? '(N/A >$75k)' : '(7 Years)' ?></label>
+                  <input type="number" id="cap-price-84" class="form-control-sm cap-input" placeholder="e.g. 2617" value="2617" data-term="84" <?= $isOver75k ? 'disabled' : '' ?>>
                 </div>
               </div>
             </div>
@@ -1156,9 +1168,9 @@ if ($dealId && $dealId > 0 && isset($db) && ($db instanceof PDO)) {
               <div class="pillar-icon">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
               </div>
-              <div class="pillar-title">Guaranteed Active for 7 Years</div>
-              <p class="pillar-desc">
-                Covers New or Pre-Owned vehicles for up to 7 years. Remains active regardless of your driving experience, claims, or losses.
+              <div class="pillar-title" id="disp-pillar-years-title">Guaranteed Active for Up to <?= $initialMaxYears ?> Years</div>
+              <p class="pillar-desc" id="disp-pillar-years-desc">
+                Covers New or Pre-Owned vehicles for up to <?= $initialMaxYears ?> years<?= $isOver75k ? ' (up to 5 years for vehicles over $75,000)' : '' ?>. Remains active regardless of your driving experience, claims, or losses.
               </p>
             </div>
 
@@ -1189,7 +1201,7 @@ if ($dealId && $dealId > 0 && isset($db) && ($db instanceof PDO)) {
               Total Loss Write-Off Reality: What Happens Without vs. With CAP?
             </h4>
             <p style="margin: 0 0 1rem 0; font-size: 0.85rem; color: rgba(255, 255, 255, 0.75);">
-              Example based on a $85,000 vehicle written off in Year 3 with an outstanding balance or replacement need:
+              Example based on a <span id="disp-scenario-veh-price">$<?= number_format($prefillSalePrice) ?></span> vehicle written off in Year 3 with an outstanding balance or replacement need:
             </p>
 
             <div class="scenario-grid">
@@ -1290,7 +1302,7 @@ if ($dealId && $dealId > 0 && isset($db) && ($db instanceof PDO)) {
             </div>
             <div class="fixed-badge">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-              <span>Up to 7 Years Locked • Reimburses Deductible</span>
+              <span id="disp-card-cap-badge">Up to <?= $initialMaxYears ?> Years Locked • Reimburses Deductible</span>
             </div>
           </div>
 
@@ -1421,11 +1433,11 @@ if ($dealId && $dealId > 0 && isset($db) && ($db instanceof PDO)) {
                     <span style="font-size: 0.85rem; color: #64748b;">Subject to annual MPI rate increases</span>
                   </td>
                   <td>
-                    <span style="font-weight: 700; color: #059669;">Up to 7 Years Guaranteed</span><br>
-                    <span style="font-size: 0.8rem; color: #64748b;">100% Locked-in Rate</span>
+                    <span style="font-weight: 700; color: #059669;" id="disp-table-cap-duration">Up to <?= $initialMaxYears ?> Years Guaranteed</span><br>
+                    <span style="font-size: 0.8rem; color: #64748b;" id="disp-table-cap-duration-sub"><?= $isOver75k ? 'Max term for vehicles over $75k' : '100% Locked-in Rate' ?></span>
                   </td>
                   <td>
-                    <span class="badge-win">No Price Hikes</span>
+                    <span class="badge-win" id="disp-table-cap-extra-years"><?= max(1, $initialMaxYears - 2) ?> Extra Years of Protection</span>
                   </td>
                 </tr>
               </tbody>
@@ -1454,7 +1466,7 @@ if ($dealId && $dealId > 0 && isset($db) && ($db instanceof PDO)) {
                 Comparing MPI Add-On Coverage vs. Dealership CAP Protection
               </h3>
               <p style="margin: 0.35rem 0 0 0; color: #64748b; font-size: 0.875rem;">
-                Evaluating what MPI charges for its optional 2-year New Vehicle Protection and Loss of Use vs. 7-Year Dealership CAP.
+                Evaluating what MPI charges for its optional 2-year New Vehicle Protection and Loss of Use vs. <span id="disp-addon-cap-term-desc">Up to <?= $initialMaxYears ?>-Year</span> Dealership CAP.
               </p>
             </div>
             <div style="text-align: right;">
@@ -1484,7 +1496,7 @@ if ($dealId && $dealId > 0 && isset($db) && ($db instanceof PDO)) {
               <div style="font-size: 1.75rem; font-weight: 800; color: var(--cap-green); margin-top: 0.25rem;" id="disp-box-cap-period">$44.90 / mo</div>
               <div style="font-size: 0.85rem; color: #047857; margin-top: 0.25rem;" id="disp-box-cap-annual">$2,219 financed ($20.72 bi-weekly)</div>
               <ul style="margin: 0.75rem 0 0 0; padding-left: 1.2rem; font-size: 0.85rem; color: #065f46; line-height: 1.6;">
-                <li><strong>Up to 7 Years (84 Months)</strong> Guaranteed Coverage</li>
+                <li id="disp-box-cap-years-bullet"><strong>Up to <?= $initialMaxYears ?> Years (<?= $initialMaxTermMonths ?> Months)</strong> Guaranteed Coverage</li>
                 <li><strong>Up to $60,000 Replacement Value Credit</strong> to buy next car</li>
                 <li><strong>30-Day Rental Vehicle</strong> included</li>
                 <li><strong>Up to $500 Deductible Reimbursed</strong> ($250 partial)</li>
@@ -1501,7 +1513,7 @@ if ($dealId && $dealId > 0 && isset($db) && ($db instanceof PDO)) {
                 <li>$200 Deductible Buy-Down: <strong id="disp-box-mpi-ded">$238/yr</strong></li>
                 <li>New Vehicle Protection: <strong id="disp-box-mpi-newveh2">$392/yr</strong></li>
                 <li>Loss of Use Rental: <strong id="disp-box-mpi-lossuse2">$143/yr</strong></li>
-                <li><strong>By switching to $500 MPI + CAP:</strong> You save <strong id="disp-box-net-savings" style="color: #059669;">$19.52 / month</strong> while gaining 7 years of full coverage!</li>
+                <li><strong>By switching to $500 MPI + CAP:</strong> You save <strong id="disp-box-net-savings" style="color: #059669;">$19.52 / month</strong> while gaining <span id="disp-box-all-years">up to <?= $initialMaxYears ?> years</span> of full coverage!</li>
               </ul>
             </div>
           </div>
@@ -1516,8 +1528,10 @@ if ($dealId && $dealId > 0 && isset($db) && ($db instanceof PDO)) {
               <h3 style="margin: 0; font-size: 1.25rem; font-weight: 700; color: #0f172a;">
                 Choose Your CAP Protection Term
               </h3>
-              <p style="margin: 0.25rem 0 0 0; color: #64748b; font-size: 0.85rem;">
-                Select your preferred coverage term below to update the monthly and bi-weekly payment comparison.
+              <p style="margin: 0.25rem 0 0 0; color: #64748b; font-size: 0.85rem;" id="disp-terms-subtext">
+                <?= $isOver75k 
+                  ? 'Vehicles over $75,000 qualify for terms up to 60 months (5 years). Select your preferred term below:' 
+                  : 'Select your preferred coverage term below (up to 84 months / 7 years) to update the monthly and bi-weekly payment comparison.' ?>
               </p>
             </div>
             <div style="font-size: 0.85rem; color: #64748b; background: #f8fafc; padding: 0.4rem 0.75rem; border-radius: var(--radius-md); border: 1px solid #e2e8f0;">
@@ -1570,7 +1584,7 @@ if ($dealId && $dealId > 0 && isset($db) && ($db instanceof PDO)) {
 
           <div class="callout-box">
             <strong>Key Takeaway:</strong>
-            While basic MPI rates increased by <strong>+15.1%</strong> across Manitoba, Dealership CAP Insurance provides a <strong>100% Rate Lock Guarantee</strong> for your entire term (up to 7 years). By choosing the $500 MPI deductible and pairing it with CAP, you mitigate rate increases and protect yourself against depreciation.
+            While basic MPI rates increased by <strong>+15.1%</strong> across Manitoba, Dealership CAP Insurance provides a <strong>100% Rate Lock Guarantee</strong> for your entire term (<span id="disp-ratelock-years">up to <?= $initialMaxYears ?> years</span>). By choosing the $500 MPI deductible and pairing it with CAP, you mitigate rate increases and protect yourself against depreciation.
           </div>
         </div>
 
@@ -1839,6 +1853,113 @@ if ($dealId && $dealId > 0 && isset($db) && ($db instanceof PDO)) {
         const elAddonsAnnual = document.getElementById('disp-mpi-addons-annual');
         if (elAddonsAnnual) elAddonsAnnual.textContent = `${fmt(mpiAddonsAnnual26)}/yr`;
 
+        // Vehicle Sale Price and Over $75,000 Luxury Rule
+        const vehPrice = parseFloat(document.getElementById('inp-veh-price').value) || 0;
+        const isLuxuryOrOver75k = vehPrice > 75000;
+        const maxAllowedYears = isLuxuryOrOver75k ? 5 : 7;
+        const maxAllowedTermMonths = isLuxuryOrOver75k ? 60 : 84;
+        const maxYearsText = `Up to ${maxAllowedYears} Years`;
+
+        // Update Manager Drawer CAP Inputs & Badges for Luxury Rule
+        const inp72 = document.getElementById('cap-price-72');
+        const inp84 = document.getElementById('cap-price-84');
+        const grp72 = document.getElementById('group-cap-72');
+        const grp84 = document.getElementById('group-cap-84');
+        const lbl72 = document.getElementById('lbl-cap-price-72');
+        const lbl84 = document.getElementById('lbl-cap-price-84');
+        const luxuryBadge = document.getElementById('disp-luxury-rule-badge');
+        const luxuryNote = document.getElementById('disp-luxury-rule-note');
+
+        if (isLuxuryOrOver75k) {
+          if (inp72) inp72.disabled = true;
+          if (inp84) inp84.disabled = true;
+          if (grp72) grp72.style.opacity = '0.45';
+          if (grp84) grp84.style.opacity = '0.45';
+          if (lbl72) lbl72.textContent = '72 Months (N/A >$75k)';
+          if (lbl84) lbl84.textContent = '84 Months (N/A >$75k)';
+          if (luxuryBadge) {
+            luxuryBadge.textContent = '⚠️ Over $75,000 Rule: Max 5-Year Term (60 Mo)';
+            luxuryBadge.style.background = '#fef3c7';
+            luxuryBadge.style.color = '#92400e';
+            luxuryBadge.style.borderColor = '#fde68a';
+          }
+          if (luxuryNote) {
+            luxuryNote.textContent = 'Vehicles with a sale price over $75,000 are restricted to a maximum of 5 years (60 months) coverage. Terms beyond 60 months are disabled.';
+          }
+        } else {
+          if (inp72) inp72.disabled = false;
+          if (inp84) inp84.disabled = false;
+          if (grp72) grp72.style.opacity = '1';
+          if (grp84) grp84.style.opacity = '1';
+          if (lbl72) lbl72.textContent = '72 Months (6 Years)';
+          if (lbl84) lbl84.textContent = '84 Months (7 Years)';
+          if (luxuryBadge) {
+            luxuryBadge.textContent = 'Standard Rule: Up to 7-Year Term Allowed';
+            luxuryBadge.style.background = '#ecfdf5';
+            luxuryBadge.style.color = '#047857';
+            luxuryBadge.style.borderColor = '#a7f3d0';
+          }
+          if (luxuryNote) {
+            luxuryNote.textContent = 'Enter prices only for the terms you wish to offer. Terms left blank will automatically be hidden on the customer view.';
+          }
+        }
+
+        // Update Scenario Vehicle Price
+        const elScenVehPrice = document.getElementById('disp-scenario-veh-price');
+        if (elScenVehPrice) elScenVehPrice.textContent = fmt(vehPrice);
+
+        // Update Pillar 2
+        const elPillarYearsTitle = document.getElementById('disp-pillar-years-title');
+        if (elPillarYearsTitle) elPillarYearsTitle.textContent = `Guaranteed Active for ${maxYearsText}`;
+
+        const elPillarYearsDesc = document.getElementById('disp-pillar-years-desc');
+        if (elPillarYearsDesc) {
+          elPillarYearsDesc.textContent = isLuxuryOrOver75k
+            ? `Covers New or Pre-Owned vehicles for up to 5 years (vehicles over $75,000 qualify for up to 5-year coverage). Remains active regardless of your driving experience, claims, or losses.`
+            : `Covers New or Pre-Owned vehicles for up to 7 years. Remains active regardless of your driving experience, claims, or losses.`;
+        }
+
+        // Update Card 2 Badge
+        const elCardCapBadge = document.getElementById('disp-card-cap-badge');
+        if (elCardCapBadge) elCardCapBadge.textContent = `${maxYearsText} Locked • Reimburses Deductible`;
+
+        // Update Strategy Table Duration Row
+        const elTableDuration = document.getElementById('disp-table-cap-duration');
+        if (elTableDuration) elTableDuration.textContent = `${maxYearsText} Guaranteed`;
+
+        const elTableDurationSub = document.getElementById('disp-table-cap-duration-sub');
+        if (elTableDurationSub) elTableDurationSub.textContent = isLuxuryOrOver75k ? 'Max term for vehicles over $75,000' : '100% Locked-in Rate';
+
+        const elTableExtraYears = document.getElementById('disp-table-cap-extra-years');
+        if (elTableExtraYears) {
+          const extraYears = Math.max(1, maxAllowedYears - 2);
+          elTableExtraYears.textContent = `${extraYears} Extra Year${extraYears > 1 ? 's' : ''} of Protection`;
+        }
+
+        // Update Add-On Comparison Section Dynamic Texts
+        const elAddonDesc = document.getElementById('disp-addon-cap-term-desc');
+        if (elAddonDesc) elAddonDesc.textContent = `Up to ${maxAllowedYears}-Year`;
+
+        const elBoxYearsBullet = document.getElementById('disp-box-cap-years-bullet');
+        if (elBoxYearsBullet) {
+          elBoxYearsBullet.innerHTML = isLuxuryOrOver75k
+            ? `<strong>Up to 5 Years (60 Months)</strong> Guaranteed Coverage`
+            : `<strong>Up to 7 Years (84 Months)</strong> Guaranteed Coverage`;
+        }
+
+        const elBoxAllYears = document.getElementById('disp-box-all-years');
+        if (elBoxAllYears) elBoxAllYears.textContent = `up to ${maxAllowedYears} years`;
+
+        const elTermsSubtext = document.getElementById('disp-terms-subtext');
+        if (elTermsSubtext) {
+          elTermsSubtext.textContent = isLuxuryOrOver75k
+            ? 'Vehicles over $75,000 qualify for terms up to 60 months (5 years). Select your preferred term below:'
+            : 'Select your preferred coverage term below (up to 84 months / 7 years) to update the monthly and bi-weekly payment comparison.';
+        }
+
+        const elRateLockYears = document.getElementById('disp-ratelock-years');
+        if (elRateLockYears) elRateLockYears.textContent = `up to ${maxAllowedYears} years`;
+
         // Process CAP Term Prices
         const capInputs = [
           { term: 36, el: document.getElementById('cap-price-36') },
@@ -1851,6 +1972,9 @@ if ($dealId && $dealId > 0 && isset($db) && ($db instanceof PDO)) {
         const activeCapOptions = [];
         capInputs.forEach(item => {
           if (!item.el) return;
+          // Luxury rule: vehicles over $75,000 capped at 60 months (5 years)
+          if (isLuxuryOrOver75k && item.term > 60) return;
+
           const val = parseFloat(item.el.value);
           if (!isNaN(val) && val > 0) {
             const pmt = calcAmortization(val, interestRate, loanTerm, paymentFrequency);
@@ -1867,11 +1991,13 @@ if ($dealId && $dealId > 0 && isset($db) && ($db instanceof PDO)) {
           }
         });
 
-        // Ensure selected term is valid
+        // Ensure selected term is valid and within luxury rule
         if (activeCapOptions.length > 0) {
           const hasSelected = activeCapOptions.some(o => o.term === selectedCapTerm);
-          if (!hasSelected) {
-            selectedCapTerm = activeCapOptions[0].term;
+          if (!hasSelected || (isLuxuryOrOver75k && selectedCapTerm > 60)) {
+            // Pick 60 if available, else first option
+            const defaultOpt = activeCapOptions.find(o => o.term === 60) || activeCapOptions[0];
+            selectedCapTerm = defaultOpt.term;
           }
         } else {
           selectedCapTerm = 0;
@@ -1908,6 +2034,16 @@ if ($dealId && $dealId > 0 && isset($db) && ($db instanceof PDO)) {
 
               termsContainer.appendChild(card);
             });
+
+            if (isLuxuryOrOver75k) {
+              const luxuryInfo = document.createElement('div');
+              luxuryInfo.style.cssText = 'grid-column: 1 / -1; background: #fffbeb; border: 1px solid #fde68a; border-radius: var(--radius-md); padding: 0.75rem 1rem; font-size: 0.85rem; color: #92400e; display: flex; align-items: center; gap: 0.6rem; margin-top: 0.5rem;';
+              luxuryInfo.innerHTML = `
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="flex-shrink: 0;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                <span><strong>Luxury Vehicle Policy (${fmt(vehPrice)} Sale Price):</strong> Underwriter guidelines cap vehicles with an original purchase price over $75,000 to a maximum term of 5 Years (60 Months).</span>
+              `;
+              termsContainer.appendChild(luxuryInfo);
+            }
           }
         }
 
