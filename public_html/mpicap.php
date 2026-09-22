@@ -1498,9 +1498,9 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
               <div class="pillar-icon">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
               </div>
-              <div class="pillar-title" id="disp-pillar-saved-title">Up to $<?= number_format($initialCapTopUp) ?> Equity Protected</div>
+              <div class="pillar-title" id="disp-pillar-saved-title">Up to $60,000 Equity Protected</div>
               <p class="pillar-desc" id="disp-pillar-saved-desc">
-                Protects you against rapid vehicle depreciation, saving you up to $<?= number_format($initialCapTopUp) ?> to replace like, kind, and model without out-of-pocket shortfall.
+                Protects you against rapid vehicle depreciation, covering up to $60,000 to replace like, kind, and model without out-of-pocket shortfall.
               </p>
             </div>
 
@@ -1653,7 +1653,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
             </div>
             <div class="hero-card-subtext">
               <strong id="disp-cap-term-label">60-Month (5-Year)</strong> Replacement Protection<br>
-              <span id="disp-card-cap-topup-text">Includes: <strong>Up to $<?= number_format($initialCapTopUp) ?> Top-Up + 30 Days Rental</strong></span><br>
+              <span id="disp-card-cap-topup-text">Includes: <strong>Up to $60,000 Top-Up + 30 Days Rental</strong></span><br>
               Daily Cost: Just <strong id="disp-cap-per-day">$1.47/day</strong> for peace of mind.<br>
               <span id="disp-cap-loan-sub" style="font-size: 0.8rem; color: #475569;">Financed over your <strong><?= (int)$prefillTerm ?>-month</strong> vehicle loan.</span>
             </div>
@@ -1822,7 +1822,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
                     <span style="font-size: 0.8rem; color: #64748b;" id="table-mpi-repl-sub"><?= $isVehIneligibleMpiNew ? 'MPI offers $0 replacement value on 2024 & older' : ($isVehOneYearMpiNew ? 'Terminates after 12 months; drops to depreciated ACV' : 'MPI pays depreciated ACV only') ?></span>
                   </td>
                   <td>
-                    <span style="font-weight: 700; color: #059669;" id="table-cap-repl-val">Up to $<?= number_format($initialCapTopUp) ?> Saved</span><br>
+                    <span style="font-weight: 700; color: #059669;" id="table-cap-repl-val">Up to $60,000 Saved</span><br>
                     <span style="font-size: 0.8rem; color: #64748b;" id="table-cap-repl-sub">Protects New &amp; Pre-Owned vehicles up to <?= $initialMaxYears ?> years</span>
                   </td>
                   <td>
@@ -1916,7 +1916,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
               <div style="font-size: 0.85rem; color: #047857; margin-top: 0.25rem;" id="disp-box-cap-annual">Just $20.72 bi-weekly ($1.47/day)</div>
               <ul style="margin: 0.75rem 0 0 0; padding-left: 1.2rem; font-size: 0.85rem; color: #065f46; line-height: 1.6;">
                 <li id="disp-box-cap-years-bullet"><strong>Up to <?= $initialMaxYears ?> Years (<?= $initialMaxTermMonths ?> Months)</strong> Guaranteed Coverage</li>
-                <li id="disp-box-cap-topup-bullet"><strong>Up to $<?= number_format($initialCapTopUp) ?> Replacement Value Credit</strong> to buy next car</li>
+                <li id="disp-box-cap-topup-bullet"><strong>Up to $60,000 Replacement Value Credit</strong> to buy next car</li>
                 <li><strong>30-Day Rental Vehicle</strong> included</li>
                 <li><strong>Up to $500 Deductible Reimbursed</strong> ($250 on repairs &amp; windshields)</li>
                 <li>100% Rate Lock Guarantee (No annual rate hikes)</li>
@@ -2631,29 +2631,6 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
         const elScenTotalPower = document.getElementById('disp-scen-total-power');
         if (elScenTotalPower) elScenTotalPower.textContent = `${fmt(scenVehPrice)} (100% Value)`;
 
-        // Dynamic Equity Protected Across All Customer Cards & Tables
-        const elPillarSavedTitle = document.getElementById('disp-pillar-saved-title');
-        if (elPillarSavedTitle) elPillarSavedTitle.textContent = `Up to ${fmt(scenCapTopUp)} Equity Protected`;
-
-        const elPillarSavedDesc = document.getElementById('disp-pillar-saved-desc');
-        if (elPillarSavedDesc) {
-          elPillarSavedDesc.textContent = `Protects you against rapid vehicle depreciation, saving you up to ${fmt(scenCapTopUp)} to replace like, kind, and model without out-of-pocket shortfall.`;
-        }
-
-        const elCardCapTopupText = document.getElementById('disp-card-cap-topup-text');
-        if (elCardCapTopupText) {
-          elCardCapTopupText.innerHTML = `Includes: <strong>Up to ${fmt(scenCapTopUp)} Top-Up + 30 Days Rental</strong>`;
-        }
-
-        const elTableCapReplVal = document.getElementById('table-cap-repl-val');
-        if (elTableCapReplVal) {
-          elTableCapReplVal.textContent = `Up to ${fmt(scenCapTopUp)} Saved`;
-        }
-
-        const elBoxCapTopupBullet = document.getElementById('disp-box-cap-topup-bullet');
-        if (elBoxCapTopupBullet) {
-          elBoxCapTopupBullet.innerHTML = `<strong>Up to ${fmt(scenCapTopUp)} Replacement Value Credit</strong> to buy next car`;
-        }
 
         // Update Pillar 2
         const elPillarYearsTitle = document.getElementById('disp-pillar-years-title');
