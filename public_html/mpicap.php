@@ -1539,9 +1539,9 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
               <div class="pillar-icon">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
               </div>
-              <div class="pillar-title" id="disp-pillar-years-title">Guaranteed Active for Up to <?= $initialMaxYears ?> Years</div>
+              <div class="pillar-title" id="disp-pillar-years-title">Guaranteed Coverage for Up to <?= $initialMaxYears ?> Years</div>
               <p class="pillar-desc" id="disp-pillar-years-desc">
-                Covers New or Pre-Owned vehicles for up to <?= $initialMaxYears ?> years<?= $isOver75k ? ' (up to 5 years for vehicles over $75,000)' : '' ?>. Remains active regardless of your driving experience, claims, or losses.
+                Covers New or Pre-Owned vehicles for up to <?= $initialMaxYears ?> years<?= $isOver75k ? ' (up to 5 years for vehicles over $75,000)' : '' ?>. Your protection is locked in and remains fully in effect regardless of claims or driving record.
               </p>
             </div>
 
@@ -2583,13 +2583,13 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
 
         // Update Pillar 2
         const elPillarYearsTitle = document.getElementById('disp-pillar-years-title');
-        if (elPillarYearsTitle) elPillarYearsTitle.textContent = `Guaranteed Active for ${maxYearsText}`;
+        if (elPillarYearsTitle) elPillarYearsTitle.textContent = `Guaranteed Coverage for ${maxYearsText}`;
 
         const elPillarYearsDesc = document.getElementById('disp-pillar-years-desc');
         if (elPillarYearsDesc) {
           elPillarYearsDesc.textContent = isLuxuryOrOver75k
-            ? `Covers New or Pre-Owned vehicles for up to 5 years (vehicles over $75,000 qualify for up to 5-year coverage). Remains active regardless of your driving experience, claims, or losses.`
-            : `Covers New or Pre-Owned vehicles for up to 7 years. Remains active regardless of your driving experience, claims, or losses.`;
+            ? `Covers New or Pre-Owned vehicles for up to 5 years (vehicles over $75,000 qualify for up to 5-year coverage). Your protection is locked in and remains fully in effect regardless of claims or driving record.`
+            : `Covers New or Pre-Owned vehicles for up to 7 years. Your protection is locked in and remains fully in effect regardless of claims or driving record.`;
         }
 
         // Update Card 2 Badge
