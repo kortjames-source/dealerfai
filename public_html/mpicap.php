@@ -933,6 +933,87 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
       border: 1px solid #e2e8f0;
     }
 
+    /* Deductible Selector Styles */
+    .deductible-selector-container {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: var(--radius-md);
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+    .deductible-pills-wrap {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 0.65rem;
+    }
+    .ded-pill-btn {
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: var(--radius-md);
+      padding: 0.65rem 0.85rem;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: inherit;
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+    .ded-pill-btn:hover {
+      border-color: var(--brand-color);
+      background: #f8fafc;
+      transform: translateY(-1px);
+    }
+    .ded-pill-btn.active {
+      border-color: var(--brand-color);
+      background: #eff6ff;
+      box-shadow: 0 0 0 1px var(--brand-color);
+    }
+    .ded-pill-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .ded-pill-val {
+      font-weight: 800;
+      font-size: 1.05rem;
+      color: #0f172a;
+    }
+    .ded-pill-btn.active .ded-pill-val {
+      color: var(--brand-color);
+    }
+    .ded-pill-badge {
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 2px 5px;
+      border-radius: 4px;
+      background: #e2e8f0;
+      color: #475569;
+    }
+    .ded-pill-btn.active .ded-pill-badge {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+    .ded-pill-fee {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin-top: 0.15rem;
+    }
+    .ded-pill-btn.active .ded-pill-fee {
+      color: var(--brand-color);
+    }
+    .ded-pill-mo {
+      font-size: 0.74rem;
+      color: #64748b;
+      font-weight: 600;
+    }
+    .ded-pill-btn.active .ded-pill-mo {
+      color: #1e40af;
+    }
+
     /* Presentation Mode: Hides Sidebar & Navigation */
     body.presentation-mode .sidebar,
     body.presentation-mode .top-bar,
@@ -1103,6 +1184,10 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
               <span id="disp-dsr-text">Level 0 • Base Rate (0% Discount)</span>
             </div>
+            <div id="disp-top-ded-badge" class="dsr-pill" style="background: #e0f2fe; color: #0369a1; border-color: #bae6fd; cursor: pointer;" title="Click to view Deductible Strategy">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <span id="disp-top-ded-text">MPI Deductible: $200 (+$19.83/mo)</span>
+            </div>
           </div>
 
           <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
@@ -1197,11 +1282,38 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
                       <td><input type="number" class="form-control-sm mpi-input" data-col="2026" id="mpi-26-basic" value="3294"></td>
                       <td><input type="number" class="form-control-sm mpi-input" data-col="2025" id="mpi-25-basic" value="2824"></td>
                     </tr>
-                    <tr>
-                      <td>Deductible ($200 Option Buy-Down Fee)</td>
-                      <td><input type="number" class="form-control-sm mpi-input" data-col="2026" id="mpi-26-deductible" value="238"></td>
-                      <td><input type="number" class="form-control-sm mpi-input" data-col="2025" id="mpi-25-deductible" value="117"></td>
+                    <tr style="background: #f1f5f9;">
+                      <td colspan="3" style="padding: 0.5rem 0.75rem; font-weight: 700; font-size: 0.8rem; color: #334155; text-transform: uppercase; letter-spacing: 0.04em;">
+                        MPI Deductible Buy-Down Fees (from MPI Calculator)
+                      </td>
                     </tr>
+                    <tr>
+                      <td style="padding-left: 1.25rem;">↳ <strong>$1,000 Deductible</strong> (Standard Base Rate)</td>
+                      <td><span style="color: #64748b; font-weight: 600; font-size: 0.85rem;">$0.00 (Included in Basic)</span></td>
+                      <td><span style="color: #64748b; font-weight: 600; font-size: 0.85rem;">$0.00 (Included in Basic)</span></td>
+                    </tr>
+                    <tr>
+                      <td style="padding-left: 1.25rem;">↳ <strong>$750 Deductible</strong> Buy-Down Fee</td>
+                      <td><input type="number" class="form-control-sm mpi-input" data-col="2026" id="mpi-26-ded-750" value="60" placeholder="e.g. 60"></td>
+                      <td><input type="number" class="form-control-sm mpi-input" data-col="2025" id="mpi-25-ded-750" value="30" placeholder="e.g. 30"></td>
+                    </tr>
+                    <tr>
+                      <td style="padding-left: 1.25rem;">↳ <strong>$500 Deductible</strong> Buy-Down Fee</td>
+                      <td><input type="number" class="form-control-sm mpi-input" data-col="2026" id="mpi-26-ded-500" value="125" placeholder="e.g. 125"></td>
+                      <td><input type="number" class="form-control-sm mpi-input" data-col="2025" id="mpi-25-ded-500" value="62" placeholder="e.g. 62"></td>
+                    </tr>
+                    <tr>
+                      <td style="padding-left: 1.25rem;">↳ <strong>$300 Deductible</strong> Buy-Down Fee</td>
+                      <td><input type="number" class="form-control-sm mpi-input" data-col="2026" id="mpi-26-ded-300" value="185" placeholder="e.g. 185"></td>
+                      <td><input type="number" class="form-control-sm mpi-input" data-col="2025" id="mpi-25-ded-300" value="92" placeholder="e.g. 92"></td>
+                    </tr>
+                    <tr>
+                      <td style="padding-left: 1.25rem;">↳ <strong>$200 Deductible</strong> Buy-Down Fee (Default Quote)</td>
+                      <td><input type="number" class="form-control-sm mpi-input" data-col="2026" id="mpi-26-ded-200" value="238" placeholder="e.g. 238"></td>
+                      <td><input type="number" class="form-control-sm mpi-input" data-col="2025" id="mpi-25-ded-200" value="117" placeholder="e.g. 117"></td>
+                    </tr>
+                    <input type="hidden" id="mpi-26-deductible" value="238">
+                    <input type="hidden" id="mpi-25-deductible" value="117">
                     <tr>
                       <td>Third Party Liability</td>
                       <td><input type="number" class="form-control-sm mpi-input" data-col="2026" id="mpi-26-tpl" value="11"></td>
@@ -1494,14 +1606,14 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
         <!-- ========================================================================= -->
         <!-- SECTION: SMART DEDUCTIBLE COMPARISON ($500 DEDUCTIBLE + CAP) -->
         <!-- ========================================================================= -->
-        <div class="strategy-card">
+        <div class="strategy-card" id="smart-deductible-section">
           <div class="strategy-header">
             <div>
-              <h3 style="margin: 0; font-size: 1.35rem; font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 0.5rem;">
+              <h3 style="margin: 0; font-size: 1.35rem; font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 0.5rem;" id="disp-ded-strategy-title">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--brand-color)" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
                 The Smart Deductible Strategy: $500 MPI Deductible with CAP
               </h3>
-              <p style="margin: 0.35rem 0 0 0; color: #64748b; font-size: 0.875rem;">
+              <p style="margin: 0.35rem 0 0 0; color: #64748b; font-size: 0.875rem;" id="disp-ded-strategy-sub">
                 Why pay MPI extra every year for a $200 deductible when Companion Asset Protection (CAP) covers your deductible for you?
               </p>
             </div>
@@ -1511,12 +1623,67 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
             </div>
           </div>
 
+          <!-- Interactive Deductible Selector Bar -->
+          <div class="deductible-selector-container">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem;">
+              <div style="font-size: 0.85rem; font-weight: 700; color: #1e293b; text-transform: uppercase; letter-spacing: 0.04em; display: flex; align-items: center; gap: 0.4rem;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand-color)" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <span>Select MPI Deductible Option To Compare:</span>
+              </div>
+              <div id="disp-active-ded-badge" style="font-size: 0.78rem; font-weight: 700; color: #0369a1; background: #e0f2fe; padding: 0.25rem 0.65rem; border-radius: 4px; border: 1px solid #bae6fd;">
+                Comparing: $200 Deductible (+$238/yr • +$19.83/mo)
+              </div>
+            </div>
+            <div class="deductible-pills-wrap" id="deductible-pills-group">
+              <button type="button" class="ded-pill-btn" data-ded="1000">
+                <div class="ded-pill-top">
+                  <span class="ded-pill-val">$1,000</span>
+                  <span class="ded-pill-badge">Base Rate</span>
+                </div>
+                <div class="ded-pill-fee">$0 / yr</div>
+                <div class="ded-pill-mo">$0.00/mo</div>
+              </button>
+              <button type="button" class="ded-pill-btn" data-ded="750">
+                <div class="ded-pill-top">
+                  <span class="ded-pill-val">$750</span>
+                  <span class="ded-pill-badge">Buy-Down</span>
+                </div>
+                <div class="ded-pill-fee" id="pill-fee-750">+$60/yr</div>
+                <div class="ded-pill-mo" id="pill-mo-750">+$5.00/mo</div>
+              </button>
+              <button type="button" class="ded-pill-btn" data-ded="500">
+                <div class="ded-pill-top">
+                  <span class="ded-pill-val">$500</span>
+                  <span class="ded-pill-badge">Buy-Down</span>
+                </div>
+                <div class="ded-pill-fee" id="pill-fee-500">+$125/yr</div>
+                <div class="ded-pill-mo" id="pill-mo-500">+$10.42/mo</div>
+              </button>
+              <button type="button" class="ded-pill-btn" data-ded="300">
+                <div class="ded-pill-top">
+                  <span class="ded-pill-val">$300</span>
+                  <span class="ded-pill-badge">Buy-Down</span>
+                </div>
+                <div class="ded-pill-fee" id="pill-fee-300">+$185/yr</div>
+                <div class="ded-pill-mo" id="pill-mo-300">+$15.42/mo</div>
+              </button>
+              <button type="button" class="ded-pill-btn active" data-ded="200">
+                <div class="ded-pill-top">
+                  <span class="ded-pill-val">$200</span>
+                  <span class="ded-pill-badge">Selected Quote</span>
+                </div>
+                <div class="ded-pill-fee" id="pill-fee-200">+$238/yr</div>
+                <div class="ded-pill-mo" id="pill-mo-200">+$19.83/mo</div>
+              </button>
+            </div>
+          </div>
+
           <div style="overflow-x: auto;">
             <table class="strategy-table">
               <thead>
                 <tr>
                   <th style="width: 28%;">Protection Feature / Scenario</th>
-                  <th style="width: 24%; color: var(--mpi-blue);">MPI with $200 Deductible Buy-Down</th>
+                  <th style="width: 24%; color: var(--mpi-blue);" id="th-mpi-ded-name">MPI with $200 Deductible Buy-Down</th>
                   <th style="width: 28%; color: var(--cap-green);">MPI $500 Deductible + Companion Asset Protection (CAP)</th>
                   <th style="width: 20%;">Your Advantage</th>
                 </tr>
@@ -1539,15 +1706,15 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
                 <tr>
                   <td><strong>Total Loss (Vehicle Written Off)</strong><br><span style="font-size: 0.8rem; color: #64748b;">Collision, Fire, Theft, Hail, or Flood</span></td>
                   <td>
-                    <span style="font-weight: 700; color: #0f172a;">Client Pays $200</span><br>
+                    <span style="font-weight: 700; color: #0f172a;" id="table-mpi-ded-loss-oop">Client Pays $200</span><br>
                     <span style="font-size: 0.8rem; color: #64748b;">Out-of-pocket deductible</span>
                   </td>
                   <td>
-                    <span style="font-weight: 700; color: #059669;">Client Pays $0.00</span><br>
+                    <span style="font-weight: 700; color: #059669;" id="table-cap-ded-loss-oop">Client Pays $0.00</span><br>
                     <span style="font-size: 0.8rem; color: #059669;">CAP reimburses up to $500 deductible</span>
                   </td>
                   <td>
-                    <span class="badge-win">CAP Saves You $200!</span>
+                    <span class="badge-win" id="table-cap-ded-loss-win">CAP Saves You $200!</span>
                   </td>
                 </tr>
                 <tr>
@@ -1556,15 +1723,15 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
                     <span style="font-size: 0.8rem; color: #64748b;">Collisions, body shop repairs &amp; <strong>windshield replacements</strong></span>
                   </td>
                   <td>
-                    <span style="font-weight: 700; color: #0f172a;">Client Pays $200</span><br>
+                    <span style="font-weight: 700; color: #0f172a;" id="table-mpi-ded-part-oop">Client Pays $200</span><br>
                     <span style="font-size: 0.8rem; color: #64748b;">Out-of-pocket deductible</span>
                   </td>
                   <td>
-                    <span style="font-weight: 700; color: #0f172a;">Client Pays $250</span><br>
-                    <span style="font-size: 0.8rem; color: #059669;">$500 MPI minus $250 CAP reimbursement (includes windshield claims)</span>
+                    <span style="font-weight: 700; color: #0f172a;" id="table-cap-ded-part-oop">Client Pays $250</span><br>
+                    <span style="font-size: 0.8rem; color: #059669;" id="table-cap-ded-part-subdesc">$500 MPI minus $250 CAP reimbursement (includes windshield claims)</span>
                   </td>
                   <td>
-                    <span style="font-size: 0.85rem; color: #475569;"><strong>Only $50 difference</strong>, while saving <strong id="table-ded-savings-sub">$238</strong> every single year!</span>
+                    <span style="font-size: 0.85rem; color: #475569;" id="table-cap-ded-part-win"><strong>Only $50 difference</strong>, while saving <strong id="table-ded-savings-sub">$238</strong> every single year!</span>
                   </td>
                 </tr>
                 <tr>
@@ -1677,7 +1844,7 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
               <div style="font-size: 1.75rem; font-weight: 800; color: var(--brand-color); margin-top: 0.25rem;" id="disp-box-mpi-all-period">$64.42 / mo</div>
               <div style="font-size: 0.85rem; color: #1e40af; margin-top: 0.25rem;" id="disp-box-mpi-all-annual">$773.00 / year (Billed Monthly by MPI)</div>
               <ul style="margin: 0.75rem 0 0 0; padding-left: 1.2rem; font-size: 0.85rem; color: #1e3a8a; line-height: 1.6;">
-                <li>$200 Deductible Buy-Down: <strong id="disp-box-mpi-ded">$238/yr</strong></li>
+                <li><span id="disp-box-mpi-ded-label">$200 Deductible Buy-Down:</span> <strong id="disp-box-mpi-ded">$238/yr</strong></li>
                 <li>New Vehicle Protection: <strong id="disp-box-mpi-newveh2">$392/yr</strong></li>
                 <li>Loss of Use Rental: <strong id="disp-box-mpi-lossuse2">$143/yr</strong></li>
                 <li id="disp-box-net-savings"><strong>By switching to $500 MPI + CAP:</strong> You save <strong style="color: #059669;">$19.52 / month net</strong> while gaining <span id="disp-box-all-years">up to <?= $initialMaxYears ?> years</span> of full coverage!</li>
@@ -1811,6 +1978,7 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
       // State
       let paymentFrequency = 'monthly'; // 'monthly' | 'biweekly'
       let selectedCapTerm = 60; // default term
+      let selectedDeductible = 200; // default deductible tier: 1000, 750, 500, 300, 200
 
       // DOM Elements
       const btnMonthly = document.getElementById('btn-monthly');
@@ -1866,12 +2034,32 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
         });
       }
 
+      // Deductible selector pills
+      document.querySelectorAll('.ded-pill-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          selectedDeductible = parseInt(btn.dataset.ded, 10) || 200;
+          recalculate();
+        });
+      });
+
+      // Top deductible badge click handler
+      const topDedBadge = document.getElementById('disp-top-ded-badge');
+      if (topDedBadge) {
+        topDedBadge.addEventListener('click', () => {
+          const dedSec = document.getElementById('smart-deductible-section');
+          if (dedSec) dedSec.scrollIntoView({ behavior: 'smooth' });
+        });
+      }
+
       // Reset to Defender sample data
       const btnSample = document.getElementById('btn-load-sample');
       if (btnSample) {
         btnSample.addEventListener('click', () => {
           document.getElementById('mpi-26-basic').value = 3294;
-          document.getElementById('mpi-26-deductible').value = 238;
+          document.getElementById('mpi-26-ded-750').value = 60;
+          document.getElementById('mpi-26-ded-500').value = 125;
+          document.getElementById('mpi-26-ded-300').value = 185;
+          document.getElementById('mpi-26-ded-200').value = 238;
           document.getElementById('mpi-26-tpl').value = 11;
           document.getElementById('mpi-26-lossuse').value = 143;
           document.getElementById('mpi-26-newveh').value = 392;
@@ -1881,7 +2069,10 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
           document.getElementById('mpi-26-plate').value = 7;
 
           document.getElementById('mpi-25-basic').value = 2824;
-          document.getElementById('mpi-25-deductible').value = 117;
+          document.getElementById('mpi-25-ded-750').value = 30;
+          document.getElementById('mpi-25-ded-500').value = 62;
+          document.getElementById('mpi-25-ded-300').value = 92;
+          document.getElementById('mpi-25-ded-200').value = 117;
           document.getElementById('mpi-25-tpl').value = 10;
           document.getElementById('mpi-25-lossuse').value = 136;
           document.getElementById('mpi-25-newveh').value = 412;
@@ -1893,6 +2084,7 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
           document.getElementById('cap-price-60').value = 2219;
           document.getElementById('cap-price-84').value = 2617;
           if (dsrSelect) dsrSelect.value = "0";
+          selectedDeductible = 200;
           recalculate();
         });
       }
@@ -1957,9 +2149,77 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
         document.getElementById('disp-loan-term-badge').textContent = `${loanTerm} months`;
         document.getElementById('disp-apr-badge').textContent = `${interestRate.toFixed(2)}% APR`;
 
+        // Deductible Rates by Tier ($1000 base = $0)
+        const dedRates26 = {
+          1000: 0,
+          750: parseFloat(document.getElementById('mpi-26-ded-750')?.value) || 0,
+          500: parseFloat(document.getElementById('mpi-26-ded-500')?.value) || 0,
+          300: parseFloat(document.getElementById('mpi-26-ded-300')?.value) || 0,
+          200: parseFloat(document.getElementById('mpi-26-ded-200')?.value) || 0,
+        };
+
+        const dedRates25 = {
+          1000: 0,
+          750: parseFloat(document.getElementById('mpi-25-ded-750')?.value) || 0,
+          500: parseFloat(document.getElementById('mpi-25-ded-500')?.value) || 0,
+          300: parseFloat(document.getElementById('mpi-25-ded-300')?.value) || 0,
+          200: parseFloat(document.getElementById('mpi-25-ded-200')?.value) || 0,
+        };
+
+        const curDedFee26 = dedRates26[selectedDeductible] ?? 0;
+        const curDedFee25 = dedRates25[selectedDeductible] ?? 0;
+        const ded26 = curDedFee26;
+        const ded25 = curDedFee25;
+
+        // Keep hidden inputs synced
+        const hiddenDed26 = document.getElementById('mpi-26-deductible');
+        if (hiddenDed26) hiddenDed26.value = ded26;
+        const hiddenDed25 = document.getElementById('mpi-25-deductible');
+        if (hiddenDed25) hiddenDed25.value = ded25;
+
+        // Update deductible pills amounts & active state
+        const pillFees = {
+          750: { fee: dedRates26[750], elFee: document.getElementById('pill-fee-750'), elMo: document.getElementById('pill-mo-750') },
+          500: { fee: dedRates26[500], elFee: document.getElementById('pill-fee-500'), elMo: document.getElementById('pill-mo-500') },
+          300: { fee: dedRates26[300], elFee: document.getElementById('pill-fee-300'), elMo: document.getElementById('pill-mo-300') },
+          200: { fee: dedRates26[200], elFee: document.getElementById('pill-fee-200'), elMo: document.getElementById('pill-mo-200') },
+        };
+
+        Object.keys(pillFees).forEach(tier => {
+          const p = pillFees[tier];
+          if (p.elFee) p.elFee.textContent = p.fee > 0 ? `+${fmt(p.fee)}/yr` : '$0/yr';
+          if (p.elMo) p.elMo.textContent = p.fee > 0 ? `+${fmtDec(p.fee / 12)}/mo` : '$0.00/mo';
+        });
+
+        document.querySelectorAll('.ded-pill-btn').forEach(btn => {
+          const bDed = parseInt(btn.getAttribute('data-ded'), 10);
+          if (bDed === selectedDeductible) {
+            btn.classList.add('active');
+          } else {
+            btn.classList.remove('active');
+          }
+        });
+
+        // Update Top Bar & Active Deductible Badges
+        const elTopDedText = document.getElementById('disp-top-ded-text');
+        const elActiveDedBadge = document.getElementById('disp-active-ded-badge');
+        const dedMoText = curDedFee26 > 0 ? `(+${fmtDec(curDedFee26 / 12)}/mo)` : '($0.00/mo)';
+        const dedYrText = curDedFee26 > 0 ? `+${fmt(curDedFee26)}/yr` : '$0/yr (Included)';
+
+        if (elTopDedText) {
+          elTopDedText.textContent = selectedDeductible === 1000
+            ? `MPI Base Deductible: $1,000 ($0.00/mo)`
+            : `MPI Deductible: $${selectedDeductible} (${dedMoText.replace(/[()]/g, '')})`;
+        }
+
+        if (elActiveDedBadge) {
+          elActiveDedBadge.textContent = selectedDeductible === 1000
+            ? `Comparing: $1,000 Base Deductible ($0 Extra Fee • Included in Basic)`
+            : `Comparing: $${selectedDeductible} Deductible (${dedYrText} • ${dedMoText.replace(/[()]/g, '')})`;
+        }
+
         // Sum MPI 2026 Lines
         const basic26 = parseFloat(document.getElementById('mpi-26-basic').value) || 0;
-        const ded26 = parseFloat(document.getElementById('mpi-26-deductible').value) || 0;
         const tpl26 = parseFloat(document.getElementById('mpi-26-tpl').value) || 0;
         const loss26 = parseFloat(document.getElementById('mpi-26-lossuse').value) || 0;
         const newveh26 = parseFloat(document.getElementById('mpi-26-newveh').value) || 0;
@@ -1978,7 +2238,6 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
 
         // Sum MPI 2025 Lines
         const basic25 = parseFloat(document.getElementById('mpi-25-basic').value) || 0;
-        const ded25 = parseFloat(document.getElementById('mpi-25-deductible').value) || 0;
         const tpl25 = parseFloat(document.getElementById('mpi-25-tpl').value) || 0;
         const loss25 = parseFloat(document.getElementById('mpi-25-lossuse').value) || 0;
         const newveh25 = parseFloat(document.getElementById('mpi-25-newveh').value) || 0;
@@ -2417,39 +2676,197 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
           `;
         }
 
-        // Update Card 3: Deductible Strategy ($500 MPI Deductible + CAP)
+        // Update Card 3: Deductible Strategy
         const netCapPmt = Math.max(0, capPmt - dedSavingsLoanPeriod26);
         const elNetCap = document.getElementById('disp-net-cap-amount');
-        if (elNetCap) elNetCap.innerHTML = `${fmtDec(netCapPmt)}<span class="period">${loanFreqSuffix} net</span>`;
+        if (elNetCap) {
+          if (curDedFee26 > 0) {
+            elNetCap.innerHTML = `${fmtDec(netCapPmt)}<span class="period">${loanFreqSuffix} net</span>`;
+          } else {
+            elNetCap.innerHTML = `${fmtDec(capPmt)}<span class="period">${loanFreqSuffix}</span>`;
+          }
+        }
         const elDedSavingsSub = document.getElementById('disp-ded-savings-sub');
         if (elDedSavingsSub) {
-          elDedSavingsSub.textContent = paymentFrequency === 'biweekly'
-            ? `${fmt(dedSavingsAnnual26)}/yr ($${fmtDec(dedSavingsMonthly26)}/mo on MPI • $${fmtDec(dedSavingsLoanPeriod26)}/bi-wk loan credit)`
-            : `${fmt(dedSavingsAnnual26)}/yr ($${fmtDec(dedSavingsMonthly26)}/mo on MPI)`;
+          if (selectedDeductible === 200 || selectedDeductible === 300) {
+            elDedSavingsSub.textContent = paymentFrequency === 'biweekly'
+              ? `${fmt(dedSavingsAnnual26)}/yr ($${fmtDec(dedSavingsMonthly26)}/mo on MPI • $${fmtDec(dedSavingsLoanPeriod26)}/bi-wk loan credit)`
+              : `${fmt(dedSavingsAnnual26)}/yr ($${fmtDec(dedSavingsMonthly26)}/mo on MPI)`;
+          } else if (selectedDeductible === 500) {
+            elDedSavingsSub.textContent = `Saves $500 on total loss & $250 on repairs (+$${fmtDec(dedSavingsMonthly26)}/mo buy-down fee)`;
+          } else if (selectedDeductible === 750) {
+            elDedSavingsSub.textContent = `Saves $500 on total loss & $250 on repairs (+$${fmtDec(dedSavingsMonthly26)}/mo buy-down fee)`;
+          } else {
+            elDedSavingsSub.textContent = `Base MPI rate ($0 buy-down fee) • CAP reimburses $500 on total loss & $250 on repairs`;
+          }
         }
         const elStratBadge = document.getElementById('disp-strategy-badge-text');
-        if (elStratBadge) elStratBadge.textContent = `Save ${fmt(dedSavingsAnnual26)}/yr on MPI + $0 Deductible on Write-off`;
+        if (elStratBadge) {
+          if (selectedDeductible === 200 || selectedDeductible === 300) {
+            elStratBadge.textContent = `Save ${fmt(dedSavingsAnnual26)}/yr on MPI + $0 Deductible on Write-off`;
+          } else if (selectedDeductible === 500) {
+            elStratBadge.textContent = `CAP Pays $500 Deductible on Write-Off + $250 on Repairs`;
+          } else if (selectedDeductible === 750) {
+            elStratBadge.textContent = `CAP Reimburses $500 on Total Loss & $250 on Repairs`;
+          } else {
+            elStratBadge.textContent = `Zero MPI Buy-Down Fees + CAP Reimburses $500`;
+          }
+        }
 
-        // Update Deductible Strategy Section
+        // Update Deductible Strategy Section Header & Titles
+        const elStratTitle = document.getElementById('disp-ded-strategy-title');
+        if (elStratTitle) {
+          if (selectedDeductible === 200 || selectedDeductible === 300) {
+            elStratTitle.innerHTML = `
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--brand-color)" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              The Smart Deductible Strategy: $500 MPI Deductible with CAP
+            `;
+          } else if (selectedDeductible === 500) {
+            elStratTitle.innerHTML = `
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--brand-color)" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              Deductible Protection: MPI $500 Deductible with CAP
+            `;
+          } else if (selectedDeductible === 750) {
+            elStratTitle.innerHTML = `
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--brand-color)" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              Deductible Protection: MPI $750 Deductible with CAP
+            `;
+          } else {
+            elStratTitle.innerHTML = `
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--brand-color)" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              Deductible Protection: MPI $1,000 Base Deductible with CAP
+            `;
+          }
+        }
+
+        const elStratSub = document.getElementById('disp-ded-strategy-sub');
+        if (elStratSub) {
+          if (selectedDeductible === 200 || selectedDeductible === 300) {
+            elStratSub.textContent = `Why pay MPI extra every year for a $${selectedDeductible} deductible when Companion Asset Protection (CAP) covers your deductible for you?`;
+          } else if (selectedDeductible === 500) {
+            elStratSub.textContent = `See how Companion Asset Protection (CAP) reimburses your $500 MPI deductible on total loss and cuts repair claims in half.`;
+          } else if (selectedDeductible === 750) {
+            elStratSub.textContent = `See how Companion Asset Protection (CAP) lowers your $750 out-of-pocket deductible by $500 on total loss and $250 on repairs.`;
+          } else {
+            elStratSub.textContent = `Avoid expensive MPI buy-down fees entirely: keep the $1,000 base rate and let CAP reimburse your deductible.`;
+          }
+        }
+
         const elDedHead = document.getElementById('disp-ded-savings-headline');
-        if (elDedHead) elDedHead.textContent = `Save ${fmt(dedSavingsAnnual26)} / year ($${fmtDec(dedSavingsMonthly26)}/mo)`;
+        if (elDedHead) {
+          if (curDedFee26 > 0) {
+            elDedHead.textContent = `Save ${fmt(curDedFee26)} / year ($${fmtDec(curDedFee26 / 12)}/mo)`;
+          } else {
+            elDedHead.textContent = `Zero MPI Buy-Down Fee • CAP Reimburses $500`;
+          }
+        }
+
+        const elThDedName = document.getElementById('th-mpi-ded-name');
+        if (elThDedName) {
+          elThDedName.textContent = selectedDeductible === 1000
+            ? `MPI with $1,000 Base Deductible Alone`
+            : `MPI with $${selectedDeductible} Deductible Buy-Down`;
+        }
+
         const elTableDedFee = document.getElementById('table-mpi-ded-fee');
-        if (elTableDedFee) elTableDedFee.textContent = `+${fmt(dedSavingsAnnual26)} / year`;
+        if (elTableDedFee) elTableDedFee.textContent = curDedFee26 > 0 ? `+${fmt(curDedFee26)} / year` : `$0.00 / year`;
+
         const elTableDedPeriod = document.getElementById('table-mpi-ded-period');
-        if (elTableDedPeriod) elTableDedPeriod.textContent = `(+${fmtDec(dedSavingsMonthly26)} / month on MPI)`;
+        if (elTableDedPeriod) {
+          elTableDedPeriod.textContent = curDedFee26 > 0
+            ? `(+${fmtDec(curDedFee26 / 12)} / month on MPI)`
+            : `(Included in Basic Autopac)`;
+        }
+
         const elTableDedPill = document.getElementById('table-ded-savings-pill');
-        if (elTableDedPill) elTableDedPill.textContent = `Save ${fmt(dedSavingsAnnual26)} / year on MPI`;
+        if (elTableDedPill) {
+          elTableDedPill.textContent = curDedFee26 > 0
+            ? `Save ${fmt(curDedFee26)} / year on MPI`
+            : `Zero MPI Buy-Down Fees`;
+        }
+
         const elTableDedSub = document.getElementById('table-ded-savings-sub');
-        if (elTableDedSub) elTableDedSub.textContent = fmt(dedSavingsAnnual26);
+        if (elTableDedSub) elTableDedSub.textContent = fmt(curDedFee26);
+
+        // Update Total Loss & Partial Loss Table Cells
+        const capLossOop = Math.max(0, selectedDeductible - 500);
+        const capLossSavings = Math.min(500, selectedDeductible);
+
+        const elTableMpiLossOop = document.getElementById('table-mpi-ded-loss-oop');
+        if (elTableMpiLossOop) elTableMpiLossOop.textContent = `Client Pays $${selectedDeductible.toLocaleString()}`;
+
+        const elTableCapLossOop = document.getElementById('table-cap-ded-loss-oop');
+        if (elTableCapLossOop) {
+          elTableCapLossOop.textContent = capLossOop === 0 ? `Client Pays $0.00` : `Client Pays $${capLossOop.toLocaleString()}`;
+        }
+
+        const elTableCapLossWin = document.getElementById('table-cap-ded-loss-win');
+        if (elTableCapLossWin) {
+          elTableCapLossWin.textContent = `CAP Saves You $${capLossSavings.toLocaleString()}!`;
+        }
+
+        const elTableMpiPartOop = document.getElementById('table-mpi-ded-part-oop');
+        if (elTableMpiPartOop) elTableMpiPartOop.textContent = `Client Pays $${selectedDeductible.toLocaleString()}`;
+
+        const elTableCapPartOop = document.getElementById('table-cap-ded-part-oop');
+        const elTableCapPartSub = document.getElementById('table-cap-ded-part-subdesc');
+        const elTableCapPartWin = document.getElementById('table-cap-ded-part-win');
+
+        if (selectedDeductible === 200) {
+          if (elTableCapPartOop) elTableCapPartOop.textContent = `Client Pays $250`;
+          if (elTableCapPartSub) elTableCapPartSub.textContent = `$500 MPI minus $250 CAP reimbursement (includes windshield claims)`;
+          if (elTableCapPartWin) elTableCapPartWin.innerHTML = `<strong>Only $50 difference</strong>, while saving <strong>${fmt(curDedFee26)}</strong> every single year!`;
+        } else if (selectedDeductible === 300) {
+          if (elTableCapPartOop) elTableCapPartOop.textContent = `Client Pays $250`;
+          if (elTableCapPartSub) elTableCapPartSub.textContent = `$500 MPI minus $250 CAP reimbursement (includes windshield claims)`;
+          if (elTableCapPartWin) elTableCapPartWin.innerHTML = `<strong>CAP is $50 cheaper out-of-pocket</strong> ($250 vs $300), AND you save <strong>${fmt(curDedFee26)}/yr</strong>!`;
+        } else if (selectedDeductible === 500) {
+          if (elTableCapPartOop) elTableCapPartOop.textContent = `Client Pays $250`;
+          if (elTableCapPartSub) elTableCapPartSub.textContent = `$500 MPI minus $250 CAP reimbursement (includes windshield claims)`;
+          if (elTableCapPartWin) elTableCapPartWin.innerHTML = `<strong>Cuts deductible in half</strong> ($250 saved on every repair/windshield claim)`;
+        } else if (selectedDeductible === 750) {
+          if (elTableCapPartOop) elTableCapPartOop.textContent = `Client Pays $500`;
+          if (elTableCapPartSub) elTableCapPartSub.textContent = `$750 MPI minus $250 CAP reimbursement (includes windshield claims)`;
+          if (elTableCapPartWin) elTableCapPartWin.innerHTML = `<strong>Saves $250 out-of-pocket</strong> on every partial loss or windshield claim`;
+        } else { // 1000
+          if (elTableCapPartOop) elTableCapPartOop.textContent = `Client Pays $750`;
+          if (elTableCapPartSub) elTableCapPartSub.textContent = `$1,000 MPI minus $250 CAP reimbursement (includes windshield claims)`;
+          if (elTableCapPartWin) elTableCapPartWin.innerHTML = `<strong>Saves $250 out-of-pocket</strong> on repairs & windshields without paying MPI fees!`;
+        }
 
         const elStratSummary = document.getElementById('disp-strategy-summary');
         if (elStratSummary) {
-          elStratSummary.innerHTML = `
-            If you pay MPI for a $200 deductible, you are paying <strong>${fmt(dedSavingsAnnual26)} extra every single year</strong> ($${fmtDec(dedSavingsMonthly26)}/month on your MPI bill). 
-            By simply keeping MPI's standard $500 deductible and choosing Companion Asset Protection (CAP), you save that <strong>${fmt(dedSavingsAnnual26)}/year ($${fmtDec(dedSavingsMonthly26)}/mo)</strong> on your insurance. 
-            In the event of a total loss, CAP reimburses your entire $500 deductible—leaving you with <strong>$0 out of pocket</strong> (which is $200 cheaper than paying MPI for a $200 deductible). 
-            Even in a partial loss (such as a body shop repair or windshield claim), you only pay $250 out of pocket (a modest $50 difference from $200), which is paid for many times over by your <strong>${fmt(dedSavingsAnnual26)}</strong> annual premium savings!
-          `;
+          if (selectedDeductible === 200) {
+            elStratSummary.innerHTML = `
+              If you pay MPI for a $200 deductible, you are paying <strong>${fmt(curDedFee26)} extra every single year</strong> ($${fmtDec(curDedFee26 / 12)}/month on your MPI bill). 
+              By simply choosing MPI's standard $500 deductible and adding Companion Asset Protection (CAP), you save that <strong>${fmt(curDedFee26)}/year ($${fmtDec(curDedFee26 / 12)}/mo)</strong> on your insurance. 
+              In the event of a total loss, CAP reimburses your entire $500 deductible—leaving you with <strong>$0 out of pocket</strong> (which is $200 cheaper than paying MPI for a $200 deductible). 
+              Even in a partial loss (such as a body shop repair or windshield claim), you only pay $250 out of pocket (a modest $50 difference from $200), which is paid for many times over by your <strong>${fmt(curDedFee26)}</strong> annual premium savings!
+            `;
+          } else if (selectedDeductible === 300) {
+            elStratSummary.innerHTML = `
+              If you pay MPI for a $300 deductible, you are paying <strong>${fmt(curDedFee26)} extra every year</strong> ($${fmtDec(curDedFee26 / 12)}/month). 
+              By keeping MPI's standard $500 deductible with Companion Asset Protection (CAP), you save that <strong>${fmt(curDedFee26)}/year ($${fmtDec(curDedFee26 / 12)}/mo)</strong> on insurance. 
+              On a total loss, CAP reimburses your entire $500 deductible—leaving you with <strong>$0 out of pocket</strong> (saving $300). 
+              On a partial loss (such as a body shop repair or windshield claim), you pay only $250 out of pocket—which is actually <strong>$50 cheaper</strong> than MPI's $300 deductible, on top of saving <strong>${fmt(curDedFee26)}/year</strong> in premiums!
+            `;
+          } else if (selectedDeductible === 500) {
+            elStratSummary.innerHTML = `
+              With a $500 MPI deductible, you normally pay $500 out-of-pocket on any write-off or repair. 
+              With Companion Asset Protection (CAP), a total loss triggers a full <strong>$500 deductible reimbursement—reducing your out-of-pocket to $0.00</strong>. 
+              On partial loss claims (including body shop collisions and windshield replacements), CAP reimburses $250, cutting your out-of-pocket deductible in half to just <strong>$250</strong>!
+            `;
+          } else if (selectedDeductible === 750) {
+            elStratSummary.innerHTML = `
+              With a $750 MPI deductible, you face a $750 out-of-pocket bill on any claim. 
+              Companion Asset Protection (CAP) reimburses <strong>$500 on a total loss</strong> (bringing your cost down to just $250), and reimburses <strong>$250 on partial losses</strong> (including windshield claims), saving you hundreds in out-of-pocket expenses!
+            `;
+          } else { // 1000
+            elStratSummary.innerHTML = `
+              MPI's standard base deductible is $1,000. By keeping the base $1,000 deductible, you pay <strong>$0 in buy-down fees to MPI</strong>. 
+              Adding Companion Asset Protection (CAP) gives you built-in deductible protection: CAP reimburses <strong>$500 on a total loss</strong> (slashing your out-of-pocket to $500) and reimburses <strong>$250 on partial losses and windshield replacements</strong>!
+            `;
+          }
         }
 
         // Update Add-Ons Comparison Section
@@ -2507,8 +2924,16 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
         if (elBoxAllPeriod) elBoxAllPeriod.textContent = `${fmtDec(mpiAllOptionalsMonthly26)} / mo`;
         const elBoxAllAnnual = document.getElementById('disp-box-mpi-all-annual');
         if (elBoxAllAnnual) elBoxAllAnnual.textContent = `${fmt(mpiAllOptionalsAnnual26)} / year (Billed Monthly by MPI)`;
+        const elBoxMpiDedLabel = document.getElementById('disp-box-mpi-ded-label');
+        if (elBoxMpiDedLabel) {
+          elBoxMpiDedLabel.textContent = selectedDeductible === 1000
+            ? 'MPI $1,000 Base Deductible:'
+            : `MPI $${selectedDeductible} Deductible Buy-Down:`;
+        }
         const elBoxMpiDed = document.getElementById('disp-box-mpi-ded');
-        if (elBoxMpiDed) elBoxMpiDed.textContent = `${fmt(ded26)}/yr`;
+        if (elBoxMpiDed) {
+          elBoxMpiDed.textContent = curDedFee26 > 0 ? `${fmt(curDedFee26)}/yr` : '$0 (Base Rate)';
+        }
         const elBoxMpiNew2 = document.getElementById('disp-box-mpi-newveh2');
         if (elBoxMpiNew2) elBoxMpiNew2.textContent = `${fmt(newveh26)}/yr`;
         const elBoxMpiLoss2 = document.getElementById('disp-box-mpi-lossuse2');
@@ -2516,12 +2941,13 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
 
         const elBoxNetSav = document.getElementById('disp-box-net-savings');
         if (elBoxNetSav && currentCap) {
+          const dedLead = selectedDeductible === 1000 ? 'By pairing Base MPI + CAP:' : 'By switching to $500 MPI + CAP:';
           if (paymentFrequency === 'biweekly') {
             const netMoDiff = mpiAllOptionalsMonthly26 - currentCap.paymentMonthly;
-            elBoxNetSav.innerHTML = `<strong>By switching to $500 MPI + CAP:</strong> You eliminate <strong>$${fmtDec(mpiAllOptionalsMonthly26)}/mo</strong> in optional MPI fees for just <strong>+${fmtDec(capPmt)} bi-weekly</strong> on your loan (saving <strong style="color: #059669;">$${fmtDec(netMoDiff)}/mo net</strong>)!`;
+            elBoxNetSav.innerHTML = `<strong>${dedLead}</strong> You eliminate <strong>$${fmtDec(mpiAllOptionalsMonthly26)}/mo</strong> in optional MPI fees for just <strong>+${fmtDec(capPmt)} bi-weekly</strong> on your loan (saving <strong style="color: #059669;">$${fmtDec(netMoDiff)}/mo net</strong>)!`;
           } else {
             const netDiff = mpiAllOptionalsMonthly26 - capPmt;
-            elBoxNetSav.innerHTML = `<strong>By switching to $500 MPI + CAP:</strong> You save <strong style="color: #059669;">$${fmtDec(Math.abs(netDiff))} / month net</strong> while gaining up to ${maxAllowedYears} years of full coverage!`;
+            elBoxNetSav.innerHTML = `<strong>${dedLead}</strong> You save <strong style="color: #059669;">$${fmtDec(Math.abs(netDiff))} / month net</strong> while gaining up to ${maxAllowedYears} years of full coverage!`;
           }
         }
 
