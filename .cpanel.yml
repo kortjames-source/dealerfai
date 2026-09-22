@@ -3,4 +3,5 @@ deployment:
   tasks:
     - export DEPLOYPATH=/home/qacgw532/public_html/
     - /bin/cp -rf public_html/* $DEPLOYPATH
-    - /bin/cp -rf secure/* /home/qacgw532/secure/
+    - /bin/cp -f public_html/.htaccess $DEPLOYPATH.htaccess 2>/dev/null || true
+    - /bin/cp -rf secure/* /home/qacgw532/secure/ 2>/dev/null || true

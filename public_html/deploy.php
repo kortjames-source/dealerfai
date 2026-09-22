@@ -52,14 +52,14 @@ foreach ($candidateDirs as $dir) {
         // If repo is in /home/qacgw532/dealerfai, sync public_html to /home/qacgw532/public_html
         if ($dir === '/home/qacgw532/dealerfai' && is_dir('/home/qacgw532/public_html')) {
             $log .= "[sync dealerfai/public_html to /home/qacgw532/public_html]\n";
-            $syncOut = shell_exec("cp -ru /home/qacgw532/dealerfai/public_html/* /home/qacgw532/public_html/ 2>&1");
+            $syncOut = shell_exec("cp -ru /home/qacgw532/dealerfai/public_html/* /home/qacgw532/public_html/ 2>&1; cp -f /home/qacgw532/dealerfai/public_html/.htaccess /home/qacgw532/public_html/.htaccess 2>&1");
             $log .= ($syncOut ? $syncOut : "Files synced successfully.\n");
         }
         
         // If repo is in /home/qacgw532/public_html and contains nested public_html
         if ($dir === '/home/qacgw532/public_html' && is_dir('/home/qacgw532/public_html/public_html')) {
             $log .= "[sync nested public_html files to web root]\n";
-            $syncOut = shell_exec("cp -ru /home/qacgw532/public_html/public_html/* /home/qacgw532/public_html/ 2>&1");
+            $syncOut = shell_exec("cp -ru /home/qacgw532/public_html/public_html/* /home/qacgw532/public_html/ 2>&1; cp -f /home/qacgw532/public_html/public_html/.htaccess /home/qacgw532/public_html/.htaccess 2>&1");
             $log .= ($syncOut ? $syncOut : "Nested files synced successfully.\n");
         }
     }
