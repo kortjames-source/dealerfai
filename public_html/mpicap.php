@@ -1192,7 +1192,7 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
               </div>
               <div class="pillar-title">Deductible Reimbursement</div>
               <p class="pillar-desc">
-                Provides up to $500 deductible coverage on total loss (or $250 on partial loss). Includes GAP benefit if replacement credit is under $5,000.
+                Provides up to $500 deductible coverage on a total loss, and $250 on partial loss claims (repairable damage including body shop repairs &amp; windshield glass replacements).
               </p>
             </div>
           </div>
@@ -1324,7 +1324,7 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
             <div class="hero-card-subtext">
               Select <strong>$500 MPI Deductible</strong> & save <strong id="disp-ded-savings-sub">$238/yr ($19.83/mo)</strong>.<br>
               In a Total Loss: CAP pays $500 &rarr; <strong>$0 Out of Pocket</strong>!<br>
-              In a Partial Loss: CAP pays $250 &rarr; <strong>Only $250 Out of Pocket</strong>!
+              In a Partial Loss (repairs &amp; windshields): CAP pays $250 &rarr; <strong>Only $250 Out of Pocket</strong>!
             </div>
             <div class="fixed-badge" style="background: #e0f2fe; color: #0369a1;">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
@@ -1393,14 +1393,17 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
                   </td>
                 </tr>
                 <tr>
-                  <td><strong>Partial Loss (Accident Repair)</strong><br><span style="font-size: 0.8rem; color: #64748b;">Vehicle repaired at body shop</span></td>
+                  <td>
+                    <strong>Partial Loss (Repairable Claims)</strong><br>
+                    <span style="font-size: 0.8rem; color: #64748b;">Collisions, body shop repairs &amp; <strong>windshield replacements</strong></span>
+                  </td>
                   <td>
                     <span style="font-weight: 700; color: #0f172a;">Client Pays $200</span><br>
                     <span style="font-size: 0.8rem; color: #64748b;">Out-of-pocket deductible</span>
                   </td>
                   <td>
                     <span style="font-weight: 700; color: #0f172a;">Client Pays $250</span><br>
-                    <span style="font-size: 0.8rem; color: #059669;">$500 MPI minus $250 CAP reimbursement</span>
+                    <span style="font-size: 0.8rem; color: #059669;">$500 MPI minus $250 CAP reimbursement (includes windshield claims)</span>
                   </td>
                   <td>
                     <span style="font-size: 0.85rem; color: #475569;"><strong>Only $50 difference</strong>, while saving <strong id="table-ded-savings-sub">$238</strong> every single year!</span>
@@ -1456,7 +1459,7 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
               If you pay MPI for a $200 deductible, you are paying <strong>$238.00 every year</strong>. 
               By simply keeping MPI's standard $500 deductible and choosing Companion Asset Protection (CAP), you save that <strong>$238.00/year ($19.83/month)</strong>. 
               In the event of a total loss, CAP reimburses your entire $500 deductible—leaving you with <strong>$0 out of pocket</strong>. 
-              Even in a partial loss, you only pay $250 out of pocket (a mere $50 difference from $200), which is paid for many times over by your annual MPI premium savings!
+              Even in a partial loss (such as a body shop repair or windshield claim), you only pay $250 out of pocket (a mere $50 difference from $200), which is paid for many times over by your annual MPI premium savings!
             </span>
           </div>
         </div>
@@ -1505,7 +1508,7 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
                 <li id="disp-box-cap-years-bullet"><strong>Up to <?= $initialMaxYears ?> Years (<?= $initialMaxTermMonths ?> Months)</strong> Guaranteed Coverage</li>
                 <li><strong>Up to $60,000 Replacement Value Credit</strong> to buy next car</li>
                 <li><strong>30-Day Rental Vehicle</strong> included</li>
-                <li><strong>Up to $500 Deductible Reimbursed</strong> ($250 partial)</li>
+                <li><strong>Up to $500 Deductible Reimbursed</strong> ($250 on repairs &amp; windshields)</li>
                 <li>100% Rate Lock Guarantee (No annual rate hikes)</li>
               </ul>
             </div>
@@ -2122,7 +2125,7 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
             If you pay MPI for a $200 deductible, you are paying <strong>${fmt(dedSavingsAnnual26)} extra every single year</strong> (${fmtDec(dedSavingsPeriod26)}${freqSuffix}). 
             By simply keeping MPI's standard $500 deductible and choosing Companion Asset Protection (CAP), you save that <strong>${fmt(dedSavingsAnnual26)}/year</strong> on your insurance. 
             In the event of a total loss, CAP reimburses your entire $500 deductible—leaving you with <strong>$0 out of pocket</strong> (which is $200 cheaper than paying MPI for a $200 deductible). 
-            Even in a partial loss, you only pay $250 out of pocket (a modest $50 difference from $200), which is paid for many times over by your <strong>${fmt(dedSavingsAnnual26)}</strong> annual premium savings!
+            Even in a partial loss (such as a body shop repair or windshield claim), you only pay $250 out of pocket (a modest $50 difference from $200), which is paid for many times over by your <strong>${fmt(dedSavingsAnnual26)}</strong> annual premium savings!
           `;
         }
 
