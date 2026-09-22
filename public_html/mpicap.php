@@ -94,7 +94,9 @@ if ($prefillVehYear === 2026 && preg_match('/\b(19\d\d|20\d\d)\b/', $prefillVehi
 $isOver75k = ($prefillSalePrice > 75000);
 $initialMaxYears = $isOver75k ? 5 : 7;
 $initialMaxTermMonths = $isOver75k ? 60 : 84;
-$initialMpiPayout = (int)(round(($prefillSalePrice * 0.61176) / 1000) * 1000);
+// Default Claim Timing Scenario: Year 4 (~52% ACV retained / 48% depreciation loss)
+$initialScenarioYear = 4;
+$initialMpiPayout = (int)(round(($prefillSalePrice * 0.52) / 1000) * 1000);
 $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
 
 // MPI New Vehicle Protection eligibility based on model year:
@@ -699,6 +701,27 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
       border: 1px solid rgba(255, 255, 255, 0.2);
       border-radius: var(--radius-md);
       padding: 1.75rem;
+    }
+
+    .scenario-year-btn {
+      background: transparent;
+      color: rgba(255, 255, 255, 0.85);
+      border: none;
+      cursor: pointer;
+      padding: 4px 11px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      border-radius: 9999px;
+      transition: all 0.2s ease;
+    }
+    .scenario-year-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+    }
+    .scenario-year-btn.active {
+      background: #059669;
+      color: #ffffff;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
     }
 
     .scenario-grid {
@@ -1475,9 +1498,9 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
               <div class="pillar-icon">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
               </div>
-              <div class="pillar-title">Up to $60,000 Saved</div>
-              <p class="pillar-desc">
-                Protects you against rapid vehicle depreciation, saving you up to $60,000 to replace like or kind, model, year, and trim level.
+              <div class="pillar-title" id="disp-pillar-saved-title">Up to $<?= number_format($initialCapTopUp) ?> Equity Protected</div>
+              <p class="pillar-desc" id="disp-pillar-saved-desc">
+                Protects you against rapid vehicle depreciation, saving you up to $<?= number_format($initialCapTopUp) ?> to replace like, kind, and model without out-of-pocket shortfall.
               </p>
             </div>
 
@@ -1514,12 +1537,24 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
 
           <!-- Total Loss Scenario Side-by-Side -->
           <div class="scenario-box">
-            <h4 style="margin: 0 0 0.5rem 0; font-size: 1.15rem; font-weight: 700; color: #ffffff;">
-              Total Loss Write-Off Reality: What Happens Without vs. With CAP?
-            </h4>
-            <p style="margin: 0 0 1rem 0; font-size: 0.85rem; color: rgba(255, 255, 255, 0.75);">
-              Example based on a <span id="disp-scenario-veh-price">$<?= number_format($prefillSalePrice) ?></span> vehicle written off in Year 3 with an outstanding balance or replacement need:
-            </p>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 0.75rem;">
+              <div>
+                <h4 style="margin: 0 0 0.25rem 0; font-size: 1.15rem; font-weight: 700; color: #ffffff;">
+                  Total Loss Write-Off Reality: What Happens Without vs. With CAP?
+                </h4>
+                <p style="margin: 0; font-size: 0.85rem; color: rgba(255, 255, 255, 0.85);" id="disp-scenario-lead-text">
+                  Example based on your <strong id="disp-scenario-veh-name"><?= htmlspecialchars($prefillVehicle) ?></strong> (<strong id="disp-scenario-veh-price">$<?= number_format($prefillSalePrice) ?></strong>) written off in <strong id="disp-scenario-year-label">Year 4 (Month 48)</strong>:
+                </p>
+              </div>
+              <div style="display: flex; align-items: center; gap: 0.5rem; background: rgba(0, 0, 0, 0.25); padding: 4px 6px; border-radius: 9999px; border: 1px solid rgba(255, 255, 255, 0.15);">
+                <span style="font-size: 0.72rem; color: rgba(255, 255, 255, 0.7); text-transform: uppercase; font-weight: 700; padding-left: 6px;">Claim Timing:</span>
+                <div style="display: flex; gap: 4px;" id="scenario-year-pills">
+                  <button type="button" class="scenario-year-btn" data-year="3">Year 3 (~61%)</button>
+                  <button type="button" class="scenario-year-btn active" data-year="4">Year 4 (~52%)</button>
+                  <button type="button" class="scenario-year-btn" data-year="5">★ Year 5 (~44%)</button>
+                </div>
+              </div>
+            </div>
 
             <div class="scenario-grid">
               <div class="scenario-column mpi">
@@ -1618,7 +1653,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
             </div>
             <div class="hero-card-subtext">
               <strong id="disp-cap-term-label">60-Month (5-Year)</strong> Replacement Protection<br>
-              Includes: <strong>Up to $60,000 Top-Up + 30 Days Rental</strong><br>
+              <span id="disp-card-cap-topup-text">Includes: <strong>Up to $<?= number_format($initialCapTopUp) ?> Top-Up + 30 Days Rental</strong></span><br>
               Daily Cost: Just <strong id="disp-cap-per-day">$1.47/day</strong> for peace of mind.<br>
               <span id="disp-cap-loan-sub" style="font-size: 0.8rem; color: #475569;">Financed over your <strong><?= (int)$prefillTerm ?>-month</strong> vehicle loan.</span>
             </div>
@@ -1787,7 +1822,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
                     <span style="font-size: 0.8rem; color: #64748b;" id="table-mpi-repl-sub"><?= $isVehIneligibleMpiNew ? 'MPI offers $0 replacement value on 2024 & older' : ($isVehOneYearMpiNew ? 'Terminates after 12 months; drops to depreciated ACV' : 'MPI pays depreciated ACV only') ?></span>
                   </td>
                   <td>
-                    <span style="font-weight: 700; color: #059669;" id="table-cap-repl-val">Up to $60,000 Saved</span><br>
+                    <span style="font-weight: 700; color: #059669;" id="table-cap-repl-val">Up to $<?= number_format($initialCapTopUp) ?> Saved</span><br>
                     <span style="font-size: 0.8rem; color: #64748b;" id="table-cap-repl-sub">Protects New &amp; Pre-Owned vehicles up to <?= $initialMaxYears ?> years</span>
                   </td>
                   <td>
@@ -1881,7 +1916,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
               <div style="font-size: 0.85rem; color: #047857; margin-top: 0.25rem;" id="disp-box-cap-annual">Just $20.72 bi-weekly ($1.47/day)</div>
               <ul style="margin: 0.75rem 0 0 0; padding-left: 1.2rem; font-size: 0.85rem; color: #065f46; line-height: 1.6;">
                 <li id="disp-box-cap-years-bullet"><strong>Up to <?= $initialMaxYears ?> Years (<?= $initialMaxTermMonths ?> Months)</strong> Guaranteed Coverage</li>
-                <li><strong>Up to $60,000 Replacement Value Credit</strong> to buy next car</li>
+                <li id="disp-box-cap-topup-bullet"><strong>Up to $<?= number_format($initialCapTopUp) ?> Replacement Value Credit</strong> to buy next car</li>
                 <li><strong>30-Day Rental Vehicle</strong> included</li>
                 <li><strong>Up to $500 Deductible Reimbursed</strong> ($250 on repairs &amp; windshields)</li>
                 <li>100% Rate Lock Guarantee (No annual rate hikes)</li>
@@ -2029,6 +2064,12 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
       let paymentFrequency = 'monthly'; // 'monthly' | 'biweekly'
       let selectedCapTerm = 60; // default term
       let selectedDeductible = 200; // default deductible tier: 1000, 750, 500, 300, 200
+      let selectedScenarioYear = 4; // default scenario claim timing: 3, 4, 5
+      const DEPRECIATION_RATES = {
+        3: { acvPct: 0.61, label: 'Year 3 (Month 36)' },
+        4: { acvPct: 0.52, label: 'Year 4 (Month 48)' },
+        5: { acvPct: 0.44, label: 'Year 5 (Month 60)' }
+      };
 
       // DOM Elements
       const btnMonthly = document.getElementById('btn-monthly');
@@ -2092,6 +2133,17 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
         });
       });
 
+      // Scenario year selector pills
+      document.querySelectorAll('.scenario-year-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          selectedScenarioYear = parseInt(btn.dataset.year, 10) || 4;
+          document.querySelectorAll('.scenario-year-btn').forEach(b => {
+            b.classList.toggle('active', parseInt(b.dataset.year, 10) === selectedScenarioYear);
+          });
+          recalculate();
+        });
+      });
+
       // Top deductible badge click handler
       const topDedBadge = document.getElementById('disp-top-ded-badge');
       if (topDedBadge) {
@@ -2109,6 +2161,8 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
           if (vehYrEl) vehYrEl.value = "2026";
           const vehNameEl = document.getElementById('inp-vehicle-name');
           if (vehNameEl) vehNameEl.value = "2026 Land Rover Defender 110 S P300";
+          const vehPriceEl = document.getElementById('inp-veh-price');
+          if (vehPriceEl) vehPriceEl.value = 85000;
 
           document.getElementById('mpi-26-basic').value = 3294;
           document.getElementById('mpi-26-ded-750').value = 60;
@@ -2140,6 +2194,10 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
           document.getElementById('cap-price-84').value = 2617;
           if (dsrSelect) dsrSelect.value = "0";
           selectedDeductible = 200;
+          selectedScenarioYear = 4;
+          document.querySelectorAll('.scenario-year-btn').forEach(b => {
+            b.classList.toggle('active', parseInt(b.dataset.year, 10) === 4);
+          });
           recalculate();
         });
       }
@@ -2543,14 +2601,20 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
           }
         }
 
-        // Update Scenario Vehicle Price & Exact Matching Math
-        const elScenVehPrice = document.getElementById('disp-scenario-veh-price');
-        if (elScenVehPrice) elScenVehPrice.textContent = fmt(vehPrice);
-
+        // Update Scenario Vehicle Name, Price & Exact Matching Math
+        const depInfo = DEPRECIATION_RATES[selectedScenarioYear] || DEPRECIATION_RATES[4];
         const scenVehPrice = vehPrice > 0 ? vehPrice : 85000;
-        // Standard Year 3 depreciation: vehicle depreciates to ~61% of value
-        const scenMpiPayout = Math.round((scenVehPrice * 0.61176) / 1000) * 1000;
+        const scenMpiPayout = Math.round((scenVehPrice * depInfo.acvPct) / 1000) * 1000;
         const scenCapTopUp = scenVehPrice - scenMpiPayout;
+
+        const elScenVehName = document.getElementById('disp-scenario-veh-name');
+        if (elScenVehName) elScenVehName.textContent = vehName;
+
+        const elScenVehPrice = document.getElementById('disp-scenario-veh-price');
+        if (elScenVehPrice) elScenVehPrice.textContent = fmt(scenVehPrice);
+
+        const elScenYearLabel = document.getElementById('disp-scenario-year-label');
+        if (elScenYearLabel) elScenYearLabel.textContent = depInfo.label;
 
         const elScenMpiPayout = document.getElementById('disp-scen-mpi-payout');
         if (elScenMpiPayout) elScenMpiPayout.textContent = `~${fmt(scenMpiPayout)}`;
@@ -2566,6 +2630,30 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
 
         const elScenTotalPower = document.getElementById('disp-scen-total-power');
         if (elScenTotalPower) elScenTotalPower.textContent = `${fmt(scenVehPrice)} (100% Value)`;
+
+        // Dynamic Equity Protected Across All Customer Cards & Tables
+        const elPillarSavedTitle = document.getElementById('disp-pillar-saved-title');
+        if (elPillarSavedTitle) elPillarSavedTitle.textContent = `Up to ${fmt(scenCapTopUp)} Equity Protected`;
+
+        const elPillarSavedDesc = document.getElementById('disp-pillar-saved-desc');
+        if (elPillarSavedDesc) {
+          elPillarSavedDesc.textContent = `Protects you against rapid vehicle depreciation, saving you up to ${fmt(scenCapTopUp)} to replace like, kind, and model without out-of-pocket shortfall.`;
+        }
+
+        const elCardCapTopupText = document.getElementById('disp-card-cap-topup-text');
+        if (elCardCapTopupText) {
+          elCardCapTopupText.innerHTML = `Includes: <strong>Up to ${fmt(scenCapTopUp)} Top-Up + 30 Days Rental</strong>`;
+        }
+
+        const elTableCapReplVal = document.getElementById('table-cap-repl-val');
+        if (elTableCapReplVal) {
+          elTableCapReplVal.textContent = `Up to ${fmt(scenCapTopUp)} Saved`;
+        }
+
+        const elBoxCapTopupBullet = document.getElementById('disp-box-cap-topup-bullet');
+        if (elBoxCapTopupBullet) {
+          elBoxCapTopupBullet.innerHTML = `<strong>Up to ${fmt(scenCapTopUp)} Replacement Value Credit</strong> to buy next car`;
+        }
 
         // Update Pillar 2
         const elPillarYearsTitle = document.getElementById('disp-pillar-years-title');
