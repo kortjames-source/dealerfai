@@ -2682,9 +2682,6 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
             : 'Select your preferred coverage term below (up to 84 months / 7 years) to update the monthly and bi-weekly payment comparison.';
         }
 
-        const elRateLockYears = document.getElementById('disp-ratelock-years');
-        if (elRateLockYears) elRateLockYears.textContent = `up to ${maxAllowedYears} years`;
-
         // Process CAP Term Prices
         const capInputs = [
           { term: 36, el: document.getElementById('cap-price-36') },
