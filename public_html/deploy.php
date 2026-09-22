@@ -6,7 +6,7 @@
 
 // --- CONFIGURATION ---
 $secret_key = 'dealer_deploy_2024'; // You should change this to something unique!
-$repo_dir = '/home/qacgw532/public_html'; // Path confirmed by user
+$repo_dir = '/home/qacgw532/dealerfai'; // Path confirmed by user
 $branch = 'main';
 $log_file = '../secure/logs/deploy.log'; // Path relative to this file
 // ---------------------

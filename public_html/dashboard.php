@@ -95,6 +95,9 @@ if (!empty($accessible_orgs)) {
         <a href="create_deal" class="sidebar-link">
           <i class="fa-solid fa-plus-circle"></i> Create Deal
         </a>
+        <a href="mpi_cap_comparison" class="sidebar-link">
+          <i class="fa-solid fa-shield-halved"></i> MPI vs CAP Tool
+        </a>
         
         <?php if ($isAdmin): ?>
           <div style="margin-top: 2rem; padding: 0 1rem; font-size: 0.75rem; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700;">Admin</div>
@@ -220,6 +223,10 @@ if (!empty($accessible_orgs)) {
             <a href="admin_tools" class="btn btn-outline" style="text-align: center; padding: 2rem 1rem;">
               <i class="fa-solid fa-chart-pie" style="font-size: 2rem; margin-bottom: 1rem; display: block;"></i>
               View Reports
+            </a>
+            <a href="mpi_cap_comparison" class="btn btn-outline" style="text-align: center; padding: 2rem 1rem;">
+              <i class="fa-solid fa-shield-halved" style="font-size: 2rem; margin-bottom: 1rem; display: block; color: var(--brand-color);"></i>
+              MPI vs CAP Tool
             </a>
           </div>
         </div>
