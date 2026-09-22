@@ -85,6 +85,8 @@ if ($dealId && $dealId > 0 && isset($db) && ($db instanceof PDO)) {
 $isOver75k = ($prefillSalePrice > 75000);
 $initialMaxYears = $isOver75k ? 5 : 7;
 $initialMaxTermMonths = $isOver75k ? 60 : 84;
+$initialMpiPayout = (int)(round(($prefillSalePrice * 0.61176) / 1000) * 1000);
+$initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -1211,8 +1213,8 @@ $initialMaxTermMonths = $isOver75k ? 60 : 84;
                   <span>MPI Base Alone (Without CAP)</span>
                 </div>
                 <div class="scenario-row">
-                  <span>MPI Payout</span>
-                  <strong>Depreciated Value (~$52,000)</strong>
+                  <span>MPI Payout (Depreciated ACV)</span>
+                  <strong id="disp-scen-mpi-payout">~$<?= number_format($initialMpiPayout) ?></strong>
                 </div>
                 <div class="scenario-row">
                   <span>Deductible Paid by Client</span>
@@ -1228,22 +1230,26 @@ $initialMaxTermMonths = $isOver75k ? 60 : 84;
                 </div>
                 <div class="scenario-row highlight" style="color: #fca5a5;">
                   <span>Out-of-Pocket To Replace:</span>
-                  <span>$25,000+ Deprec. Loss</span>
+                  <span id="disp-scen-mpi-loss">-$<?= number_format($initialCapTopUp) ?> Deprec. Shortfall</span>
                 </div>
               </div>
 
               <div class="scenario-column cap">
                 <div class="scenario-title" style="color: #6ee7b7;">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="9 11 12 14 22 4"/></svg>
+                  <svg width="18" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="9 11 12 14 22 4"/></svg>
                   <span>With Dealership CAP Insurance</span>
                 </div>
                 <div class="scenario-row">
                   <span>MPI Base Payout</span>
-                  <strong>~$52,000 Depreciated Value</strong>
+                  <strong id="disp-scen-cap-mpi-payout">~$<?= number_format($initialMpiPayout) ?></strong>
                 </div>
                 <div class="scenario-row">
                   <span>CAP Replacement Credit Top-Up</span>
-                  <span style="color: #6ee7b7;">+$25,000+ Direct Credit</span>
+                  <span style="color: #6ee7b7; font-weight: 700;" id="disp-scen-cap-topup">+$<?= number_format($initialCapTopUp) ?> Direct Credit</span>
+                </div>
+                <div class="scenario-row">
+                  <span>Total Buying Power for Next Car</span>
+                  <strong style="color: #6ee7b7;" id="disp-scen-total-power">$<?= number_format($prefillSalePrice) ?> (100% Value)</strong>
                 </div>
                 <div class="scenario-row">
                   <span>Deductible Reimbursement</span>
@@ -1904,9 +1910,29 @@ $initialMaxTermMonths = $isOver75k ? 60 : 84;
           }
         }
 
-        // Update Scenario Vehicle Price
+        // Update Scenario Vehicle Price & Exact Matching Math
         const elScenVehPrice = document.getElementById('disp-scenario-veh-price');
         if (elScenVehPrice) elScenVehPrice.textContent = fmt(vehPrice);
+
+        const scenVehPrice = vehPrice > 0 ? vehPrice : 85000;
+        // Standard Year 3 depreciation: vehicle depreciates to ~61% of value
+        const scenMpiPayout = Math.round((scenVehPrice * 0.61176) / 1000) * 1000;
+        const scenCapTopUp = scenVehPrice - scenMpiPayout;
+
+        const elScenMpiPayout = document.getElementById('disp-scen-mpi-payout');
+        if (elScenMpiPayout) elScenMpiPayout.textContent = `~${fmt(scenMpiPayout)}`;
+
+        const elScenMpiLoss = document.getElementById('disp-scen-mpi-loss');
+        if (elScenMpiLoss) elScenMpiLoss.textContent = `-${fmt(scenCapTopUp)} Deprec. Shortfall`;
+
+        const elScenCapMpi = document.getElementById('disp-scen-cap-mpi-payout');
+        if (elScenCapMpi) elScenCapMpi.textContent = `~${fmt(scenMpiPayout)}`;
+
+        const elScenCapTopup = document.getElementById('disp-scen-cap-topup');
+        if (elScenCapTopup) elScenCapTopup.textContent = `+${fmt(scenCapTopUp)} Direct Credit`;
+
+        const elScenTotalPower = document.getElementById('disp-scen-total-power');
+        if (elScenTotalPower) elScenTotalPower.textContent = `${fmt(scenVehPrice)} (100% Value)`;
 
         // Update Pillar 2
         const elPillarYearsTitle = document.getElementById('disp-pillar-years-title');
