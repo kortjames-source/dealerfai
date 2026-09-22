@@ -43,6 +43,7 @@ if ($org_id && isset($db) && ($db instanceof PDO)) {
 $dealId = isset($_GET['deal_id']) ? (int)$_GET['deal_id'] : null;
 $prefillClient = 'Valued Client';
 $prefillVehicle = '2026 Land Rover Defender 110 S P300';
+$prefillVehYear = 2026;
 $prefillSalePrice = 85000;
 $prefillTerm = 60;
 $prefillRate = 7.99;
@@ -58,6 +59,9 @@ if ($dealId && $dealId > 0 && isset($db) && ($db instanceof PDO)) {
                 $prefillClient = implode(' ', $nameParts);
             } elseif (!empty($deal['customer_name'])) {
                 $prefillClient = (string)$deal['customer_name'];
+            }
+            if (!empty($deal['vehicle_year']) && (int)$deal['vehicle_year'] >= 1980) {
+                $prefillVehYear = (int)$deal['vehicle_year'];
             }
             $vehYear = trim((string)($deal['vehicle_year'] ?? ''));
             $vehMake = trim((string)($deal['vehicle_make_name'] ?? ''));
@@ -81,12 +85,25 @@ if ($dealId && $dealId > 0 && isset($db) && ($db instanceof PDO)) {
     }
 }
 
+// Fallback year extraction from vehicle name string if deal year was not set
+if ($prefillVehYear === 2026 && preg_match('/\b(19\d\d|20\d\d)\b/', $prefillVehicle, $m)) {
+    $prefillVehYear = (int)$m[1];
+}
+
 // Vehicle sale price rule: luxury vehicles over $75,000 are restricted to a max 5-year (60 mo) term
 $isOver75k = ($prefillSalePrice > 75000);
 $initialMaxYears = $isOver75k ? 5 : 7;
 $initialMaxTermMonths = $isOver75k ? 60 : 84;
 $initialMpiPayout = (int)(round(($prefillSalePrice * 0.61176) / 1000) * 1000);
 $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
+
+// MPI New Vehicle Protection eligibility based on model year:
+// 2+ years old (<= 2024): Ineligible ($0 from MPI / ACV only)
+// 1 year old (2025): 1 year max (12 months)
+// Brand New (2026+): up to 2 years (24 months)
+$isVehIneligibleMpiNew = ($prefillVehYear <= 2024);
+$isVehOneYearMpiNew = ($prefillVehYear === 2025);
+$initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew ? 1 : 2);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -1228,13 +1245,28 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
 
           <div class="manager-panel-body">
             <!-- Client & Deal Information -->
-            <div class="grid-3col">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
               <div class="form-group">
                 <label for="inp-client-name">Client Name</label>
                 <input type="text" id="inp-client-name" class="form-control-sm" value="<?= htmlspecialchars($prefillClient) ?>">
               </div>
               <div class="form-group">
-                <label for="inp-vehicle-name">Vehicle Year / Make / Model</label>
+                <label for="inp-vehicle-year">Vehicle Model Year</label>
+                <select id="inp-vehicle-year" class="form-control-sm" style="font-weight: 600;">
+                  <?php
+                    $availableYears = [2027, 2026, 2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015];
+                    foreach ($availableYears as $yr):
+                      $yrLabel = (string)$yr;
+                      if ($yr >= 2026) $yrLabel .= " (New - Up to 2 Yrs MPI)";
+                      elseif ($yr === 2025) $yrLabel .= " (1 Yr Old - Max 1 Yr MPI)";
+                      else $yrLabel .= " (Pre-Owned - Ineligible for MPI)";
+                  ?>
+                    <option value="<?= $yr ?>" <?= ($prefillVehYear === $yr) ? 'selected' : '' ?>><?= $yrLabel ?></option>
+                  <?php endforeach; ?>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="inp-vehicle-name">Vehicle Description / Make / Model</label>
                 <input type="text" id="inp-vehicle-name" class="form-control-sm" value="<?= htmlspecialchars($prefillVehicle) ?>">
               </div>
               <div class="form-group">
@@ -1260,12 +1292,21 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
               </div>
             </div>
 
-            <!-- MPI Itemized Lines Input (2025 vs 2026) -->
-            <div style="margin-top: 1.25rem; border-top: 1px solid #e2e8f0; padding-top: 1.25rem;">
-              <h4 style="margin: 0 0 0.75rem 0; font-size: 0.95rem; font-weight: 700; color: #1e293b; display: flex; align-items: center; justify-content: space-between;">
-                <span>MPI Calculator Line Items</span>
-                <button type="button" id="btn-load-sample" class="action-btn" style="padding: 0.25rem 0.65rem; font-size: 0.75rem;">Reset to Defender Sample</button>
-              </h4>
+            <!-- MPI Optional Coverage Calculator Input Table -->
+            <div style="margin-top: 1.5rem; border-top: 1px solid #e2e8f0; padding-top: 1.25rem;">
+              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem;">
+                <h4 style="margin: 0; font-size: 0.95rem; font-weight: 700; color: #1e293b;">
+                  Manitoba Public Insurance (MPI) Quote Inputs
+                </h4>
+                <div style="display: flex; gap: 0.5rem;">
+                  <button type="button" id="btn-load-sample" class="btn btn-secondary btn-sm" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;">
+                    Reset to Defender Sample
+                  </button>
+                </div>
+              </div>
+              <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 0.75rem;">
+                Enter the exact figures pulled from the MPI online calculator for this vehicle and driver rating.
+              </p>
 
               <div style="overflow-x: auto;">
                 <table class="rates-comparison-table" style="margin-bottom: 0.5rem;">
@@ -1324,8 +1365,13 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
                       <td><input type="number" class="form-control-sm mpi-input" data-col="2026" id="mpi-26-lossuse" value="143"></td>
                       <td><input type="number" class="form-control-sm mpi-input" data-col="2025" id="mpi-25-lossuse" value="136"></td>
                     </tr>
-                    <tr>
-                      <td>New/Leased Vehicle Protection (2-Year Max)</td>
+                    <tr id="row-mpi-newveh">
+                      <td>
+                        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 4px;">
+                          <span id="lbl-mpi-newveh-title">New/Leased Vehicle Protection</span>
+                          <span id="disp-mpi-newveh-status-badge" style="font-size: 0.72rem; padding: 2px 6px; border-radius: 4px; font-weight: 700;"></span>
+                        </div>
+                      </td>
                       <td><input type="number" class="form-control-sm mpi-input" data-col="2026" id="mpi-26-newveh" value="392"></td>
                       <td><input type="number" class="form-control-sm mpi-input" data-col="2025" id="mpi-25-newveh" value="412"></td>
                     </tr>
@@ -1543,21 +1589,21 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
         <div class="comparison-grid">
           <!-- Card 1: MPI Add-On Costs (New Car + Loss of Use) -->
           <div class="hero-card">
-            <div class="hero-card-tag" style="color: var(--mpi-blue);">
+            <div class="hero-card-tag" style="color: var(--mpi-blue);" id="disp-mpi-addons-tag">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-              <span>MPI Add-Ons (New Car + Rental)</span>
+              <span id="disp-mpi-addons-tag-text"><?= $isVehIneligibleMpiNew ? 'MPI Add-Ons (Rental Only • New Car Ineligible)' : 'MPI Add-Ons (New Car + Rental)' ?></span>
             </div>
             <div class="hero-amount" id="disp-mpi-addons-amount" style="color: var(--mpi-blue);">
-              $44<span class="period">.58/mo</span>
+              <?= $isVehIneligibleMpiNew ? '$11<span class="period">.92/mo</span>' : '$44<span class="period">.58/mo</span>' ?>
             </div>
             <div class="hero-card-subtext">
-              MPI New Vehicle Protection: <strong id="disp-mpi-newveh-sub">$392/yr ($32.67/mo)</strong><br>
+              MPI New Vehicle Protection: <strong id="disp-mpi-newveh-sub"><?= $isVehIneligibleMpiNew ? 'Ineligible ($0.00 from MPI)' : ($isVehOneYearMpiNew ? '$392/yr ($32.67/mo) — Max 1 Yr' : '$392/yr ($32.67/mo)') ?></strong><br>
               MPI Loss of Use (Rental Car): <strong id="disp-mpi-lossuse-sub">$143/yr ($11.92/mo)</strong><br>
-              Combined MPI Add-On Cost: <strong id="disp-mpi-addons-annual">$535/yr (Billed Monthly by MPI)</strong>
+              Combined MPI Add-On Cost: <strong id="disp-mpi-addons-annual"><?= $isVehIneligibleMpiNew ? '$143/yr (Rental Only)' : '$535/yr (Billed Monthly by MPI)' ?></strong>
             </div>
             <div class="increase-badge" style="background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1;">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-              <span id="disp-mpi-addons-badge">Billed Monthly by MPI • Expires after 1–2 Years</span>
+              <span id="disp-mpi-addons-badge"><?= $isVehIneligibleMpiNew ? '⚠️ MPI Ineligible (2+ Yrs Old) • ACV Only' : ($isVehOneYearMpiNew ? 'Billed Monthly by MPI • Max 1 Year (Expires after 12 Mo)' : 'Billed Monthly by MPI • Expires after 2 Years') ?></span>
             </div>
           </div>
 
@@ -1578,7 +1624,7 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
             </div>
             <div class="fixed-badge">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-              <span id="disp-card-cap-badge">Up to <?= $initialMaxYears ?> Years Locked • Reimburses Deductible</span>
+              <span id="disp-card-cap-badge"><?= $isVehIneligibleMpiNew ? "Up to {$initialMaxYears} Years Locked • Pre-Owned Covered" : "Up to {$initialMaxYears} Years Locked • Reimburses Deductible" ?></span>
             </div>
           </div>
 
@@ -1737,15 +1783,15 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
                 <tr>
                   <td><strong>Replacement Value Top-Up</strong><br><span style="font-size: 0.8rem; color: #64748b;">Credit towards your replacement car</span></td>
                   <td>
-                    <span style="font-weight: 700; color: #b91c1c;">$0.00 from MPI</span><br>
-                    <span style="font-size: 0.8rem; color: #64748b;">MPI pays depreciated ACV only</span>
+                    <span style="font-weight: 700; color: #b91c1c;" id="table-mpi-repl-val"><?= $isVehIneligibleMpiNew ? '$0.00 from MPI (Ineligible)' : ($isVehOneYearMpiNew ? 'Limited to 1 Year Only' : '$0.00 after 2 Years') ?></span><br>
+                    <span style="font-size: 0.8rem; color: #64748b;" id="table-mpi-repl-sub"><?= $isVehIneligibleMpiNew ? 'MPI offers $0 replacement value on 2024 & older' : ($isVehOneYearMpiNew ? 'Terminates after 12 months; drops to depreciated ACV' : 'MPI pays depreciated ACV only') ?></span>
                   </td>
                   <td>
-                    <span style="font-weight: 700; color: #059669;">Up to $60,000 Saved</span><br>
-                    <span style="font-size: 0.8rem; color: #64748b;">Replaces same like, kind, model & trim</span>
+                    <span style="font-weight: 700; color: #059669;" id="table-cap-repl-val">Up to $60,000 Saved</span><br>
+                    <span style="font-size: 0.8rem; color: #64748b;" id="table-cap-repl-sub">Protects New &amp; Pre-Owned vehicles up to <?= $initialMaxYears ?> years</span>
                   </td>
                   <td>
-                    <span class="badge-win">Full Equity Top-Up</span>
+                    <span class="badge-win" id="table-cap-repl-badge">Full Equity Top-Up</span>
                   </td>
                 </tr>
                 <tr>
@@ -1764,14 +1810,14 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
                 <tr>
                   <td><strong>Coverage Duration</strong></td>
                   <td>
-                    <span style="font-size: 0.85rem; color: #64748b;">Subject to annual MPI rate increases</span>
+                    <span style="font-size: 0.85rem; color: #64748b;" id="disp-table-mpi-duration"><?= $isVehIneligibleMpiNew ? '0 Years (Ineligible for New Vehicle Protection)' : ($isVehOneYearMpiNew ? 'Max 1 Year (12 Months Max on 2025 Models)' : 'Max 2 Years (24 Months Max on New Models)') ?></span>
                   </td>
                   <td>
                     <span style="font-weight: 700; color: #059669;" id="disp-table-cap-duration">Up to <?= $initialMaxYears ?> Years Guaranteed</span><br>
                     <span style="font-size: 0.8rem; color: #64748b;" id="disp-table-cap-duration-sub"><?= $isOver75k ? 'Max term for vehicles over $75k' : '100% Locked-in Rate' ?></span>
                   </td>
                   <td>
-                    <span class="badge-win" id="disp-table-cap-extra-years"><?= max(1, $initialMaxYears - 2) ?> Extra Years of Protection</span>
+                    <span class="badge-win" id="disp-table-cap-extra-years"><?= $isVehIneligibleMpiNew ? "Full {$initialMaxYears} Extra Years vs $0 MPI" : ($isVehOneYearMpiNew ? max(1, $initialMaxYears - 1) . " Extra Years of Protection" : max(1, $initialMaxYears - 2) . " Extra Years of Protection") ?></span>
                   </td>
                 </tr>
               </tbody>
@@ -1799,13 +1845,17 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--mpi-blue)" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                 Comparing MPI Add-On Coverage vs. Companion Asset Protection (CAP)
               </h3>
-              <p style="margin: 0.35rem 0 0 0; color: #64748b; font-size: 0.875rem;">
-                Evaluating what MPI charges for its optional 2-year New Vehicle Protection and Loss of Use vs. <span id="disp-addon-cap-term-desc">Up to <?= $initialMaxYears ?>-Year</span> Companion Asset Protection (CAP).
+              <p style="margin: 0.35rem 0 0 0; color: #64748b; font-size: 0.875rem;" id="disp-addon-comparison-lead">
+                <?= $isVehIneligibleMpiNew
+                  ? "Evaluating MPI's coverage limitations on pre-owned vehicles (ineligible for New Vehicle Protection) vs. <span id=\"disp-addon-cap-term-desc\">Up to {$initialMaxYears}-Year</span> Companion Asset Protection (CAP)."
+                  : ($isVehOneYearMpiNew
+                    ? "Evaluating what MPI charges for its optional 1-year New Vehicle Protection and Loss of Use vs. <span id=\"disp-addon-cap-term-desc\">Up to {$initialMaxYears}-Year</span> Companion Asset Protection (CAP)."
+                    : "Evaluating what MPI charges for its optional 2-year New Vehicle Protection and Loss of Use vs. <span id=\"disp-addon-cap-term-desc\">Up to {$initialMaxYears}-Year</span> Companion Asset Protection (CAP).") ?>
               </p>
             </div>
             <div style="text-align: right;">
               <div style="font-size: 0.75rem; text-transform: uppercase; color: #64748b; font-weight: 700;">Cost Comparison</div>
-              <div style="font-size: 1.35rem; font-weight: 800; color: #0f172a;" id="disp-addon-vs-cap-headline">Virtually Identical Cost</div>
+              <div style="font-size: 1.35rem; font-weight: 800; color: #0f172a;" id="disp-addon-vs-cap-headline"><?= $isVehIneligibleMpiNew ? "MPI Offers \$0 Replacement Value — CAP Protects Up to {$initialMaxYears} Yrs" : "Virtually Identical Cost" ?></div>
             </div>
           </div>
 
@@ -1813,12 +1863,12 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
             <!-- Box 1: MPI Add-Ons Cost -->
             <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: var(--radius-md); padding: 1.25rem;">
               <div style="font-size: 0.75rem; font-weight: 700; color: var(--mpi-blue); text-transform: uppercase;">MPI Optional Add-Ons (Billed Monthly)</div>
-              <div style="font-size: 1.75rem; font-weight: 800; color: #0f172a; margin-top: 0.25rem;" id="disp-box-mpi-addons-period">$44.58 / mo</div>
-              <div style="font-size: 0.85rem; color: #64748b; margin-top: 0.25rem;" id="disp-box-mpi-addons-annual">$535.00 / year (Billed Monthly by MPI)</div>
+              <div style="font-size: 1.75rem; font-weight: 800; color: #0f172a; margin-top: 0.25rem;" id="disp-box-mpi-addons-period"><?= $isVehIneligibleMpiNew ? "$11.92 / mo" : "$44.58 / mo" ?></div>
+              <div style="font-size: 0.85rem; color: #64748b; margin-top: 0.25rem;" id="disp-box-mpi-addons-annual"><?= $isVehIneligibleMpiNew ? "$143.00 / year (Rental Car Only)" : "$535.00 / year (Billed Monthly by MPI)" ?></div>
               <ul style="margin: 0.75rem 0 0 0; padding-left: 1.2rem; font-size: 0.85rem; color: #475569; line-height: 1.6;">
-                <li>New/Leased Vehicle Protection: <strong id="disp-box-mpi-newveh">$392/yr</strong></li>
+                <li>New/Leased Vehicle Protection: <strong id="disp-box-mpi-newveh"><?= $isVehIneligibleMpiNew ? '$0 (Not Eligible from MPI)' : ($isVehOneYearMpiNew ? '$392/yr (12 Mo Max)' : '$392/yr') ?></strong></li>
                 <li>Loss of Use (Rental Car): <strong id="disp-box-mpi-lossuse">$143/yr</strong></li>
-                <li><span style="color: #dc2626; font-weight: 600;">Coverage terminates after 24 months</span></li>
+                <li id="disp-box-mpi-term-bullet"><?= $isVehIneligibleMpiNew ? '<span style="color: #dc2626; font-weight: 700;">⚠️ MPI Replacement Value NOT AVAILABLE (2+ Yrs Old)</span> — MPI only pays depreciated ACV' : ($isVehOneYearMpiNew ? '<span style="color: #ea580c; font-weight: 600;">MPI Coverage terminates after 12 months</span>' : '<span style="color: #dc2626; font-weight: 600;">Coverage terminates after 24 months</span>') ?></li>
                 <li>Settles depreciated ACV; no replacement credit</li>
                 <li>$0 deductible reimbursement</li>
               </ul>
@@ -1841,11 +1891,11 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
             <!-- Box 3: Total MPI Optionals vs CAP -->
             <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: var(--radius-md); padding: 1.25rem;">
               <div style="font-size: 0.75rem; font-weight: 700; color: var(--brand-color); text-transform: uppercase;">All MPI Options (Billed Monthly)</div>
-              <div style="font-size: 1.75rem; font-weight: 800; color: var(--brand-color); margin-top: 0.25rem;" id="disp-box-mpi-all-period">$64.42 / mo</div>
-              <div style="font-size: 0.85rem; color: #1e40af; margin-top: 0.25rem;" id="disp-box-mpi-all-annual">$773.00 / year (Billed Monthly by MPI)</div>
+              <div style="font-size: 1.75rem; font-weight: 800; color: var(--brand-color); margin-top: 0.25rem;" id="disp-box-mpi-all-period"><?= $isVehIneligibleMpiNew ? "$31.75 / mo" : "$64.42 / mo" ?></div>
+              <div style="font-size: 0.85rem; color: #1e40af; margin-top: 0.25rem;" id="disp-box-mpi-all-annual"><?= $isVehIneligibleMpiNew ? "$381.00 / year (Billed Monthly by MPI)" : "$773.00 / year (Billed Monthly by MPI)" ?></div>
               <ul style="margin: 0.75rem 0 0 0; padding-left: 1.2rem; font-size: 0.85rem; color: #1e3a8a; line-height: 1.6;">
                 <li><span id="disp-box-mpi-ded-label">$200 Deductible Buy-Down:</span> <strong id="disp-box-mpi-ded">$238/yr</strong></li>
-                <li>New Vehicle Protection: <strong id="disp-box-mpi-newveh2">$392/yr</strong></li>
+                <li>New Vehicle Protection: <strong id="disp-box-mpi-newveh2"><?= $isVehIneligibleMpiNew ? 'Ineligible ($0)' : ($isVehOneYearMpiNew ? '$392/yr (Year 1 Only)' : '$392/yr') ?></strong></li>
                 <li>Loss of Use Rental: <strong id="disp-box-mpi-lossuse2">$143/yr</strong></li>
                 <li id="disp-box-net-savings"><strong>By switching to $500 MPI + CAP:</strong> You save <strong style="color: #059669;">$19.52 / month net</strong> while gaining <span id="disp-box-all-years">up to <?= $initialMaxYears ?> years</span> of full coverage!</li>
               </ul>
@@ -2055,6 +2105,11 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
       const btnSample = document.getElementById('btn-load-sample');
       if (btnSample) {
         btnSample.addEventListener('click', () => {
+          const vehYrEl = document.getElementById('inp-vehicle-year');
+          if (vehYrEl) vehYrEl.value = "2026";
+          const vehNameEl = document.getElementById('inp-vehicle-name');
+          if (vehNameEl) vehNameEl.value = "2026 Land Rover Defender 110 S P300";
+
           document.getElementById('mpi-26-basic').value = 3294;
           document.getElementById('mpi-26-ded-750').value = 60;
           document.getElementById('mpi-26-ded-500').value = 125;
@@ -2089,8 +2144,41 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
         });
       }
 
+      // Two-way synchronization between Model Year and Vehicle Name
+      const vehYearSelect = document.getElementById('inp-vehicle-year');
+      const vehNameInput = document.getElementById('inp-vehicle-name');
+
+      if (vehYearSelect && vehNameInput) {
+        // When year dropdown is changed, update leading year in vehicle name if present
+        vehYearSelect.addEventListener('change', () => {
+          const selectedYr = vehYearSelect.value;
+          const currentName = vehNameInput.value.trim();
+          const yearMatch = currentName.match(/^(\d{4})\b(.*)/);
+          if (yearMatch) {
+            vehNameInput.value = `${selectedYr}${yearMatch[2]}`;
+          } else if (currentName) {
+            vehNameInput.value = `${selectedYr} ${currentName}`;
+          }
+          recalculate();
+        });
+
+        // When vehicle name is typed into, detect year and sync dropdown
+        vehNameInput.addEventListener('input', () => {
+          const currentName = vehNameInput.value.trim();
+          const yearMatch = currentName.match(/\b(20[12]\d)\b/);
+          if (yearMatch) {
+            const detectedYear = yearMatch[1];
+            const optionExists = Array.from(vehYearSelect.options).some(opt => opt.value === detectedYear);
+            if (optionExists && vehYearSelect.value !== detectedYear) {
+              vehYearSelect.value = detectedYear;
+            }
+          }
+          recalculate();
+        });
+      }
+
       // Recalculate on any input change
-      const allInputs = document.querySelectorAll('.mpi-input, .cap-input, #inp-loan-term, #inp-interest-rate, #inp-client-name, #inp-vehicle-name, #inp-dsr-level, #inp-veh-price');
+      const allInputs = document.querySelectorAll('.mpi-input, .cap-input, #inp-loan-term, #inp-interest-rate, #inp-client-name, #inp-vehicle-name, #inp-vehicle-year, #inp-dsr-level, #inp-veh-price');
       allInputs.forEach(input => {
         input.addEventListener('input', recalculate);
         input.addEventListener('change', recalculate);
@@ -2218,11 +2306,99 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
             : `Comparing: $${selectedDeductible} Deductible (${dedYrText} • ${dedMoText.replace(/[()]/g, '')})`;
         }
 
+        // Vehicle Model Year and MPI New Vehicle Protection Underwriting Rules:
+        // - 2024 or older: Ineligible ($0.00 from MPI / ACV only)
+        // - 2025: 1 year max (12 months)
+        // - 2026+: up to 2 years (24 months)
+        const vehYearVal = document.getElementById('inp-vehicle-year')?.value;
+        const vehYear = parseInt(vehYearVal, 10) || 2026;
+        const isVehIneligibleMpiNew = (vehYear <= 2024);
+        const isVehOneYearMpiNew = (vehYear === 2025);
+        const isVehBrandNew = (vehYear >= 2026);
+
+        const inpMpiNew26 = document.getElementById('mpi-26-newveh');
+        const inpMpiNew25 = document.getElementById('mpi-25-newveh');
+        const badgeMpiNewStatus = document.getElementById('disp-mpi-newveh-status-badge');
+
+        let rawNewveh26 = parseFloat(inpMpiNew26?.value) || 0;
+        let rawNewveh25 = parseFloat(inpMpiNew25?.value) || 0;
+
+        if (inpMpiNew26 && !inpMpiNew26.disabled && rawNewveh26 > 0) inpMpiNew26.dataset.activeVal = rawNewveh26;
+        if (inpMpiNew25 && !inpMpiNew25.disabled && rawNewveh25 > 0) inpMpiNew25.dataset.activeVal = rawNewveh25;
+
+        let effectiveNewveh26 = rawNewveh26;
+        let effectiveNewveh25 = rawNewveh25;
+
+        if (isVehIneligibleMpiNew) {
+          if (inpMpiNew26) {
+            inpMpiNew26.disabled = true;
+            inpMpiNew26.value = 0;
+          }
+          if (inpMpiNew25) {
+            inpMpiNew25.disabled = true;
+            inpMpiNew25.value = 0;
+          }
+          effectiveNewveh26 = 0;
+          effectiveNewveh25 = 0;
+          if (badgeMpiNewStatus) {
+            badgeMpiNewStatus.textContent = 'Ineligible on 2024 & Older ($0.00)';
+            badgeMpiNewStatus.style.background = '#fef2f2';
+            badgeMpiNewStatus.style.color = '#dc2626';
+            badgeMpiNewStatus.style.border = '1px solid #fecaca';
+          }
+        } else if (isVehOneYearMpiNew) {
+          if (inpMpiNew26) {
+            inpMpiNew26.disabled = false;
+            if (inpMpiNew26.value == 0 && inpMpiNew26.dataset.activeVal) {
+              inpMpiNew26.value = inpMpiNew26.dataset.activeVal;
+            } else if (inpMpiNew26.value == 0) {
+              inpMpiNew26.value = 392;
+            }
+            effectiveNewveh26 = parseFloat(inpMpiNew26.value) || 0;
+          }
+          if (inpMpiNew25) {
+            inpMpiNew25.disabled = true;
+            inpMpiNew25.value = 0;
+          }
+          effectiveNewveh25 = 0;
+          if (badgeMpiNewStatus) {
+            badgeMpiNewStatus.textContent = 'Max 1 Year (12 Mo) on 2025 Models';
+            badgeMpiNewStatus.style.background = '#fffbeb';
+            badgeMpiNewStatus.style.color = '#b45309';
+            badgeMpiNewStatus.style.border = '1px solid #fde68a';
+          }
+        } else {
+          if (inpMpiNew26) {
+            inpMpiNew26.disabled = false;
+            if (inpMpiNew26.value == 0 && inpMpiNew26.dataset.activeVal) {
+              inpMpiNew26.value = inpMpiNew26.dataset.activeVal;
+            } else if (inpMpiNew26.value == 0) {
+              inpMpiNew26.value = 392;
+            }
+            effectiveNewveh26 = parseFloat(inpMpiNew26.value) || 0;
+          }
+          if (inpMpiNew25) {
+            inpMpiNew25.disabled = false;
+            if (inpMpiNew25.value == 0 && inpMpiNew25.dataset.activeVal) {
+              inpMpiNew25.value = inpMpiNew25.dataset.activeVal;
+            } else if (inpMpiNew25.value == 0) {
+              inpMpiNew25.value = 412;
+            }
+            effectiveNewveh25 = parseFloat(inpMpiNew25.value) || 0;
+          }
+          if (badgeMpiNewStatus) {
+            badgeMpiNewStatus.textContent = 'Up to 2 Years (24 Mo) for New Vehicles';
+            badgeMpiNewStatus.style.background = '#eff6ff';
+            badgeMpiNewStatus.style.color = '#1d4ed8';
+            badgeMpiNewStatus.style.border = '1px solid #bfdbfe';
+          }
+        }
+
         // Sum MPI 2026 Lines
         const basic26 = parseFloat(document.getElementById('mpi-26-basic').value) || 0;
         const tpl26 = parseFloat(document.getElementById('mpi-26-tpl').value) || 0;
         const loss26 = parseFloat(document.getElementById('mpi-26-lossuse').value) || 0;
-        const newveh26 = parseFloat(document.getElementById('mpi-26-newveh').value) || 0;
+        const newveh26 = effectiveNewveh26;
         const maxval26 = parseFloat(document.getElementById('mpi-26-maxval').value) || 0;
         const admin26 = parseFloat(document.getElementById('mpi-26-admin').value) || 0;
         const reg26 = parseFloat(document.getElementById('mpi-26-reg').value) || 0;
@@ -2240,7 +2416,7 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
         const basic25 = parseFloat(document.getElementById('mpi-25-basic').value) || 0;
         const tpl25 = parseFloat(document.getElementById('mpi-25-tpl').value) || 0;
         const loss25 = parseFloat(document.getElementById('mpi-25-lossuse').value) || 0;
-        const newveh25 = parseFloat(document.getElementById('mpi-25-newveh').value) || 0;
+        const newveh25 = effectiveNewveh25;
         const maxval25 = parseFloat(document.getElementById('mpi-25-maxval').value) || 0;
         const admin25 = parseFloat(document.getElementById('mpi-25-admin').value) || 0;
         const reg25 = parseFloat(document.getElementById('mpi-25-reg').value) || 0;
@@ -2274,20 +2450,47 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
         const mpiAllOptionalsMonthly26 = mpiAllOptionalsAnnual26 / mpiMonthlyDivisor;
 
         // Update Card 1: MPI Add-On Protection (New Car + Loss of Use) — ALWAYS Monthly
+        const elAddonsTagText = document.getElementById('disp-mpi-addons-tag-text');
+        if (elAddonsTagText) {
+          elAddonsTagText.textContent = isVehIneligibleMpiNew
+            ? 'MPI Add-Ons (Rental Only • New Car Ineligible)'
+            : 'MPI Add-Ons (New Car + Rental)';
+        }
+
         const elAddonsAmt = document.getElementById('disp-mpi-addons-amount');
         if (elAddonsAmt) elAddonsAmt.innerHTML = `${fmtDec(mpiAddonsMonthly26)}<span class="period">/mo</span>`;
 
         const elNewvehSub = document.getElementById('disp-mpi-newveh-sub');
-        if (elNewvehSub) elNewvehSub.textContent = `${fmt(newveh26)}/yr (${fmtDec(newveh26 / 12)}/mo)`;
+        if (elNewvehSub) {
+          if (isVehIneligibleMpiNew) {
+            elNewvehSub.innerHTML = '<span style="color: #dc2626;">Ineligible ($0.00 from MPI on 2024 & older)</span>';
+          } else if (isVehOneYearMpiNew) {
+            elNewvehSub.textContent = `${fmt(newveh26)}/yr (${fmtDec(newveh26 / 12)}/mo) — Max 1 Yr`;
+          } else {
+            elNewvehSub.textContent = `${fmt(newveh26)}/yr (${fmtDec(newveh26 / 12)}/mo)`;
+          }
+        }
 
         const elLossSub = document.getElementById('disp-mpi-lossuse-sub');
         if (elLossSub) elLossSub.textContent = `${fmt(loss26)}/yr (${fmtDec(loss26 / 12)}/mo)`;
 
         const elAddonsAnnual = document.getElementById('disp-mpi-addons-annual');
-        if (elAddonsAnnual) elAddonsAnnual.textContent = `${fmt(mpiAddonsAnnual26)}/yr (Billed Monthly by MPI)`;
+        if (elAddonsAnnual) {
+          elAddonsAnnual.textContent = isVehIneligibleMpiNew
+            ? `${fmt(loss26)}/yr (Rental Car Only)`
+            : `${fmt(mpiAddonsAnnual26)}/yr (Billed Monthly by MPI)`;
+        }
 
         const elAddonsBadge = document.getElementById('disp-mpi-addons-badge');
-        if (elAddonsBadge) elAddonsBadge.textContent = 'Billed Monthly by MPI • Expires after 1–2 Years';
+        if (elAddonsBadge) {
+          if (isVehIneligibleMpiNew) {
+            elAddonsBadge.textContent = '⚠️ MPI Ineligible (2+ Yrs Old) • ACV Only (No Replacement Value)';
+          } else if (isVehOneYearMpiNew) {
+            elAddonsBadge.textContent = '⚠️ Billed Monthly by MPI • Max 1 Year (Expires after 12 Mo)';
+          } else {
+            elAddonsBadge.textContent = 'Billed Monthly by MPI • Expires after 2 Years';
+          }
+        }
 
         // Vehicle Sale Price and Over $75,000 Luxury Rule
         const vehPrice = parseFloat(document.getElementById('inp-veh-price').value) || 0;
@@ -2377,24 +2580,76 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
 
         // Update Card 2 Badge
         const elCardCapBadge = document.getElementById('disp-card-cap-badge');
-        if (elCardCapBadge) elCardCapBadge.textContent = `${maxYearsText} Locked • Reimburses Deductible`;
+        if (elCardCapBadge) {
+          elCardCapBadge.textContent = isVehIneligibleMpiNew
+            ? `Up to ${maxAllowedYears} Years Locked • Pre-Owned Covered • Reimburses Deductible`
+            : `${maxYearsText} Locked • Reimburses Deductible`;
+        }
 
-        // Update Strategy Table Duration Row
+        // Update Strategy Table Duration & Replacement Rows
         const elTableDuration = document.getElementById('disp-table-cap-duration');
         if (elTableDuration) elTableDuration.textContent = `${maxYearsText} Guaranteed`;
 
         const elTableDurationSub = document.getElementById('disp-table-cap-duration-sub');
         if (elTableDurationSub) elTableDurationSub.textContent = isLuxuryOrOver75k ? 'Max term for vehicles over $75,000' : '100% Locked-in Rate';
 
+        const elTableMpiDuration = document.getElementById('disp-table-mpi-duration');
+        if (elTableMpiDuration) {
+          elTableMpiDuration.textContent = isVehIneligibleMpiNew
+            ? '0 Years (Ineligible for New Vehicle Protection)'
+            : (isVehOneYearMpiNew
+              ? 'Max 1 Year (12 Months Max on 2025 Models)'
+              : 'Max 2 Years (24 Months Max on New Models)');
+        }
+
+        const elTableMpiReplVal = document.getElementById('table-mpi-repl-val');
+        if (elTableMpiReplVal) {
+          elTableMpiReplVal.textContent = isVehIneligibleMpiNew
+            ? '$0.00 from MPI (Ineligible)'
+            : (isVehOneYearMpiNew ? 'Limited to 1 Year Only' : '$0.00 after 2 Years');
+        }
+
+        const elTableMpiReplSub = document.getElementById('table-mpi-repl-sub');
+        if (elTableMpiReplSub) {
+          elTableMpiReplSub.textContent = isVehIneligibleMpiNew
+            ? 'MPI offers $0 replacement value on 2024 & older'
+            : (isVehOneYearMpiNew
+              ? 'Terminates after 12 months; drops to depreciated ACV'
+              : 'MPI pays depreciated ACV only');
+        }
+
+        const elTableCapReplSub = document.getElementById('table-cap-repl-sub');
+        if (elTableCapReplSub) {
+          elTableCapReplSub.textContent = `Protects New & Pre-Owned vehicles up to ${maxAllowedYears} years`;
+        }
+
         const elTableExtraYears = document.getElementById('disp-table-cap-extra-years');
         if (elTableExtraYears) {
-          const extraYears = Math.max(1, maxAllowedYears - 2);
-          elTableExtraYears.textContent = `${extraYears} Extra Year${extraYears > 1 ? 's' : ''} of Protection`;
+          if (isVehIneligibleMpiNew) {
+            elTableExtraYears.textContent = `Full ${maxAllowedYears} Extra Years vs $0 MPI`;
+          } else if (isVehOneYearMpiNew) {
+            const extraYears = Math.max(1, maxAllowedYears - 1);
+            elTableExtraYears.textContent = `${extraYears} Extra Year${extraYears > 1 ? 's' : ''} of Protection`;
+          } else {
+            const extraYears = Math.max(1, maxAllowedYears - 2);
+            elTableExtraYears.textContent = `${extraYears} Extra Year${extraYears > 1 ? 's' : ''} of Protection`;
+          }
         }
 
         // Update Add-On Comparison Section Dynamic Texts
         const elAddonDesc = document.getElementById('disp-addon-cap-term-desc');
         if (elAddonDesc) elAddonDesc.textContent = `Up to ${maxAllowedYears}-Year`;
+
+        const elAddonLead = document.getElementById('disp-addon-comparison-lead');
+        if (elAddonLead) {
+          if (isVehIneligibleMpiNew) {
+            elAddonLead.innerHTML = `Evaluating MPI's coverage limitations on pre-owned vehicles (ineligible for New Vehicle Protection) vs. <span id="disp-addon-cap-term-desc">Up to ${maxAllowedYears}-Year</span> Companion Asset Protection (CAP).`;
+          } else if (isVehOneYearMpiNew) {
+            elAddonLead.innerHTML = `Evaluating what MPI charges for its optional 1-year New Vehicle Protection and Loss of Use vs. <span id="disp-addon-cap-term-desc">Up to ${maxAllowedYears}-Year</span> Companion Asset Protection (CAP).`;
+          } else {
+            elAddonLead.innerHTML = `Evaluating what MPI charges for its optional 2-year New Vehicle Protection and Loss of Use vs. <span id="disp-addon-cap-term-desc">Up to ${maxAllowedYears}-Year</span> Companion Asset Protection (CAP).`;
+          }
+        }
 
         const elBoxYearsBullet = document.getElementById('disp-box-cap-years-bullet');
         if (elBoxYearsBullet) {
@@ -2949,16 +3204,22 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
         // Update Add-Ons Comparison Section
         const elAddonHead = document.getElementById('disp-addon-vs-cap-headline');
         if (elAddonHead) {
-          if (paymentFrequency === 'biweekly') {
-            elAddonHead.textContent = `Replace $${fmtDec(mpiAddonsMonthly26)}/mo MPI with +$${fmtDec(capPmt)}/bi-wk`;
+          if (isVehIneligibleMpiNew) {
+            elAddonHead.textContent = `MPI Offers $0 Replacement Value — CAP Protects Up to ${maxAllowedYears} Yrs`;
+          } else if (isVehOneYearMpiNew) {
+            elAddonHead.textContent = `MPI Coverage Drops After 1 Year — CAP Protects Up to ${maxAllowedYears} Yrs`;
           } else {
-            const diffMpiVsCap = Math.abs(mpiAddonsMonthly26 - capPmt);
-            if (diffMpiVsCap < 2) {
-              elAddonHead.textContent = 'Virtually Identical Cost';
-            } else if (mpiAddonsMonthly26 > capPmt) {
-              elAddonHead.textContent = `CAP Is $${fmtDec(mpiAddonsMonthly26 - capPmt)}/mo Cheaper!`;
+            if (paymentFrequency === 'biweekly') {
+              elAddonHead.textContent = `Replace $${fmtDec(mpiAddonsMonthly26)}/mo MPI with +$${fmtDec(capPmt)}/bi-wk`;
             } else {
-              elAddonHead.textContent = `Only $${fmtDec(capPmt - mpiAddonsMonthly26)}/mo Difference`;
+              const diffMpiVsCap = Math.abs(mpiAddonsMonthly26 - capPmt);
+              if (diffMpiVsCap < 2) {
+                elAddonHead.textContent = 'Virtually Identical Cost';
+              } else if (mpiAddonsMonthly26 > capPmt) {
+                elAddonHead.textContent = `CAP Is $${fmtDec(mpiAddonsMonthly26 - capPmt)}/mo Cheaper!`;
+              } else {
+                elAddonHead.textContent = `Only $${fmtDec(capPmt - mpiAddonsMonthly26)}/mo Difference`;
+              }
             }
           }
         }
@@ -2966,11 +3227,30 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
         const elBoxMpiPeriod = document.getElementById('disp-box-mpi-addons-period');
         if (elBoxMpiPeriod) elBoxMpiPeriod.textContent = `${fmtDec(mpiAddonsMonthly26)} / mo`;
         const elBoxMpiAnnual = document.getElementById('disp-box-mpi-addons-annual');
-        if (elBoxMpiAnnual) elBoxMpiAnnual.textContent = `${fmt(mpiAddonsAnnual26)} / year (Billed Monthly by MPI)`;
+        if (elBoxMpiAnnual) {
+          elBoxMpiAnnual.textContent = isVehIneligibleMpiNew
+            ? `${fmt(loss26)} / year (Rental Car Only)`
+            : `${fmt(mpiAddonsAnnual26)} / year (Billed Monthly by MPI)`;
+        }
         const elBoxMpiNew = document.getElementById('disp-box-mpi-newveh');
-        if (elBoxMpiNew) elBoxMpiNew.textContent = `${fmt(newveh26)}/yr`;
+        if (elBoxMpiNew) {
+          elBoxMpiNew.textContent = isVehIneligibleMpiNew
+            ? '$0 (Not Eligible from MPI)'
+            : (isVehOneYearMpiNew ? `${fmt(effectiveNewveh26)}/yr (12 Mo Max)` : `${fmt(effectiveNewveh26)}/yr`);
+        }
         const elBoxMpiLoss = document.getElementById('disp-box-mpi-lossuse');
         if (elBoxMpiLoss) elBoxMpiLoss.textContent = `${fmt(loss26)}/yr`;
+
+        const elBoxMpiTermBullet = document.getElementById('disp-box-mpi-term-bullet');
+        if (elBoxMpiTermBullet) {
+          if (isVehIneligibleMpiNew) {
+            elBoxMpiTermBullet.innerHTML = '<span style="color: #dc2626; font-weight: 700;">⚠️ MPI Replacement Value NOT AVAILABLE (2+ Yrs Old)</span> — MPI only pays depreciated ACV';
+          } else if (isVehOneYearMpiNew) {
+            elBoxMpiTermBullet.innerHTML = '<span style="color: #ea580c; font-weight: 600;">MPI Coverage terminates after 12 months (1 Year Max)</span>';
+          } else {
+            elBoxMpiTermBullet.innerHTML = '<span style="color: #dc2626; font-weight: 600;">Coverage terminates after 24 months</span>';
+          }
+        }
 
         const elBoxCapPeriod = document.getElementById('disp-box-cap-period');
         if (elBoxCapPeriod) elBoxCapPeriod.textContent = `${fmtDec(capPmt)} ${loanFreqSuffix}`;
@@ -3012,27 +3292,35 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
           elBoxMpiDed.textContent = curDedFee26 > 0 ? `${fmt(curDedFee26)}/yr` : '$0 (Base Rate)';
         }
         const elBoxMpiNew2 = document.getElementById('disp-box-mpi-newveh2');
-        if (elBoxMpiNew2) elBoxMpiNew2.textContent = `${fmt(newveh26)}/yr`;
+        if (elBoxMpiNew2) {
+          elBoxMpiNew2.textContent = isVehIneligibleMpiNew
+            ? 'Ineligible ($0)'
+            : (isVehOneYearMpiNew ? `${fmt(effectiveNewveh26)}/yr (Year 1 Only)` : `${fmt(effectiveNewveh26)}/yr`);
+        }
         const elBoxMpiLoss2 = document.getElementById('disp-box-mpi-lossuse2');
         if (elBoxMpiLoss2) elBoxMpiLoss2.textContent = `${fmt(loss26)}/yr`;
 
         const elBoxNetSav = document.getElementById('disp-box-net-savings');
         if (elBoxNetSav && currentCap) {
-          let dedLead = 'With Companion Asset Protection (CAP):';
-          if (selectedDeductible === 200 || selectedDeductible === 300) {
-            const dSav = curDedFee26 - fee500;
-            dedLead = `By choosing $500 MPI + CAP (saving ${fmt(dSav)}/yr on deductible):`;
-          } else if (selectedDeductible === 500) {
-            dedLead = 'By choosing $500 MPI + CAP ($0 write-off deductible):';
+          if (isVehIneligibleMpiNew) {
+            elBoxNetSav.innerHTML = `<strong>On Pre-Owned Vehicles:</strong> MPI offers $0 replacement coverage (ACV only). Adding CAP guarantees up to ${maxAllowedYears} years of full purchase price equity protection for just <strong>${fmtDec(capPmt)} ${loanFreqSuffix}</strong>!`;
           } else {
-            dedLead = 'By pairing Base $1,000 MPI + CAP:';
-          }
-          if (paymentFrequency === 'biweekly') {
-            const netMoDiff = mpiAllOptionalsMonthly26 - currentCap.paymentMonthly;
-            elBoxNetSav.innerHTML = `<strong>${dedLead}</strong> You eliminate <strong>$${fmtDec(mpiAllOptionalsMonthly26)}/mo</strong> in optional MPI fees for just <strong>+${fmtDec(capPmt)} bi-weekly</strong> on your loan (saving <strong style="color: #059669;">$${fmtDec(netMoDiff)}/mo net</strong>)!`;
-          } else {
-            const netDiff = mpiAllOptionalsMonthly26 - capPmt;
-            elBoxNetSav.innerHTML = `<strong>${dedLead}</strong> You save <strong style="color: #059669;">$${fmtDec(Math.abs(netDiff))} / month net</strong> while gaining up to ${maxAllowedYears} years of full coverage!`;
+            let dedLead = 'With Companion Asset Protection (CAP):';
+            if (selectedDeductible === 200 || selectedDeductible === 300) {
+              const dSav = curDedFee26 - fee500;
+              dedLead = `By choosing $500 MPI + CAP (saving ${fmt(dSav)}/yr on deductible):`;
+            } else if (selectedDeductible === 500) {
+              dedLead = 'By choosing $500 MPI + CAP ($0 write-off deductible):';
+            } else {
+              dedLead = 'By pairing Base $1,000 MPI + CAP:';
+            }
+            if (paymentFrequency === 'biweekly') {
+              const netMoDiff = mpiAllOptionalsMonthly26 - currentCap.paymentMonthly;
+              elBoxNetSav.innerHTML = `<strong>${dedLead}</strong> You eliminate <strong>$${fmtDec(mpiAllOptionalsMonthly26)}/mo</strong> in optional MPI fees for just <strong>+${fmtDec(capPmt)} bi-weekly</strong> on your loan (saving <strong style="color: #059669;">$${fmtDec(netMoDiff)}/mo net</strong>)!`;
+            } else {
+              const netDiff = mpiAllOptionalsMonthly26 - capPmt;
+              elBoxNetSav.innerHTML = `<strong>${dedLead}</strong> You save <strong style="color: #059669;">$${fmtDec(Math.abs(netDiff))} / month net</strong> while gaining up to ${maxAllowedYears} years of full coverage!`;
+            }
           }
         }
 
