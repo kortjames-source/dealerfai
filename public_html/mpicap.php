@@ -1545,7 +1545,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
               </div>
               <div class="pillar-title" id="disp-pillar-years-title">Guaranteed Coverage for Up to <?= $initialMaxYears ?> Years</div>
               <p class="pillar-desc" id="disp-pillar-years-desc">
-                Covers New or Pre-Owned vehicles for up to <?= $initialMaxYears ?> years<?= $isOver75k ? ' (up to 5 years for vehicles over $75,000)' : '' ?>. Your protection is locked in and remains fully in effect regardless of claims or driving record.
+                Covers New or Pre-Owned vehicles for up to <?= $initialMaxYears ?> years. Your protection is locked in and remains fully in effect regardless of claims or driving record.
               </p>
             </div>
 
@@ -1663,9 +1663,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
                 Choose Your Companion Asset Protection (CAP) Term
               </h3>
               <p style="margin: 0.25rem 0 0 0; color: #64748b; font-size: 0.85rem;" id="disp-terms-subtext">
-                <?= $isOver75k 
-                  ? 'Vehicles over $75,000 qualify for terms up to 60 months (5 years). Select your preferred term below:' 
-                  : 'Select your preferred coverage term below (up to 84 months / 7 years) to update the monthly and bi-weekly payment comparison.' ?>
+                Select your preferred coverage term below to update the monthly and bi-weekly payment comparison.
               </p>
             </div>
             <div style="font-size: 0.85rem; color: #334155; background: #f8fafc; padding: 0.5rem 0.85rem; border-radius: var(--radius-md); border: 1px solid #cbd5e1; display: flex; align-items: center; gap: 0.5rem;">
@@ -2727,9 +2725,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
 
         const elPillarYearsDesc = document.getElementById('disp-pillar-years-desc');
         if (elPillarYearsDesc) {
-          elPillarYearsDesc.textContent = isLuxuryOrOver75k
-            ? `Covers New or Pre-Owned vehicles for up to 5 years (vehicles over $75,000 qualify for up to 5-year coverage). Your protection is locked in and remains fully in effect regardless of claims or driving record.`
-            : `Covers New or Pre-Owned vehicles for up to 7 years. Your protection is locked in and remains fully in effect regardless of claims or driving record.`;
+          elPillarYearsDesc.textContent = `Covers New or Pre-Owned vehicles for up to ${maxAllowedYears} years. Your protection is locked in and remains fully in effect regardless of claims or driving record.`;
         }
 
         // Update Card 2 Badge
@@ -2826,9 +2822,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
 
         const elTermsSubtext = document.getElementById('disp-terms-subtext');
         if (elTermsSubtext) {
-          elTermsSubtext.textContent = isLuxuryOrOver75k
-            ? 'Vehicles over $75,000 qualify for terms up to 60 months (5 years). Select your preferred term below:'
-            : 'Select your preferred coverage term below (up to 84 months / 7 years) to update the monthly and bi-weekly payment comparison.';
+          elTermsSubtext.textContent = 'Select your preferred coverage term below to update the monthly and bi-weekly payment comparison.';
         }
 
         // Process CAP Term Prices
@@ -2929,16 +2923,6 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
 
               termsContainer.appendChild(card);
             });
-
-            if (isLuxuryOrOver75k) {
-              const luxuryInfo = document.createElement('div');
-              luxuryInfo.style.cssText = 'grid-column: 1 / -1; background: #fffbeb; border: 1px solid #fde68a; border-radius: var(--radius-md); padding: 0.75rem 1rem; font-size: 0.85rem; color: #92400e; display: flex; align-items: center; gap: 0.6rem; margin-top: 0.5rem;';
-              luxuryInfo.innerHTML = `
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="flex-shrink: 0;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                <span><strong>Luxury Vehicle Policy (${fmt(vehPrice)} Sale Price):</strong> Underwriter guidelines cap vehicles with an original purchase price over $75,000 to a maximum term of 5 Years (60 Months).</span>
-              `;
-              termsContainer.appendChild(luxuryInfo);
-            }
           }
         }
 
