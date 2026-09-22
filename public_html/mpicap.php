@@ -961,6 +961,7 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
       footer,
       .manager-panel,
       .top-action-bar .freq-toggle-group,
+      .loan-freq-wrapper,
       .action-btn,
       .presentation-toggle {
         display: none !important;
@@ -1105,10 +1106,13 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
           </div>
 
           <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
-            <!-- Monthly / Bi-Weekly Selector -->
-            <div class="freq-toggle-group">
-              <button type="button" class="freq-btn active" id="btn-monthly">Monthly</button>
-              <button type="button" class="freq-btn" id="btn-biweekly">Bi-Weekly</button>
+            <!-- Monthly / Bi-Weekly Selector (for Loan / Lease / CAP) -->
+            <div class="loan-freq-wrapper" style="display: flex; align-items: center; gap: 0.45rem;">
+              <span style="font-size: 0.78rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.04em;">Loan/Lease:</span>
+              <div class="freq-toggle-group">
+                <button type="button" class="freq-btn active" id="btn-monthly">Monthly</button>
+                <button type="button" class="freq-btn" id="btn-biweekly">Bi-Weekly</button>
+              </div>
             </div>
 
             <!-- Customer Presentation Toggle -->
@@ -1435,13 +1439,13 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
               $44<span class="period">.58/mo</span>
             </div>
             <div class="hero-card-subtext">
-              MPI New Vehicle Protection: <strong id="disp-mpi-newveh-sub">$392/yr</strong><br>
-              MPI Loss of Use (Rental Car): <strong id="disp-mpi-lossuse-sub">$143/yr</strong><br>
-              Combined MPI Add-On Cost: <strong id="disp-mpi-addons-annual">$535/yr</strong>
+              MPI New Vehicle Protection: <strong id="disp-mpi-newveh-sub">$392/yr ($32.67/mo)</strong><br>
+              MPI Loss of Use (Rental Car): <strong id="disp-mpi-lossuse-sub">$143/yr ($11.92/mo)</strong><br>
+              Combined MPI Add-On Cost: <strong id="disp-mpi-addons-annual">$535/yr (Billed Monthly by MPI)</strong>
             </div>
             <div class="increase-badge" style="background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1;">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-              <span>Expires after 1–2 Years • $0 Deductible Reimbursed</span>
+              <span id="disp-mpi-addons-badge">Billed Monthly by MPI • Expires after 1–2 Years</span>
             </div>
           </div>
 
@@ -1476,7 +1480,7 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
               $25<span class="period">.07/mo net</span>
             </div>
             <div class="hero-card-subtext">
-              Select <strong>$500 MPI Deductible</strong> & save <strong id="disp-ded-savings-sub">$238/yr ($19.83/mo)</strong>.<br>
+              Select <strong>$500 MPI Deductible</strong> & save <strong id="disp-ded-savings-sub">$238/yr ($19.83/mo on MPI)</strong>.<br>
               In a Total Loss: CAP pays $500 &rarr; <strong>$0 Out of Pocket</strong>!<br>
               In a Partial Loss (repairs &amp; windshields): CAP pays $250 &rarr; <strong>Only $250 Out of Pocket</strong>!
             </div>
@@ -1522,7 +1526,7 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
                   <td><strong>Annual MPI Deductible Fee</strong></td>
                   <td>
                     <span style="font-weight: 700; color: #b91c1c;" id="table-mpi-ded-fee">+$238.00 / year</span><br>
-                    <span style="font-size: 0.8rem; color: #64748b;" id="table-mpi-ded-period">(+$19.83 / month)</span>
+                    <span style="font-size: 0.8rem; color: #64748b;" id="table-mpi-ded-period">(+$19.83 / month on MPI)</span>
                   </td>
                   <td>
                     <span style="font-weight: 700; color: #059669;">$0.00 Extra Fee</span><br>
@@ -1641,9 +1645,9 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem;">
             <!-- Box 1: MPI Add-Ons Cost -->
             <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: var(--radius-md); padding: 1.25rem;">
-              <div style="font-size: 0.75rem; font-weight: 700; color: var(--mpi-blue); text-transform: uppercase;">MPI Optional Add-Ons</div>
+              <div style="font-size: 0.75rem; font-weight: 700; color: var(--mpi-blue); text-transform: uppercase;">MPI Optional Add-Ons (Billed Monthly)</div>
               <div style="font-size: 1.75rem; font-weight: 800; color: #0f172a; margin-top: 0.25rem;" id="disp-box-mpi-addons-period">$44.58 / mo</div>
-              <div style="font-size: 0.85rem; color: #64748b; margin-top: 0.25rem;" id="disp-box-mpi-addons-annual">$535.00 / year ($20.58 bi-weekly)</div>
+              <div style="font-size: 0.85rem; color: #64748b; margin-top: 0.25rem;" id="disp-box-mpi-addons-annual">$535.00 / year (Billed Monthly by MPI)</div>
               <ul style="margin: 0.75rem 0 0 0; padding-left: 1.2rem; font-size: 0.85rem; color: #475569; line-height: 1.6;">
                 <li>New/Leased Vehicle Protection: <strong id="disp-box-mpi-newveh">$392/yr</strong></li>
                 <li>Loss of Use (Rental Car): <strong id="disp-box-mpi-lossuse">$143/yr</strong></li>
@@ -1669,14 +1673,14 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
 
             <!-- Box 3: Total MPI Optionals vs CAP -->
             <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: var(--radius-md); padding: 1.25rem;">
-              <div style="font-size: 0.75rem; font-weight: 700; color: var(--brand-color); text-transform: uppercase;">All MPI Options (Incl. $200 Ded)</div>
+              <div style="font-size: 0.75rem; font-weight: 700; color: var(--brand-color); text-transform: uppercase;">All MPI Options (Billed Monthly)</div>
               <div style="font-size: 1.75rem; font-weight: 800; color: var(--brand-color); margin-top: 0.25rem;" id="disp-box-mpi-all-period">$64.42 / mo</div>
-              <div style="font-size: 0.85rem; color: #1e40af; margin-top: 0.25rem;" id="disp-box-mpi-all-annual">$773.00 / year ($29.73 bi-weekly)</div>
+              <div style="font-size: 0.85rem; color: #1e40af; margin-top: 0.25rem;" id="disp-box-mpi-all-annual">$773.00 / year (Billed Monthly by MPI)</div>
               <ul style="margin: 0.75rem 0 0 0; padding-left: 1.2rem; font-size: 0.85rem; color: #1e3a8a; line-height: 1.6;">
                 <li>$200 Deductible Buy-Down: <strong id="disp-box-mpi-ded">$238/yr</strong></li>
                 <li>New Vehicle Protection: <strong id="disp-box-mpi-newveh2">$392/yr</strong></li>
                 <li>Loss of Use Rental: <strong id="disp-box-mpi-lossuse2">$143/yr</strong></li>
-                <li><strong>By switching to $500 MPI + CAP:</strong> You save <strong id="disp-box-net-savings" style="color: #059669;">$19.52 / month</strong> while gaining <span id="disp-box-all-years">up to <?= $initialMaxYears ?> years</span> of full coverage!</li>
+                <li id="disp-box-net-savings"><strong>By switching to $500 MPI + CAP:</strong> You save <strong style="color: #059669;">$19.52 / month net</strong> while gaining <span id="disp-box-all-years">up to <?= $initialMaxYears ?> years</span> of full coverage!</li>
               </ul>
             </div>
           </div>
@@ -1991,34 +1995,40 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
         document.getElementById('sum-25-reg').textContent = fmt(sumReg25);
         document.getElementById('sum-25-total').textContent = fmt(total25);
 
-        // Frequency divisor & suffix
-        const freqSuffix = paymentFrequency === 'biweekly' ? '/bi-wk' : '/mo';
-        const periodDivisor = paymentFrequency === 'biweekly' ? 26 : 12;
+        // Payment frequency parameters for Loan / Lease / CAP financing
+        const loanFreqSuffix = paymentFrequency === 'biweekly' ? '/bi-wk' : '/mo';
+        const loanPeriodDivisor = paymentFrequency === 'biweekly' ? 26 : 12;
 
-        // MPI Add-Ons (New Vehicle Protection + Loss of Use)
+        // MPI amounts are strictly monthly (MPI only offers annual or monthly pre-authorized payments)
+        const mpiMonthlyDivisor = 12;
         const mpiAddonsAnnual26 = newveh26 + loss26;
-        const mpiAddonsPeriod26 = mpiAddonsAnnual26 / periodDivisor;
+        const mpiAddonsMonthly26 = mpiAddonsAnnual26 / mpiMonthlyDivisor;
 
-        // Deductible Savings (Difference between $200 buy-down fee and standard $500 deductible)
+        // Deductible Savings on MPI ($238/yr = $19.83/mo savings on insurance bill)
         const dedSavingsAnnual26 = ded26; // e.g. $238
-        const dedSavingsPeriod26 = dedSavingsAnnual26 / periodDivisor;
+        const dedSavingsMonthly26 = dedSavingsAnnual26 / mpiMonthlyDivisor;
+        // Bi-weekly equivalent deductible savings credit towards loan budget
+        const dedSavingsLoanPeriod26 = dedSavingsAnnual26 / loanPeriodDivisor;
 
         // Total MPI Optionals ($200 Deductible buy-down + New Vehicle + Loss of Use)
         const mpiAllOptionalsAnnual26 = mpiAddonsAnnual26 + dedSavingsAnnual26;
-        const mpiAllOptionalsPeriod26 = mpiAllOptionalsAnnual26 / periodDivisor;
+        const mpiAllOptionalsMonthly26 = mpiAllOptionalsAnnual26 / mpiMonthlyDivisor;
 
-        // Update Card 1: MPI Add-On Protection (New Car + Loss of Use)
+        // Update Card 1: MPI Add-On Protection (New Car + Loss of Use) — ALWAYS Monthly
         const elAddonsAmt = document.getElementById('disp-mpi-addons-amount');
-        if (elAddonsAmt) elAddonsAmt.innerHTML = `${fmtDec(mpiAddonsPeriod26)}<span class="period">${freqSuffix}</span>`;
+        if (elAddonsAmt) elAddonsAmt.innerHTML = `${fmtDec(mpiAddonsMonthly26)}<span class="period">/mo</span>`;
 
         const elNewvehSub = document.getElementById('disp-mpi-newveh-sub');
-        if (elNewvehSub) elNewvehSub.textContent = `${fmt(newveh26)}/yr (${fmtDec(newveh26 / periodDivisor)}${freqSuffix})`;
+        if (elNewvehSub) elNewvehSub.textContent = `${fmt(newveh26)}/yr (${fmtDec(newveh26 / 12)}/mo)`;
 
         const elLossSub = document.getElementById('disp-mpi-lossuse-sub');
-        if (elLossSub) elLossSub.textContent = `${fmt(loss26)}/yr (${fmtDec(loss26 / periodDivisor)}${freqSuffix})`;
+        if (elLossSub) elLossSub.textContent = `${fmt(loss26)}/yr (${fmtDec(loss26 / 12)}/mo)`;
 
         const elAddonsAnnual = document.getElementById('disp-mpi-addons-annual');
-        if (elAddonsAnnual) elAddonsAnnual.textContent = `${fmt(mpiAddonsAnnual26)}/yr`;
+        if (elAddonsAnnual) elAddonsAnnual.textContent = `${fmt(mpiAddonsAnnual26)}/yr (Billed Monthly by MPI)`;
+
+        const elAddonsBadge = document.getElementById('disp-mpi-addons-badge');
+        if (elAddonsBadge) elAddonsBadge.textContent = 'Billed Monthly by MPI • Expires after 1–2 Years';
 
         // Vehicle Sale Price and Over $75,000 Luxury Rule
         const vehPrice = parseFloat(document.getElementById('inp-veh-price').value) || 0;
@@ -2231,7 +2241,7 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
                 <div style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid #f1f5f9;">
                   <div style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: #64748b; letter-spacing: 0.04em;">Loan Payment Impact</div>
                   <div style="font-size: 1.5rem; font-weight: 800; color: var(--cap-green); margin: 0.2rem 0;">
-                    +${fmtDec(opt.payment)}<span style="font-size: 0.85rem; font-weight: 600; color: #64748b;">${freqSuffix}</span>
+                    +${fmtDec(opt.payment)}<span style="font-size: 0.85rem; font-weight: 600; color: #64748b;">${loanFreqSuffix}</span>
                   </div>
                   <div style="font-size: 0.78rem; color: #475569; font-weight: 600;">For all ${loanTerm} months of vehicle loan</div>
                   <div style="font-size: 0.75rem; color: #047857; margin-top: 0.25rem; font-weight: 600;">${paymentFrequency === 'biweekly' ? `Equivalent to ${fmtDec(opt.paymentMonthly)}/mo` : `Just ${fmtDec(opt.paymentBiweekly)} bi-weekly`} • ${fmtDec(opt.perDay)}/day</div>
@@ -2274,7 +2284,7 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
 
         // Update Card 2: Companion Asset Protection (CAP)
         const elCapAmt = document.getElementById('disp-cap-amount');
-        if (elCapAmt) elCapAmt.innerHTML = `${fmtDec(capPmt)}<span class="period">${freqSuffix}</span>`;
+        if (elCapAmt) elCapAmt.innerHTML = `${fmtDec(capPmt)}<span class="period">${loanFreqSuffix}</span>`;
         const elCapTermLabel = document.getElementById('disp-cap-term-label');
         if (elCapTermLabel) elCapTermLabel.textContent = capTermLabel;
         const elCapPerDay = document.getElementById('disp-cap-per-day');
@@ -2282,12 +2292,13 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
 
         const elCapLoanSub = document.getElementById('disp-cap-loan-sub');
         if (elCapLoanSub) {
+          const freqDesc = paymentFrequency === 'biweekly' ? 'Bi-Weekly payments' : 'Monthly payments';
           if (selectedCapTerm < loanTerm) {
-            elCapLoanSub.innerHTML = `Protects Years 1–${capYears} • Financed over full <strong>${loanTerm}-month</strong> loan`;
+            elCapLoanSub.innerHTML = `Protects Years 1–${capYears} • Financed over full <strong>${loanTerm}-month</strong> loan (${freqDesc})`;
           } else if (selectedCapTerm === loanTerm) {
-            elCapLoanSub.innerHTML = `✓ <strong>100% Match</strong> with your <strong>${loanTerm}-month</strong> loan term`;
+            elCapLoanSub.innerHTML = `✓ <strong>100% Match</strong> with your <strong>${loanTerm}-month</strong> loan term (${freqDesc})`;
           } else {
-            elCapLoanSub.innerHTML = `Covers ${capYears} Years • Financed over <strong>${loanTerm}-month</strong> loan`;
+            elCapLoanSub.innerHTML = `Covers ${capYears} Years • Financed over <strong>${loanTerm}-month</strong> loan (${freqDesc})`;
           }
         }
 
@@ -2309,7 +2320,7 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
             explanationBadge = `<span style="background: #fef3c7; color: #92400e; font-weight: 700; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem;">Years 1–${capYears} Protection • ${loanTerm}-Mo Financing</span>`;
             explanationHtml = `
               <strong>How your financing &amp; coverage work together:</strong><br>
-              Your Companion Asset Protection is financed directly into your vehicle loan, adding just <strong>+${fmtDec(capPmt)}${freqSuffix}</strong> (a modest <strong>${fmtDec(capPerDay)}/day</strong>) across all <strong>${loanTerm} months of your loan</strong> with zero out-of-pocket cost today.<br><br>
+              Your Companion Asset Protection is financed directly into your vehicle loan, adding just <strong>+${fmtDec(capPmt)}${loanFreqSuffix}</strong> (a modest <strong>${fmtDec(capPerDay)}/day</strong>) across all <strong>${loanTerm} months of your loan</strong> with zero out-of-pocket cost today.<br><br>
               <strong>Why this is a smart financial strategy:</strong><br>
               Vehicles suffer their steepest market depreciation during the first 5 years (Months 1–60). Having 60-Month CAP gives you 100% Replacement Value Top-Up and deductible protection during your highest-risk ownership window, while your ${loanTerm}-month financing keeps the monthly payment ultra-affordable. By Month 60, your remaining loan balance has significantly dropped, naturally closing the equity gap.
             `;
@@ -2319,7 +2330,7 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
             explanationHtml = `
               <strong>Complete Loan Coverage Match:</strong><br>
               Your Companion Asset Protection term matches your <strong>${loanTerm}-month vehicle loan</strong> 100%. 
-              For <strong>+${fmtDec(capPmt)}${freqSuffix}</strong> (<strong>${fmtDec(capPerDay)}/day</strong>), you have complete replacement value and deductible protection from the day you drive off the lot until your final loan payment is made!
+              For <strong>+${fmtDec(capPmt)}${loanFreqSuffix}</strong> (<strong>${fmtDec(capPerDay)}/day</strong>), you have complete replacement value and deductible protection from the day you drive off the lot until your final loan payment is made!
             `;
             activeWindowLabel = `Active for 100% of Loan Term (All ${loanTerm} Months)`;
           } else {
@@ -2348,11 +2359,11 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
                 <div class="timeline-row">
                   <div class="timeline-label-bar">
                     <span>Vehicle Loan Term (${loanTerm} Months)</span>
-                    <span style="color: #2563eb;">Payment Impact: +${fmtDec(capPmt)}${freqSuffix} (Months 1–${loanTerm})</span>
+                    <span style="color: #2563eb;">Payment Impact: +${fmtDec(capPmt)}${loanFreqSuffix} (Months 1–${loanTerm})</span>
                   </div>
                   <div class="timeline-track">
                     <div class="timeline-fill-loan">
-                      <span>💳 Full ${loanTerm}-Month Vehicle Loan (+${fmtDec(capPmt)}${freqSuffix} on every payment)</span>
+                      <span>💳 Full ${loanTerm}-Month Vehicle Loan (+${fmtDec(capPmt)}${loanFreqSuffix} on every payment)</span>
                     </div>
                   </div>
                 </div>
@@ -2378,10 +2389,10 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
               <div class="timeline-cards-grid">
                 <div class="timeline-card-box">
                   <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #2563eb; letter-spacing: 0.04em;">
-                    💳 Your Monthly Loan Payment
+                    💳 Your ${paymentFrequency === 'biweekly' ? 'Bi-Weekly' : 'Monthly'} Loan Payment
                   </div>
                   <div style="font-size: 1.6rem; font-weight: 800; color: #0f172a; margin: 0.25rem 0;">
-                    +${fmtDec(capPmt)} <span style="font-size: 0.9rem; font-weight: 600; color: #64748b;">${freqSuffix}</span>
+                    +${fmtDec(capPmt)} <span style="font-size: 0.9rem; font-weight: 600; color: #64748b;">${loanFreqSuffix}</span>
                   </div>
                   <ul style="margin: 0.5rem 0 0 0; padding-left: 1.2rem; font-size: 0.85rem; color: #334155; line-height: 1.55;">
                     <li><strong>Applied to all ${loanTerm} months of your loan:</strong> Financed with your vehicle so your payment stays predictable without any out-of-pocket payment today.</li>
@@ -2407,21 +2418,25 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
         }
 
         // Update Card 3: Deductible Strategy ($500 MPI Deductible + CAP)
-        const netCapPmt = Math.max(0, capPmt - dedSavingsPeriod26);
+        const netCapPmt = Math.max(0, capPmt - dedSavingsLoanPeriod26);
         const elNetCap = document.getElementById('disp-net-cap-amount');
-        if (elNetCap) elNetCap.innerHTML = `${fmtDec(netCapPmt)}<span class="period">${freqSuffix} net</span>`;
+        if (elNetCap) elNetCap.innerHTML = `${fmtDec(netCapPmt)}<span class="period">${loanFreqSuffix} net</span>`;
         const elDedSavingsSub = document.getElementById('disp-ded-savings-sub');
-        if (elDedSavingsSub) elDedSavingsSub.textContent = `${fmt(dedSavingsAnnual26)}/yr (${fmtDec(dedSavingsPeriod26)}${freqSuffix})`;
+        if (elDedSavingsSub) {
+          elDedSavingsSub.textContent = paymentFrequency === 'biweekly'
+            ? `${fmt(dedSavingsAnnual26)}/yr ($${fmtDec(dedSavingsMonthly26)}/mo on MPI • $${fmtDec(dedSavingsLoanPeriod26)}/bi-wk loan credit)`
+            : `${fmt(dedSavingsAnnual26)}/yr ($${fmtDec(dedSavingsMonthly26)}/mo on MPI)`;
+        }
         const elStratBadge = document.getElementById('disp-strategy-badge-text');
         if (elStratBadge) elStratBadge.textContent = `Save ${fmt(dedSavingsAnnual26)}/yr on MPI + $0 Deductible on Write-off`;
 
         // Update Deductible Strategy Section
         const elDedHead = document.getElementById('disp-ded-savings-headline');
-        if (elDedHead) elDedHead.textContent = `Save ${fmt(dedSavingsAnnual26)} / year`;
+        if (elDedHead) elDedHead.textContent = `Save ${fmt(dedSavingsAnnual26)} / year ($${fmtDec(dedSavingsMonthly26)}/mo)`;
         const elTableDedFee = document.getElementById('table-mpi-ded-fee');
         if (elTableDedFee) elTableDedFee.textContent = `+${fmt(dedSavingsAnnual26)} / year`;
         const elTableDedPeriod = document.getElementById('table-mpi-ded-period');
-        if (elTableDedPeriod) elTableDedPeriod.textContent = `(+${fmtDec(dedSavingsPeriod26)} ${freqSuffix})`;
+        if (elTableDedPeriod) elTableDedPeriod.textContent = `(+${fmtDec(dedSavingsMonthly26)} / month on MPI)`;
         const elTableDedPill = document.getElementById('table-ded-savings-pill');
         if (elTableDedPill) elTableDedPill.textContent = `Save ${fmt(dedSavingsAnnual26)} / year on MPI`;
         const elTableDedSub = document.getElementById('table-ded-savings-sub');
@@ -2430,8 +2445,8 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
         const elStratSummary = document.getElementById('disp-strategy-summary');
         if (elStratSummary) {
           elStratSummary.innerHTML = `
-            If you pay MPI for a $200 deductible, you are paying <strong>${fmt(dedSavingsAnnual26)} extra every single year</strong> (${fmtDec(dedSavingsPeriod26)}${freqSuffix}). 
-            By simply keeping MPI's standard $500 deductible and choosing Companion Asset Protection (CAP), you save that <strong>${fmt(dedSavingsAnnual26)}/year</strong> on your insurance. 
+            If you pay MPI for a $200 deductible, you are paying <strong>${fmt(dedSavingsAnnual26)} extra every single year</strong> ($${fmtDec(dedSavingsMonthly26)}/month on your MPI bill). 
+            By simply keeping MPI's standard $500 deductible and choosing Companion Asset Protection (CAP), you save that <strong>${fmt(dedSavingsAnnual26)}/year ($${fmtDec(dedSavingsMonthly26)}/mo)</strong> on your insurance. 
             In the event of a total loss, CAP reimburses your entire $500 deductible—leaving you with <strong>$0 out of pocket</strong> (which is $200 cheaper than paying MPI for a $200 deductible). 
             Even in a partial loss (such as a body shop repair or windshield claim), you only pay $250 out of pocket (a modest $50 difference from $200), which is paid for many times over by your <strong>${fmt(dedSavingsAnnual26)}</strong> annual premium savings!
           `;
@@ -2440,34 +2455,38 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
         // Update Add-Ons Comparison Section
         const elAddonHead = document.getElementById('disp-addon-vs-cap-headline');
         if (elAddonHead) {
-          const diffMpiVsCap = Math.abs(mpiAddonsPeriod26 - capPmt);
-          if (diffMpiVsCap < 2) {
-            elAddonHead.textContent = 'Virtually Identical Cost';
-          } else if (mpiAddonsPeriod26 > capPmt) {
-            elAddonHead.textContent = `CAP Is ${fmtDec(mpiAddonsPeriod26 - capPmt)}/mo Cheaper!`;
+          if (paymentFrequency === 'biweekly') {
+            elAddonHead.textContent = `Replace $${fmtDec(mpiAddonsMonthly26)}/mo MPI with +$${fmtDec(capPmt)}/bi-wk`;
           } else {
-            elAddonHead.textContent = `Only ${fmtDec(capPmt - mpiAddonsPeriod26)}/mo Difference`;
+            const diffMpiVsCap = Math.abs(mpiAddonsMonthly26 - capPmt);
+            if (diffMpiVsCap < 2) {
+              elAddonHead.textContent = 'Virtually Identical Cost';
+            } else if (mpiAddonsMonthly26 > capPmt) {
+              elAddonHead.textContent = `CAP Is $${fmtDec(mpiAddonsMonthly26 - capPmt)}/mo Cheaper!`;
+            } else {
+              elAddonHead.textContent = `Only $${fmtDec(capPmt - mpiAddonsMonthly26)}/mo Difference`;
+            }
           }
         }
 
         const elBoxMpiPeriod = document.getElementById('disp-box-mpi-addons-period');
-        if (elBoxMpiPeriod) elBoxMpiPeriod.textContent = `${fmtDec(mpiAddonsPeriod26)} ${freqSuffix}`;
+        if (elBoxMpiPeriod) elBoxMpiPeriod.textContent = `${fmtDec(mpiAddonsMonthly26)} / mo`;
         const elBoxMpiAnnual = document.getElementById('disp-box-mpi-addons-annual');
-        if (elBoxMpiAnnual) elBoxMpiAnnual.textContent = `${fmt(mpiAddonsAnnual26)} / year (${fmtDec(mpiAddonsPeriod26)} ${freqSuffix})`;
+        if (elBoxMpiAnnual) elBoxMpiAnnual.textContent = `${fmt(mpiAddonsAnnual26)} / year (Billed Monthly by MPI)`;
         const elBoxMpiNew = document.getElementById('disp-box-mpi-newveh');
         if (elBoxMpiNew) elBoxMpiNew.textContent = `${fmt(newveh26)}/yr`;
         const elBoxMpiLoss = document.getElementById('disp-box-mpi-lossuse');
         if (elBoxMpiLoss) elBoxMpiLoss.textContent = `${fmt(loss26)}/yr`;
 
         const elBoxCapPeriod = document.getElementById('disp-box-cap-period');
-        if (elBoxCapPeriod) elBoxCapPeriod.textContent = `${fmtDec(capPmt)} ${freqSuffix}`;
+        if (elBoxCapPeriod) elBoxCapPeriod.textContent = `${fmtDec(capPmt)} ${loanFreqSuffix}`;
         const elBoxCapAnnual = document.getElementById('disp-box-cap-annual');
         if (elBoxCapAnnual) {
           if (currentCap) {
             if (paymentFrequency === 'biweekly') {
-              elBoxCapAnnual.textContent = `Equivalent to ${fmtDec(currentCap.paymentMonthly)} / mo (Just ${fmtDec(currentCap.perDay)}/day)`;
+              elBoxCapAnnual.textContent = `Just ${fmtDec(currentCap.paymentBiweekly)} bi-weekly (Equivalent to ${fmtDec(currentCap.paymentMonthly)}/mo • ${fmtDec(currentCap.perDay)}/day)`;
             } else {
-              elBoxCapAnnual.textContent = `Just ${fmtDec(currentCap.paymentBiweekly)} bi-weekly (Just ${fmtDec(currentCap.perDay)}/day)`;
+              elBoxCapAnnual.textContent = `${fmtDec(currentCap.paymentMonthly)} / mo (Just ${fmtDec(currentCap.paymentBiweekly)} bi-weekly • ${fmtDec(currentCap.perDay)}/day)`;
             }
           } else {
             elBoxCapAnnual.textContent = '$0';
@@ -2485,9 +2504,9 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
         }
 
         const elBoxAllPeriod = document.getElementById('disp-box-mpi-all-period');
-        if (elBoxAllPeriod) elBoxAllPeriod.textContent = `${fmtDec(mpiAllOptionalsPeriod26)} ${freqSuffix}`;
+        if (elBoxAllPeriod) elBoxAllPeriod.textContent = `${fmtDec(mpiAllOptionalsMonthly26)} / mo`;
         const elBoxAllAnnual = document.getElementById('disp-box-mpi-all-annual');
-        if (elBoxAllAnnual) elBoxAllAnnual.textContent = `${fmt(mpiAllOptionalsAnnual26)} / year (${fmtDec(mpiAllOptionalsPeriod26)} ${freqSuffix})`;
+        if (elBoxAllAnnual) elBoxAllAnnual.textContent = `${fmt(mpiAllOptionalsAnnual26)} / year (Billed Monthly by MPI)`;
         const elBoxMpiDed = document.getElementById('disp-box-mpi-ded');
         if (elBoxMpiDed) elBoxMpiDed.textContent = `${fmt(ded26)}/yr`;
         const elBoxMpiNew2 = document.getElementById('disp-box-mpi-newveh2');
@@ -2496,9 +2515,14 @@ $initialCapTopUp = (int)($prefillSalePrice - $initialMpiPayout);
         if (elBoxMpiLoss2) elBoxMpiLoss2.textContent = `${fmt(loss26)}/yr`;
 
         const elBoxNetSav = document.getElementById('disp-box-net-savings');
-        if (elBoxNetSav) {
-          const netDiff = mpiAllOptionalsPeriod26 - capPmt;
-          elBoxNetSav.textContent = `${fmtDec(Math.abs(netDiff))} ${freqSuffix} ${netDiff >= 0 ? 'less' : 'more'}`;
+        if (elBoxNetSav && currentCap) {
+          if (paymentFrequency === 'biweekly') {
+            const netMoDiff = mpiAllOptionalsMonthly26 - currentCap.paymentMonthly;
+            elBoxNetSav.innerHTML = `<strong>By switching to $500 MPI + CAP:</strong> You eliminate <strong>$${fmtDec(mpiAllOptionalsMonthly26)}/mo</strong> in optional MPI fees for just <strong>+${fmtDec(capPmt)} bi-weekly</strong> on your loan (saving <strong style="color: #059669;">$${fmtDec(netMoDiff)}/mo net</strong>)!`;
+          } else {
+            const netDiff = mpiAllOptionalsMonthly26 - capPmt;
+            elBoxNetSav.innerHTML = `<strong>By switching to $500 MPI + CAP:</strong> You save <strong style="color: #059669;">$${fmtDec(Math.abs(netDiff))} / month net</strong> while gaining up to ${maxAllowedYears} years of full coverage!`;
+          }
         }
 
         // Update Rate Increase Reference Section
