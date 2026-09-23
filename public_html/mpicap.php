@@ -810,6 +810,73 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
     }
 
+    /* Visual Depreciation & Equity Protection Graph */
+    .depreciation-graph-wrap {
+      background: rgba(2, 6, 23, 0.55);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-md);
+      padding: 1.25rem 1rem 0.85rem 1rem;
+      margin: 1rem 0 1.25rem 0;
+    }
+    .deprec-legend {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1.25rem;
+      margin-bottom: 0.85rem;
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.85);
+    }
+    .deprec-legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+    .deprec-legend-line {
+      display: inline-block;
+      width: 18px;
+      height: 3px;
+      border-radius: 2px;
+    }
+    .deprec-legend-line.cap-line {
+      background: #10b981;
+      box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
+    }
+    .deprec-legend-line.mpi-line {
+      background: #f87171;
+      box-shadow: 0 0 6px rgba(248, 113, 113, 0.6);
+    }
+    .deprec-legend-box.cap-zone {
+      display: inline-block;
+      width: 13px;
+      height: 13px;
+      border-radius: 3px;
+      background: rgba(16, 185, 129, 0.35);
+      border: 1px solid #10b981;
+    }
+    .deprec-cutoff-badge {
+      background: rgba(220, 38, 38, 0.25);
+      color: #fca5a5;
+      border: 1px solid rgba(239, 68, 68, 0.45);
+      padding: 2px 7px;
+      border-radius: 9999px;
+      font-weight: 700;
+      font-size: 0.72rem;
+    }
+    .deprec-svg-wrap {
+      width: 100%;
+      overflow: visible;
+      position: relative;
+    }
+    .deprec-node {
+      transition: r 0.2s ease, filter 0.2s ease;
+    }
+    .deprec-node:hover {
+      r: 7;
+      filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.9));
+    }
+
     .scenario-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -1668,6 +1735,30 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
               </div>
             </div>
 
+            <!-- Visual Depreciation & Equity Protection Graph -->
+            <div class="depreciation-graph-wrap" id="depreciation-graph-container">
+              <div class="deprec-legend">
+                <div class="deprec-legend-item">
+                  <span class="deprec-legend-line cap-line"></span>
+                  <span><strong>CAP Buying Power</strong> (<span id="disp-deprec-cap-val">$<?= number_format($prefillSalePrice) ?></span> Locked)</span>
+                </div>
+                <div class="deprec-legend-item">
+                  <span class="deprec-legend-line mpi-line"></span>
+                  <span><strong>MPI Actual Cash Value</strong> (Depreciates to ~44% by Yr 5)</span>
+                </div>
+                <div class="deprec-legend-item">
+                  <span class="deprec-legend-box cap-zone"></span>
+                  <span><strong>CAP Protection Zone</strong> (Reimburses Equity Shortfall)</span>
+                </div>
+                <div class="deprec-legend-item">
+                  <span class="deprec-cutoff-badge">⚠️ MPI 2-Year Cutoff</span>
+                </div>
+              </div>
+              <div class="deprec-svg-wrap">
+                <svg id="deprec-svg" viewBox="0 0 760 250" preserveAspectRatio="xMidYMid meet" width="100%" height="auto"></svg>
+              </div>
+            </div>
+
             <div class="scenario-grid">
               <div class="scenario-column mpi">
                 <div class="scenario-title" style="color: #fca5a5;">
@@ -1999,7 +2090,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
                   </td>
                   <td>
                     <span style="font-weight: 700; color: #059669;" id="disp-table-cap-duration">Up to <?= $initialMaxYears ?> Years Guaranteed</span><br>
-                    <span style="font-size: 0.8rem; color: #64748b;" id="disp-table-cap-duration-sub"><?= $isOver75k ? 'Covers full term up to 60 months' : 'Covers full loan term up to 84 months' ?></span>
+                    <span style="font-size: 0.8rem; color: #64748b;" id="disp-table-cap-duration-sub">Covers your selected <?= $initialMaxTermMonths ?>-month (<?= $initialMaxYears ?>-year) term</span>
                   </td>
                   <td>
                     <span class="badge-win" id="disp-table-cap-extra-years"><?= $isVehIneligibleMpiNew ? "Full {$initialMaxYears} Extra Years vs $0 MPI" : ($isVehOneYearMpiNew ? max(1, $initialMaxYears - 1) . " Extra Years of Coverage" : max(1, $initialMaxYears - 2) . " Extra Years of Coverage") ?></span>
@@ -2177,11 +2268,15 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
       let paymentFrequency = 'monthly'; // 'monthly' | 'biweekly'
       let selectedCapTerm = 60; // default term
       let selectedDeductible = 200; // default deductible tier: 1000, 750, 500, 300, 200
-      let selectedScenarioYear = 4; // default scenario claim timing: 3, 4, 5
+      let selectedScenarioYear = 4; // default scenario claim timing: 3, 4, 5 (or 1..7)
       const DEPRECIATION_RATES = {
+        1: { acvPct: 0.80, label: 'Year 1 (Month 12)' },
+        2: { acvPct: 0.70, label: 'Year 2 (Month 24)' },
         3: { acvPct: 0.61, label: 'Year 3 (Month 36)' },
         4: { acvPct: 0.52, label: 'Year 4 (Month 48)' },
-        5: { acvPct: 0.44, label: 'Year 5 (Month 60)' }
+        5: { acvPct: 0.44, label: 'Year 5 (Month 60)' },
+        6: { acvPct: 0.38, label: 'Year 6 (Month 72)' },
+        7: { acvPct: 0.33, label: 'Year 7 (Month 84)' }
       };
 
       // DOM Elements
@@ -2299,7 +2394,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
             selectedDeductible = state.selectedDeductible;
           }
 
-          if (typeof state.selectedScenarioYear === 'number' && [3, 4, 5].includes(state.selectedScenarioYear)) {
+          if (typeof state.selectedScenarioYear === 'number' && [1, 2, 3, 4, 5, 6, 7].includes(state.selectedScenarioYear)) {
             selectedScenarioYear = state.selectedScenarioYear;
             document.querySelectorAll('.scenario-year-btn').forEach(b => {
               b.classList.toggle('active', parseInt(b.dataset.year, 10) === selectedScenarioYear);
@@ -2490,6 +2585,176 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
 
       function fmtDec(val) {
         return '$' + (Number(val).toFixed(2)).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      }
+
+      function fmtK(val) {
+        const v = Math.round(val);
+        if (v >= 1000) {
+          return '$' + Math.round(v / 1000) + 'k';
+        }
+        return '$' + v;
+      }
+
+      function getBadgeCoords(targetX, width) {
+        const x = Math.max(75, Math.min(720 - width, targetX - width / 2));
+        return { rectX: x, textX: x + width / 2 };
+      }
+
+      function renderDepreciationGraph(vehPrice, selectedYear) {
+        const svgEl = document.getElementById('deprec-svg');
+        const capValEl = document.getElementById('disp-deprec-cap-val');
+        if (capValEl) capValEl.textContent = fmt(vehPrice);
+        if (!svgEl) return;
+
+        const pts = [
+          { year: 0, pct: 1.00, label: 'Day 1', sub: '100% Value', x: 75.0, y: 36.0 },
+          { year: 1, pct: 0.80, label: 'Yr 1 (12m)', sub: '~80% ACV', x: 167.1, y: 67.8 },
+          { year: 2, pct: 0.70, label: 'Yr 2 (24m)', sub: 'MPI Cutoff', x: 259.3, y: 83.7 },
+          { year: 3, pct: 0.61, label: 'Yr 3 (36m)', sub: '~61% ACV', x: 351.4, y: 98.0 },
+          { year: 4, pct: 0.52, label: 'Yr 4 (48m)', sub: '~52% ACV', x: 443.6, y: 112.3 },
+          { year: 5, pct: 0.44, label: 'Yr 5 (60m)', sub: '~44% ACV', x: 535.7, y: 125.0 },
+          { year: 6, pct: 0.38, label: 'Yr 6 (72m)', sub: '~38% ACV', x: 627.9, y: 134.6 },
+          { year: 7, pct: 0.33, label: 'Yr 7 (84m)', sub: '~33% ACV', x: 720.0, y: 142.5 }
+        ];
+
+        // Smooth Catmull-Rom to Cubic Bézier Spline
+        let curveD = `M ${pts[0].x.toFixed(1)},${pts[0].y.toFixed(1)}`;
+        for (let i = 0; i < pts.length - 1; i++) {
+          const p0 = i > 0 ? pts[i - 1] : pts[i];
+          const p1 = pts[i];
+          const p2 = pts[i + 1];
+          const p3 = i < pts.length - 2 ? pts[i + 2] : p2;
+          const cp1x = p1.x + (p2.x - p0.x) / 6;
+          const cp1y = p1.y + (p2.y - p0.y) / 6;
+          const cp2x = p2.x - (p3.x - p1.x) / 6;
+          const cp2y = p2.y - (p3.y - p1.y) / 6;
+          curveD += ` C ${cp1x.toFixed(1)},${cp1y.toFixed(1)} ${cp2x.toFixed(1)},${cp2y.toFixed(1)} ${p2.x.toFixed(1)},${p2.y.toFixed(1)}`;
+        }
+        const areaD = `${curveD} L 720.0,36.0 L 75.0,36.0 Z`;
+
+        const targetPt = pts.find(p => p.year === selectedYear) || pts[4];
+        const scenMpiPayout = Math.round((vehPrice * targetPt.pct) / 1000) * 1000;
+        const scenCapTopUp = vehPrice - scenMpiPayout;
+        const midY = (36 + targetPt.y) / 2;
+
+        const topB = getBadgeCoords(targetPt.x, 140);
+        const midB = getBadgeCoords(targetPt.x, 156);
+        const botB = getBadgeCoords(targetPt.x, 136);
+
+        let svgHtml = `
+          <defs>
+            <linearGradient id="capZoneGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#10b981" stop-opacity="0.38"/>
+              <stop offset="100%" stop-color="#10b981" stop-opacity="0.10"/>
+            </linearGradient>
+            <filter id="graphShadow" x="-10%" y="-10%" width="120%" height="130%">
+              <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity="0.6"/>
+            </filter>
+          </defs>
+
+          <!-- Horizontal Reference Grid Lines -->
+          <line x1="75" y1="36" x2="720" y2="36" stroke="rgba(255,255,255,0.12)" stroke-width="1" stroke-dasharray="3,3"/>
+          <line x1="75" y1="75.8" x2="720" y2="75.8" stroke="rgba(255,255,255,0.07)" stroke-width="1" stroke-dasharray="3,3"/>
+          <line x1="75" y1="115.5" x2="720" y2="115.5" stroke="rgba(255,255,255,0.07)" stroke-width="1" stroke-dasharray="3,3"/>
+          <line x1="75" y1="155.3" x2="720" y2="155.3" stroke="rgba(255,255,255,0.07)" stroke-width="1" stroke-dasharray="3,3"/>
+          <line x1="75" y1="195" x2="720" y2="195" stroke="rgba(255,255,255,0.22)" stroke-width="1"/>
+
+          <!-- Y-Axis Labels -->
+          <text x="68" y="40" fill="#a7f3d0" font-size="10" font-weight="700" text-anchor="end">${fmtK(vehPrice)}</text>
+          <text x="68" y="79" fill="#94a3b8" font-size="9" text-anchor="end">75%</text>
+          <text x="68" y="119" fill="#94a3b8" font-size="9" text-anchor="end">50%</text>
+          <text x="68" y="159" fill="#94a3b8" font-size="9" text-anchor="end">25%</text>
+          <text x="68" y="198" fill="#64748b" font-size="9" text-anchor="end">$0</text>
+        `;
+
+        // X-Axis Labels
+        pts.forEach(p => {
+          const isTarget = p.year === selectedYear;
+          const isCutoff = p.year === 2;
+          const labelColor = isTarget ? '#38bdf8' : (isCutoff ? '#fca5a5' : '#cbd5e1');
+          const subColor = isCutoff ? '#ef4444' : (isTarget ? '#38bdf8' : '#64748b');
+          const weight = isTarget || isCutoff ? '700' : '500';
+
+          svgHtml += `
+            <text x="${p.x}" y="212" fill="${labelColor}" font-size="10.5" font-weight="${weight}" text-anchor="middle">${p.label}</text>
+            <text x="${p.x}" y="226" fill="${subColor}" font-size="9" font-weight="${weight}" text-anchor="middle">${p.sub}</text>
+          `;
+        });
+
+        svgHtml += `
+          <!-- CAP Protection Zone Fill -->
+          <path d="${areaD}" fill="url(#capZoneGrad)" />
+
+          <!-- MPI 2-Year Cutoff Marker -->
+          <line x1="259.3" y1="36" x2="259.3" y2="195" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,3" opacity="0.8"/>
+          <rect x="204" y="172" width="112" height="18" rx="3" fill="rgba(185, 28, 28, 0.95)" stroke="#fca5a5" stroke-width="1" filter="url(#graphShadow)"/>
+          <text x="260" y="184.5" fill="#ffffff" font-size="9" font-weight="700" text-anchor="middle">⚠️ MPI 2-YR CUTOFF</text>
+
+          <!-- MPI ACV Curve -->
+          <path d="${curveD}" fill="none" stroke="#f87171" stroke-width="3" stroke-linecap="round"/>
+
+          <!-- Top CAP Buying Power Flat Line -->
+          <line x1="75" y1="36" x2="720" y2="36" stroke="#10b981" stroke-width="3.5" stroke-linecap="round"/>
+          <circle cx="75" cy="36" r="4.5" fill="#10b981" stroke="#ffffff" stroke-width="1.5"/>
+          <circle cx="720" cy="36" r="4.5" fill="#10b981" stroke="#ffffff" stroke-width="1.5"/>
+          <rect x="622" y="18" width="98" height="16" rx="3" fill="#065f46" stroke="#34d399" stroke-width="1"/>
+          <text x="671" y="29.5" fill="#a7f3d0" font-size="8.5" font-weight="700" text-anchor="middle">100% BUYING POWER</text>
+
+          <!-- Selected Scenario Year Vertical Guide Line -->
+          <line x1="${targetPt.x}" y1="20" x2="${targetPt.x}" y2="195" stroke="#38bdf8" stroke-width="2" stroke-dasharray="4,3"/>
+
+          <!-- Target Top Ceiling Badge -->
+          <rect x="${topB.rectX}" y="8" width="140" height="20" rx="4" fill="#065f46" stroke="#34d399" stroke-width="1.2" filter="url(#graphShadow)"/>
+          <text x="${topB.textX}" y="22" fill="#ecfdf5" font-size="10" font-weight="700" text-anchor="middle">CAP Ceiling: ${fmt(vehPrice)}</text>
+
+          <!-- Target Mid GAP Shortfall Badge -->
+          <rect x="${midB.rectX}" y="${midY - 11}" width="156" height="22" rx="4" fill="#047857" stroke="#6ee7b7" stroke-width="1.5" filter="url(#graphShadow)"/>
+          <text x="${midB.textX}" y="${midY + 4}" fill="#ffffff" font-size="10.5" font-weight="800" text-anchor="middle">+${fmt(scenCapTopUp)} CAP Top-Up</text>
+
+          <!-- Target Curve Node & Pulse Ring -->
+          <circle cx="${targetPt.x}" cy="${targetPt.y}" r="8" fill="none" stroke="#38bdf8" stroke-width="2" opacity="0.9"/>
+          <circle cx="${targetPt.x}" cy="${targetPt.y}" r="4.5" fill="#f87171" stroke="#ffffff" stroke-width="2"/>
+
+          <!-- Target Bottom MPI Payout Badge -->
+          <rect x="${botB.rectX}" y="${targetPt.y + 8}" width="136" height="20" rx="4" fill="rgba(153, 27, 27, 0.95)" stroke="#f87171" stroke-width="1" filter="url(#graphShadow)"/>
+          <text x="${botB.textX}" y="${targetPt.y + 22}" fill="#fee2e2" font-size="10" font-weight="700" text-anchor="middle">MPI Pays: ~${fmt(scenMpiPayout)} (${Math.round(targetPt.pct * 100)}%)</text>
+        `;
+
+        // Interactive Year Nodes (Years 1 to 7)
+        pts.forEach(p => {
+          if (p.year === 0) return;
+          if (p.year !== selectedYear) {
+            svgHtml += `
+              <circle cx="${p.x}" cy="${p.y}" r="4" fill="#f87171" stroke="#ffffff" stroke-width="1.5" class="deprec-node" data-year="${p.year}" style="cursor: pointer;"/>
+            `;
+            if ([3, 4, 5].includes(p.year)) {
+              svgHtml += `
+                <circle cx="${p.x}" cy="${p.y}" r="7.5" fill="none" stroke="#38bdf8" stroke-width="1.2" opacity="0.6" style="cursor: pointer;" data-year="${p.year}"/>
+              `;
+            }
+          }
+          // Larger hit area for touch/click
+          svgHtml += `
+            <circle cx="${p.x}" cy="${p.y}" r="16" fill="transparent" style="cursor: pointer;" data-year="${p.year}"/>
+          `;
+        });
+
+        svgEl.innerHTML = svgHtml;
+
+        // Attach click listeners to SVG nodes
+        svgEl.querySelectorAll('[data-year]').forEach(el => {
+          el.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const yr = parseInt(el.getAttribute('data-year'), 10);
+            if (yr && DEPRECIATION_RATES[yr]) {
+              selectedScenarioYear = yr;
+              document.querySelectorAll('.scenario-year-btn').forEach(b => {
+                b.classList.toggle('active', parseInt(b.dataset.year, 10) === selectedScenarioYear);
+              });
+              recalculate();
+            }
+          });
+        });
       }
 
       // Calculate Loan Payment (Amortization)
@@ -2956,6 +3221,8 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
         const elScenTotalPower = document.getElementById('disp-scen-total-power');
         if (elScenTotalPower) elScenTotalPower.textContent = `${fmt(scenVehPrice)} (100% Value)`;
 
+        // Render Interactive Visual Depreciation & Equity Protection Graph
+        renderDepreciationGraph(scenVehPrice, selectedScenarioYear);
 
         // Update Pillar 2
         const elPillarYearsTitle = document.getElementById('disp-pillar-years-title');
@@ -2979,7 +3246,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
         if (elTableDuration) elTableDuration.textContent = `${maxYearsText} Guaranteed`;
 
         const elTableDurationSub = document.getElementById('disp-table-cap-duration-sub');
-        if (elTableDurationSub) elTableDurationSub.textContent = isLuxuryOrOver75k ? 'Covers full term up to 60 months' : 'Covers full loan term up to 84 months';
+        if (elTableDurationSub) elTableDurationSub.textContent = `Covers your selected ${selectedCapTerm}-month (${selectedCapTerm / 12}-year) term`;
 
         const elTableMpiDuration = document.getElementById('disp-table-mpi-duration');
         if (elTableMpiDuration) {
@@ -3218,7 +3485,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
               <strong>How your financing &amp; coverage work together:</strong><br>
               Your Companion Asset Protection is financed directly into your vehicle loan, adding just <strong>+${fmtDec(capPmt)}${loanFreqSuffix}</strong> (a modest <strong>${fmtDec(capPerDay)}/day</strong>) across all <strong>${loanTerm} months of your loan</strong> with zero out-of-pocket cost today.<br><br>
               <strong>Why this is a smart financial strategy:</strong><br>
-              Vehicles suffer their steepest market depreciation during the first 5 years (Months 1–60). Having 60-Month CAP gives you 100% Replacement Value Top-Up and deductible protection during your highest-risk ownership window, while your ${loanTerm}-month financing keeps the monthly payment ultra-affordable. By Month 60, your remaining loan balance has significantly dropped, naturally closing the equity gap.
+              Vehicles suffer their steepest market depreciation during the first ${capYears} years (Months 1–${currentCap.term}). Having ${currentCap.term}-Month (${capYears}-Year) CAP gives you 100% Replacement Value Top-Up and deductible protection during your highest-risk ownership window, while your ${loanTerm}-month financing keeps the monthly payment ultra-affordable. By Month ${currentCap.term}, your remaining loan balance has significantly dropped, naturally closing the equity gap.
             `;
             activeWindowLabel = `Active Months 1–${currentCap.term} (First ${capYears} Years of Ownership)`;
           } else if (isTermEqual) {
