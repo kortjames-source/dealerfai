@@ -1298,8 +1298,32 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
       padding-top: 2rem;
     }
 
-    /* Print Stylesheet */
+    /* Precision 3-Page Print Stylesheet */
     @media print {
+      @page {
+        size: letter portrait;
+        margin: 0.35in 0.38in;
+      }
+
+      *, *::before, *::after {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+        box-sizing: border-box !important;
+      }
+
+      html, body {
+        background: #ffffff !important;
+        color: #0f172a !important;
+        font-size: 11pt !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+      }
+
+      /* Hide interactive navigation, management controls, buttons & footer */
       .sidebar,
       .top-bar,
       .standalone-header,
@@ -1308,37 +1332,601 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
       .top-action-bar .freq-toggle-group,
       .loan-freq-wrapper,
       .action-btn,
-      .presentation-toggle {
+      .presentation-toggle,
+      .scenario-year-selector,
+      .dsr-caret,
+      .dsr-select-overlay,
+      #storage-saved-badge,
+      #btn-load-sample,
+      .timeline-cards-grid {
         display: none !important;
       }
 
-      body {
-        background: #ffffff !important;
-        color: #000000 !important;
-      }
-
       .main-container,
+      .page-content,
       .mpi-cap-container {
         padding: 0 !important;
         margin: 0 !important;
         max-width: 100% !important;
+        width: 100% !important;
       }
 
-      .hero-card,
-      .rate-lock-banner,
-      .strategy-card,
-      .cap-terms-container {
-        box-shadow: none !important;
+      /* ========================================================================= */
+      /* PAGE 1: TITLE HEADER + SECTION 1 (WHY CAP IS ESSENTIAL & SCENARIO GRAPH)  */
+      /* ========================================================================= */
+      .top-action-bar {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        padding: 0.45rem 0.75rem !important;
+        margin-bottom: 0.45rem !important;
         border: 1px solid #cbd5e1 !important;
-        page-break-inside: avoid;
+        border-radius: 6px !important;
+        background: #f8fafc !important;
+        box-shadow: none !important;
       }
 
+      .client-badge-bar {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        flex-wrap: nowrap !important;
+        width: 100% !important;
+        gap: 0.5rem !important;
+      }
+
+      .client-title {
+        font-size: 1rem !important;
+        font-weight: 800 !important;
+        color: #0f172a !important;
+        white-space: nowrap !important;
+      }
+
+      .client-subtitle {
+        font-size: 0.68rem !important;
+        color: #64748b !important;
+        white-space: nowrap !important;
+      }
+
+      .dsr-pill {
+        padding: 0.2rem 0.5rem !important;
+        font-size: 0.7rem !important;
+        border-radius: 4px !important;
+        white-space: nowrap !important;
+      }
+
+      /* Section 1 Card: Exactly Page 1 */
       .replacement-showcase-card {
         background: #064e3b !important;
         color: #ffffff !important;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-        page-break-inside: avoid;
+        border: 1px solid #047857 !important;
+        border-radius: 8px !important;
+        padding: 0.85rem 1rem !important;
+        margin: 0 !important;
+        box-shadow: none !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        page-break-after: always !important;
+        break-after: page !important;
+      }
+
+      .showcase-header {
+        text-align: center !important;
+        margin: 0 auto 0.45rem auto !important;
+        max-width: 100% !important;
+      }
+
+      .showcase-header .badge-tag {
+        font-size: 0.65rem !important;
+        padding: 0.15rem 0.5rem !important;
+        margin-bottom: 0.25rem !important;
+        background: #10b981 !important;
+        color: #ffffff !important;
+      }
+
+      .showcase-header h2 {
+        font-size: 1.15rem !important;
+        margin: 0 auto 0.25rem auto !important;
+        line-height: 1.2 !important;
+        color: #ffffff !important;
+      }
+
+      .showcase-header p {
+        font-size: 0.74rem !important;
+        line-height: 1.3 !important;
+        max-width: 95% !important;
+        margin: 0 auto !important;
+        color: rgba(255, 255, 255, 0.92) !important;
+      }
+
+      /* 4 Pillars in a single row across Page 1 */
+      .pillars-grid {
+        display: grid !important;
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: 0.4rem !important;
+        margin-bottom: 0.5rem !important;
+      }
+
+      .pillar-item {
+        background: rgba(255, 255, 255, 0.08) !important;
+        border: 1px solid rgba(255, 255, 255, 0.18) !important;
+        padding: 0.45rem 0.5rem !important;
+        border-radius: 6px !important;
+        transform: none !important;
+      }
+
+      .pillar-icon {
+        width: 24px !important;
+        height: 24px !important;
+        border-radius: 6px !important;
+        margin-bottom: 0.25rem !important;
+        background: rgba(16, 185, 129, 0.3) !important;
+        color: #34d399 !important;
+      }
+
+      .pillar-icon svg {
+        width: 14px !important;
+        height: 14px !important;
+      }
+
+      .pillar-title {
+        font-size: 0.72rem !important;
+        font-weight: 700 !important;
+        margin-bottom: 0.15rem !important;
+        line-height: 1.2 !important;
+        color: #ffffff !important;
+      }
+
+      .pillar-desc {
+        font-size: 0.64rem !important;
+        line-height: 1.2 !important;
+        color: rgba(255, 255, 255, 0.85) !important;
+      }
+
+      /* Total Loss Scenario Showcase */
+      .scenario-box {
+        background: rgba(15, 23, 42, 0.85) !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        border-radius: 6px !important;
+        padding: 0.65rem 0.85rem !important;
+      }
+
+      .scenario-box h3 {
+        font-size: 0.88rem !important;
+        margin: 0 !important;
+      }
+
+      .depreciation-graph-wrap {
+        background: rgba(2, 6, 23, 0.65) !important;
+        border: 1px solid rgba(255, 255, 255, 0.15) !important;
+        border-radius: 6px !important;
+        padding: 0.35rem 0.5rem 0.2rem 0.5rem !important;
+        margin: 0.35rem 0 0.45rem 0 !important;
+      }
+
+      .deprec-legend {
+        gap: 0.55rem !important;
+        margin-bottom: 0.2rem !important;
+        font-size: 0.66rem !important;
+      }
+
+      .deprec-svg-wrap svg {
+        height: 130px !important;
+        width: 100% !important;
+      }
+
+      .scenario-grid {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 0.55rem !important;
+        margin-top: 0.35rem !important;
+      }
+
+      .scenario-column {
+        padding: 0.5rem 0.65rem !important;
+        border-radius: 6px !important;
+      }
+
+      .scenario-column.mpi {
+        background: rgba(220, 38, 38, 0.14) !important;
+        border: 1px solid rgba(239, 68, 68, 0.35) !important;
+      }
+
+      .scenario-column.cap {
+        background: rgba(16, 185, 129, 0.16) !important;
+        border: 1.5px solid #10b981 !important;
+      }
+
+      .scenario-title {
+        font-size: 0.76rem !important;
+        font-weight: 700 !important;
+        margin-bottom: 0.25rem !important;
+        padding-bottom: 0.2rem !important;
+      }
+
+      .scen-hero-callout {
+        padding: 0.35rem 0.5rem !important;
+        margin: 0.25rem 0 !important;
+        border-radius: 4px !important;
+      }
+
+      .scen-hero-tag {
+        font-size: 0.62rem !important;
+        margin-bottom: 0.1rem !important;
+      }
+
+      .scen-hero-amount {
+        font-size: 1.15rem !important;
+        font-weight: 800 !important;
+        margin-bottom: 0.1rem !important;
+        line-height: 1.1 !important;
+      }
+
+      .scen-hero-sub {
+        font-size: 0.64rem !important;
+        line-height: 1.2 !important;
+      }
+
+      .scenario-row {
+        padding: 0.18rem 0 !important;
+        font-size: 0.68rem !important;
+      }
+
+      .scenario-row.highlight {
+        font-size: 0.74rem !important;
+        padding-top: 0.25rem !important;
+      }
+
+      /* ========================================================================= */
+      /* PAGE 2: SECTION 2 (CAP TERMS & TIMELINE) + SECTION 3 (EXECUTIVE 3 CARDS)  */
+      /* ========================================================================= */
+      .cap-terms-container {
+        padding: 0.75rem 1rem !important;
+        margin-bottom: 0.55rem !important;
+        border: 1px solid #cbd5e1 !important;
+        border-radius: 8px !important;
+        background: #ffffff !important;
+        box-shadow: none !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+
+      .cap-terms-container h3 {
+        font-size: 1.05rem !important;
+        margin: 0 !important;
+      }
+
+      .cap-terms-grid {
+        display: grid !important;
+        grid-template-columns: repeat(auto-fit, minmax(125px, 1fr)) !important;
+        gap: 0.4rem !important;
+        margin-top: 0.45rem !important;
+      }
+
+      .cap-term-card {
+        padding: 0.45rem 0.55rem !important;
+        border: 1.5px solid #cbd5e1 !important;
+        border-radius: 6px !important;
+        box-shadow: none !important;
+      }
+
+      .cap-term-card.selected {
+        border: 2px solid var(--brand-color) !important;
+        background: #f0f7ff !important;
+      }
+
+      .cap-term-badge {
+        top: 5px !important;
+        right: 5px !important;
+        font-size: 0.58rem !important;
+        padding: 1px 3px !important;
+      }
+
+      .cap-term-card h4 {
+        font-size: 0.78rem !important;
+        margin: 0 !important;
+      }
+
+      .cap-term-card .term-amount {
+        font-size: 1.15rem !important;
+        margin: 0.1rem 0 !important;
+        font-weight: 800 !important;
+      }
+
+      .cap-term-card .term-daily {
+        font-size: 0.66rem !important;
+      }
+
+      .cap-relation-pill {
+        font-size: 0.6rem !important;
+        padding: 1px 3px !important;
+      }
+
+      .timeline-container {
+        padding: 0.45rem 0.65rem !important;
+        margin-top: 0.45rem !important;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 6px !important;
+        background: #f8fafc !important;
+        box-shadow: none !important;
+      }
+
+      .timeline-title {
+        font-size: 0.78rem !important;
+      }
+
+      .timeline-subtitle {
+        font-size: 0.68rem !important;
+        margin-bottom: 0.35rem !important;
+      }
+
+      .timeline-track-wrap {
+        height: auto !important;
+        gap: 0.3rem !important;
+      }
+
+      .timeline-row {
+        margin-bottom: 0.25rem !important;
+      }
+
+      .timeline-label-bar {
+        font-size: 0.65rem !important;
+        margin-bottom: 2px !important;
+      }
+
+      .timeline-track {
+        height: 14px !important;
+        border-radius: 3px !important;
+      }
+
+      .timeline-fill-loan,
+      .timeline-fill-cap,
+      .timeline-fill-remaining {
+        font-size: 0.6rem !important;
+        line-height: 14px !important;
+      }
+
+      /* Section 3: Executive Comparison Hero Cards */
+      .comparison-grid {
+        display: grid !important;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) !important;
+        gap: 0.5rem !important;
+        margin-bottom: 0 !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        page-break-after: always !important;
+        break-after: page !important;
+      }
+
+      .hero-card {
+        padding: 0.65rem 0.75rem !important;
+        border-radius: 6px !important;
+        border: 1.5px solid #cbd5e1 !important;
+        box-shadow: none !important;
+      }
+
+      .hero-card.highlight {
+        border-color: #10b981 !important;
+        background: #f0fdf4 !important;
+      }
+
+      .hero-card.combined {
+        border-color: #059669 !important;
+        background: #f0fdf4 !important;
+      }
+
+      .hero-card-tag {
+        font-size: 0.64rem !important;
+        margin-bottom: 0.2rem !important;
+      }
+
+      .hero-amount {
+        font-size: 1.55rem !important;
+        margin-bottom: 0.2rem !important;
+        line-height: 1 !important;
+      }
+
+      .hero-amount span.period {
+        font-size: 0.75rem !important;
+      }
+
+      .hero-card-subtext {
+        font-size: 0.68rem !important;
+        line-height: 1.3 !important;
+      }
+
+      .fixed-badge,
+      .increase-badge {
+        font-size: 0.64rem !important;
+        padding: 2px 5px !important;
+        margin-top: 0.3rem !important;
+      }
+
+      /* ========================================================================= */
+      /* PAGE 3: SECTION 4 (DEDUCTIBLE PROOF) + SECTION 5 (RATE LOCK) + DISCLOSURE */
+      /* ========================================================================= */
+      .strategy-card {
+        padding: 0.65rem 0.85rem !important;
+        margin-bottom: 0.45rem !important;
+        border: 1px solid #cbd5e1 !important;
+        border-radius: 8px !important;
+        box-shadow: none !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+
+      .strategy-header {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        margin-bottom: 0.35rem !important;
+      }
+
+      .strategy-header h3 {
+        font-size: 0.95rem !important;
+        margin: 0 !important;
+      }
+
+      .strategy-header p {
+        font-size: 0.68rem !important;
+        margin-top: 0.1rem !important;
+      }
+
+      #disp-ded-savings-label {
+        font-size: 0.62rem !important;
+      }
+
+      #disp-ded-savings-headline {
+        font-size: 1.1rem !important;
+      }
+
+      .deductible-selector-container {
+        padding: 0.3rem 0.45rem !important;
+        margin-bottom: 0.35rem !important;
+        background: #f8fafc !important;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 5px !important;
+      }
+
+      .deductible-pills-wrap {
+        display: flex !important;
+        gap: 0.25rem !important;
+      }
+
+      .ded-pill-btn {
+        padding: 0.2rem 0.35rem !important;
+        border: 1px solid #cbd5e1 !important;
+        border-radius: 4px !important;
+        flex: 1 !important;
+        box-shadow: none !important;
+      }
+
+      .ded-pill-btn.active {
+        border: 2px solid var(--brand-color) !important;
+        background: #eff6ff !important;
+      }
+
+      .ded-pill-val {
+        font-size: 0.74rem !important;
+        font-weight: 800 !important;
+      }
+
+      .ded-pill-badge {
+        font-size: 0.55rem !important;
+        padding: 1px 2px !important;
+      }
+
+      .ded-pill-fee {
+        font-size: 0.64rem !important;
+      }
+
+      .ded-pill-mo {
+        font-size: 0.58rem !important;
+      }
+
+      .strategy-table {
+        margin-bottom: 0.3rem !important;
+      }
+
+      .strategy-table th,
+      .strategy-table td {
+        padding: 0.25rem 0.4rem !important;
+        font-size: 0.67rem !important;
+        line-height: 1.2 !important;
+      }
+
+      .badge-win {
+        font-size: 0.64rem !important;
+        padding: 2px 5px !important;
+      }
+
+      .callout-box {
+        padding: 0.35rem 0.55rem !important;
+        margin-top: 0.35rem !important;
+        font-size: 0.65rem !important;
+        line-height: 1.25 !important;
+        border-radius: 4px !important;
+      }
+
+      /* Section 5: Rate Lock Guarantee */
+      .rate-lock-banner {
+        padding: 0.55rem 0.75rem !important;
+        margin-bottom: 0.35rem !important;
+        border: 1.5px solid #059669 !important;
+        border-radius: 8px !important;
+        background: #f0fdf4 !important;
+        box-shadow: none !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+
+      .rate-lock-inner {
+        gap: 0.5rem !important;
+      }
+
+      .rate-lock-icon {
+        width: 30px !important;
+        height: 30px !important;
+      }
+
+      .rate-lock-icon svg {
+        width: 16px !important;
+        height: 16px !important;
+      }
+
+      .rate-lock-banner h3 {
+        font-size: 0.88rem !important;
+        margin: 0 !important;
+      }
+
+      #disp-increase-headline {
+        font-size: 0.68rem !important;
+        padding: 2px 5px !important;
+      }
+
+      .rate-lock-banner p {
+        font-size: 0.66rem !important;
+        line-height: 1.25 !important;
+        margin: 0.15rem 0 !important;
+      }
+
+      .rate-lock-banner ul {
+        font-size: 0.64rem !important;
+        line-height: 1.2 !important;
+        padding-left: 0.85rem !important;
+      }
+
+      .rate-lock-pills {
+        gap: 0.2rem !important;
+        margin-top: 0.3rem !important;
+      }
+
+      .rate-lock-pill {
+        font-size: 0.58rem !important;
+        padding: 1px 4px !important;
+      }
+
+      /* Insurance Advisory Disclosure */
+      .disclosure-card {
+        padding: 0.35rem 0.55rem !important;
+        margin-top: 0.35rem !important;
+        margin-bottom: 0 !important;
+        border: 1px solid #cbd5e1 !important;
+        border-radius: 5px !important;
+        background: #f8fafc !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+
+      .disclosure-card h4 {
+        font-size: 0.68rem !important;
+        margin: 0 !important;
+      }
+
+      .disclosure-card p {
+        font-size: 0.58rem !important;
+        line-height: 1.2 !important;
+        margin: 0 !important;
       }
     }
   </style>
@@ -2289,7 +2877,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
         <!-- ========================================================================= -->
         <!-- SECTION: INSURANCE ADVISORY & BROKER DISCLOSURE -->
         <!-- ========================================================================= -->
-        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: var(--radius-lg); padding: 1.25rem 1.5rem; margin-top: 2rem; margin-bottom: 0.5rem;">
+        <div class="disclosure-card" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: var(--radius-lg); padding: 1.25rem 1.5rem; margin-top: 2rem; margin-bottom: 0.5rem;">
           <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
             <h4 style="margin: 0; font-size: 0.85rem; font-weight: 700; color: #334155; text-transform: uppercase; letter-spacing: 0.05em;">
