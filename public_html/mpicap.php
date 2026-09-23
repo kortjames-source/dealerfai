@@ -2837,7 +2837,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
                   100% Rate Lock Guarantee vs. Rising MPI Premiums &amp; Merit Penalties
                 </h3>
                 <span id="disp-increase-headline" style="font-size: 0.85rem; font-weight: 800; color: #dc2626; background: #fee2e2; padding: 0.25rem 0.65rem; border-radius: 9999px; border: 1px solid #fca5a5;">
-                  +15.1% Approved MPI Rate Increase
+                  Annual MPI Premiums Fluctuate
                 </span>
               </div>
               <p style="margin: 0.5rem 0 0 0; color: #047857; font-size: 0.9rem; line-height: 1.55;">
@@ -2854,7 +2854,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
                     MPI Premiums &amp; Merit Penalties Fluctuate
                   </div>
                   <ul style="margin: 0; padding-left: 1.15rem; font-size: 0.8rem; color: #7f1d1d; line-height: 1.45;">
-                    <li>Annual PUB general rate increases (up to +15.1% approved)</li>
+                    <li>Annual PUB general rate revisions &amp; premium adjustments</li>
                     <li>At-fault collisions drop you <strong>5 merit levels</strong></li>
                     <li>Speeding tickets &amp; moving violations drop merits by <strong>2+ levels</strong></li>
                     <li>Merit drops slash vehicle discounts &amp; add driver license surcharges</li>
@@ -4716,13 +4716,9 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
           }
         }
         // Update Rate Lock Closer Banner
-        const diffTotal = total26 - total25;
-        const pctIncrease = total25 > 0 ? ((diffTotal / total25) * 100) : 0;
         const elIncHead = document.getElementById('disp-increase-headline');
         if (elIncHead) {
-          elIncHead.textContent = pctIncrease > 0 
-            ? `+${pctIncrease.toFixed(1)}% Approved MPI Rate Increase` 
-            : 'Approved PUB Rate Increases';
+          elIncHead.textContent = 'Annual MPI Premiums Fluctuate';
         }
 
         const elRateLockYears = document.getElementById('disp-ratelock-years');
