@@ -4380,7 +4380,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
 
         if (selectedDeductible === 200) {
           if (elCardStratTag) elCardStratTag.textContent = 'Smart Autopac Offset Strategy';
-          if (elNetCap) elNetCap.innerHTML = `Save ${fmtDec(totalSavPeriod)}<span class="period">${loanFreqSuffix}</span>`;
+          if (elNetCap) elNetCap.innerHTML = `Save ${fmtDec(totalSavMonthly)}<span class="period">/mo</span>`;
           if (elStratPeriodLine) {
             elStratPeriodLine.textContent = `-${fmt(totalSavAnnual)}/yr total reduction on your MPI Autopac bill`;
           }
@@ -4390,7 +4390,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
               🚗 <strong>Drop MPI Rental Car:</strong> Pocket <strong>${fmtDec(lossSavMonthly)}/mo</strong> (${fmt(lossSavAnnual)}/yr) since CAP includes 30 days of rental!<br>
               🛡️ <strong>Write-Off Deductible:</strong> Still <strong>$0 Out of Pocket</strong> (CAP reimburses $500)!<br>
               <div style="margin-top: 0.5rem; padding: 6px 8px; background: rgba(16, 185, 129, 0.12); border-radius: 4px; border: 1px solid rgba(16, 185, 129, 0.3); color: #065f46; font-size: 0.8rem; font-weight: 600;">
-                💡 <strong>True Net Cost:</strong> Your ${fmtDec(totalSavPeriod)}${loanFreqSuffix} savings offsets CAP down to just <strong>+${fmtDec(netCapPmt)}${loanFreqSuffix}</strong> (${fmtDec(netCapPerDay)}/day)!
+                💡 <strong>True Net Cost:</strong> Your ${fmtDec(totalSavMonthly)}/mo MPI savings offsets CAP down to just <strong>+${fmtDec(netCapPmt)}${loanFreqSuffix}</strong> (${fmtDec(netCapPerDay)}/day)!
               </div>
             `;
           }
@@ -4399,7 +4399,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
           }
         } else if (selectedDeductible === 300) {
           if (elCardStratTag) elCardStratTag.textContent = 'Smart Autopac Offset Strategy';
-          if (elNetCap) elNetCap.innerHTML = `Save ${fmtDec(totalSavPeriod)}<span class="period">${loanFreqSuffix}</span>`;
+          if (elNetCap) elNetCap.innerHTML = `Save ${fmtDec(totalSavMonthly)}<span class="period">/mo</span>`;
           if (elStratPeriodLine) {
             elStratPeriodLine.textContent = `-${fmt(totalSavAnnual)}/yr total reduction on your MPI Autopac bill`;
           }
@@ -4409,7 +4409,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
               🚗 <strong>Drop MPI Rental Car:</strong> Pocket <strong>${fmtDec(lossSavMonthly)}/mo</strong> (${fmt(lossSavAnnual)}/yr) since CAP includes 30 days of rental!<br>
               🛡️ <strong>Write-Off Deductible:</strong> Still <strong>$0 Out of Pocket</strong> (CAP reimburses $500)!<br>
               <div style="margin-top: 0.5rem; padding: 6px 8px; background: rgba(16, 185, 129, 0.12); border-radius: 4px; border: 1px solid rgba(16, 185, 129, 0.3); color: #065f46; font-size: 0.8rem; font-weight: 600;">
-                💡 <strong>True Net Cost:</strong> Your ${fmtDec(totalSavPeriod)}${loanFreqSuffix} savings offsets CAP down to just <strong>+${fmtDec(netCapPmt)}${loanFreqSuffix}</strong> (${fmtDec(netCapPerDay)}/day)!
+                💡 <strong>True Net Cost:</strong> Your ${fmtDec(totalSavMonthly)}/mo MPI savings offsets CAP down to just <strong>+${fmtDec(netCapPmt)}${loanFreqSuffix}</strong> (${fmtDec(netCapPerDay)}/day)!
               </div>
             `;
           }
@@ -4418,7 +4418,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
           }
         } else if (selectedDeductible === 500) {
           if (elCardStratTag) elCardStratTag.textContent = 'Smart Autopac Offset Strategy';
-          if (elNetCap) elNetCap.innerHTML = `Save ${fmtDec(lossSavPeriod)}<span class="period">${loanFreqSuffix}</span>`;
+          if (elNetCap) elNetCap.innerHTML = `Save ${fmtDec(lossSavMonthly)}<span class="period">/mo</span>`;
           if (elStratPeriodLine) {
             elStratPeriodLine.textContent = `-${fmt(lossSavAnnual)}/yr rental car savings on your Autopac bill`;
           }
@@ -4428,7 +4428,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
               🛡️ <strong>Write-Off Deductible:</strong> <strong>$0 Out of Pocket</strong> (CAP reimburses your entire $500 deductible)!<br>
               🔧 <strong>Repairs &amp; Windshields:</strong> CAP reimburses $250 &rarr; <strong>Cuts deductible in half to $250</strong>!<br>
               <div style="margin-top: 0.5rem; padding: 6px 8px; background: rgba(16, 185, 129, 0.12); border-radius: 4px; border: 1px solid rgba(16, 185, 129, 0.3); color: #065f46; font-size: 0.8rem; font-weight: 600;">
-                💡 <strong>True Net Cost:</strong> Your rental car savings offsets CAP down to just <strong>+${fmtDec(netCapPmt)}${loanFreqSuffix}</strong> (${fmtDec(netCapPerDay)}/day)!
+                💡 <strong>True Net Cost:</strong> Your ${fmtDec(lossSavMonthly)}/mo rental car savings offsets CAP down to just <strong>+${fmtDec(netCapPmt)}${loanFreqSuffix}</strong> (${fmtDec(netCapPerDay)}/day)!
               </div>
             `;
           }
@@ -4437,7 +4437,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
           }
         } else if (selectedDeductible === 750) {
           if (elCardStratTag) elCardStratTag.textContent = 'Smart Autopac Offset Strategy';
-          if (elNetCap) elNetCap.innerHTML = `Save ${fmtDec(lossSavPeriod)}<span class="period">${loanFreqSuffix}</span>`;
+          if (elNetCap) elNetCap.innerHTML = `Save ${fmtDec(lossSavMonthly)}<span class="period">/mo</span>`;
           if (elStratPeriodLine) {
             elStratPeriodLine.textContent = `-${fmt(lossSavAnnual)}/yr rental car savings on your Autopac bill`;
           }
@@ -4447,7 +4447,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
               🛡️ <strong>Write-Off Deductible:</strong> CAP reimburses $500 &rarr; <strong>Pay only $250 Out of Pocket</strong> ($500 saved)!<br>
               🔧 <strong>Repairs &amp; Windshields:</strong> CAP reimburses $250 &rarr; <strong>Pay only $500 Out of Pocket</strong> ($250 saved)!<br>
               <div style="margin-top: 0.5rem; padding: 6px 8px; background: rgba(16, 185, 129, 0.12); border-radius: 4px; border: 1px solid rgba(16, 185, 129, 0.3); color: #065f46; font-size: 0.8rem; font-weight: 600;">
-                💡 <strong>True Net Cost:</strong> Your rental car savings offsets CAP down to just <strong>+${fmtDec(netCapPmt)}${loanFreqSuffix}</strong> (${fmtDec(netCapPerDay)}/day)!
+                💡 <strong>True Net Cost:</strong> Your ${fmtDec(lossSavMonthly)}/mo rental car savings offsets CAP down to just <strong>+${fmtDec(netCapPmt)}${loanFreqSuffix}</strong> (${fmtDec(netCapPerDay)}/day)!
               </div>
             `;
           }
@@ -4456,7 +4456,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
           }
         } else { // 1000
           if (elCardStratTag) elCardStratTag.textContent = 'Base Rate & Deductible Protection';
-          if (elNetCap) elNetCap.innerHTML = `Save ${fmtDec(lossSavPeriod)}<span class="period">${loanFreqSuffix}</span>`;
+          if (elNetCap) elNetCap.innerHTML = `Save ${fmtDec(lossSavMonthly)}<span class="period">/mo</span>`;
           if (elStratPeriodLine) {
             elStratPeriodLine.textContent = `-${fmt(lossSavAnnual)}/yr rental car savings + $0 buy-down fees`;
           }
@@ -4467,7 +4467,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
               🛡️ <strong>Write-Off Protection:</strong> CAP reimburses $500 &rarr; <strong>Slashes deductible to $500</strong>!<br>
               🔧 <strong>Repairs &amp; Windshields:</strong> CAP reimburses $250 &rarr; <strong>Reduces deductible to $750</strong>!<br>
               <div style="margin-top: 0.5rem; padding: 6px 8px; background: rgba(16, 185, 129, 0.12); border-radius: 4px; border: 1px solid rgba(16, 185, 129, 0.3); color: #065f46; font-size: 0.8rem; font-weight: 600;">
-                💡 <strong>True Net Cost:</strong> Rental car savings offsets CAP down to just <strong>+${fmtDec(netCapPmt)}${loanFreqSuffix}</strong> (${fmtDec(netCapPerDay)}/day)!
+                💡 <strong>True Net Cost:</strong> Rental car savings (${fmtDec(lossSavMonthly)}/mo) offsets CAP down to just <strong>+${fmtDec(netCapPmt)}${loanFreqSuffix}</strong> (${fmtDec(netCapPerDay)}/day)!
               </div>
             `;
           }
@@ -4683,7 +4683,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
             elStratSummary.innerHTML = `
               If you choose MPI's $200 deductible and add Loss of Use rental car coverage, you are paying MPI <strong>${fmt(fee200 + loss26)} extra every year (${fmtDec((fee200 + loss26) / 12)}/month)</strong> in optional add-on fees. 
               By choosing MPI's $500 deductible buy-down (${fmt(fee500)}/yr) and adding Companion Asset Protection (CAP), you can safely <strong>drop MPI's $143/yr rental car fee</strong> (CAP already includes 30 days of rental car at $0) AND pocket <strong>${fmt(sav200)}/yr</strong> in deductible savings. 
-              That puts <strong>${fmt(totalSav)}/year (${fmtDec(totalSav / 12)}/month or ${fmtDec(totalSav / loanPeriodDivisor)}${loanFreqSuffix})</strong> in total savings right back in your pocket! 
+              That puts <strong>${fmt(totalSav)}/year (${fmtDec(totalSav / 12)}/month)</strong> in total savings right back in your pocket! 
               In a total loss write-off, CAP reimburses your entire $500 deductible—leaving you with <strong>$0 out of pocket</strong> ($200 cheaper than MPI's $200 option). 
               On partial losses and windshield repairs, you pay just $250 out of pocket (a tiny $50 difference), which is paid for over and over by your <strong>${fmt(totalSav)}/yr</strong> Autopac savings!
             `;
@@ -4692,13 +4692,13 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
             const totalSav = sav300 + loss26;
             elStratSummary.innerHTML = `
               If you choose MPI's $300 deductible and add Loss of Use rental car coverage, you are paying MPI <strong>${fmt(fee300 + loss26)} extra every year (${fmtDec((fee300 + loss26) / 12)}/month)</strong>. 
-              By choosing MPI's $500 deductible buy-down (${fmt(fee500)}/yr) and adding Companion Asset Protection (CAP), you drop MPI's rental car fee and pocket <strong>${fmt(totalSav)}/year (${fmtDec(totalSav / 12)}/mo or ${fmtDec(totalSav / loanPeriodDivisor)}${loanFreqSuffix})</strong> in total Autopac savings! 
+              By choosing MPI's $500 deductible buy-down (${fmt(fee500)}/yr) and adding Companion Asset Protection (CAP), you drop MPI's rental car fee and pocket <strong>${fmt(totalSav)}/year (${fmtDec(totalSav / 12)}/mo)</strong> in total Autopac savings! 
               On a total loss, CAP reimburses your entire $500 deductible—leaving you with <strong>$0 out of pocket</strong> (saving $300). 
               On a partial loss or windshield claim, you pay only $250 out of pocket—which is actually <strong>$50 cheaper</strong> than MPI's $300 deductible, on top of saving <strong>${fmt(totalSav)}/year</strong> in premiums!
             `;
           } else if (selectedDeductible === 500) {
             elStratSummary.innerHTML = `
-              With MPI's $500 deductible buy-down (${fmt(fee500)}/yr) and Companion Asset Protection (CAP), you can safely <strong>drop MPI's $143/yr rental car fee</strong> to save <strong>${fmt(loss26)}/year (${fmtDec(loss26 / 12)}/mo or ${fmtDec(loss26 / loanPeriodDivisor)}${loanFreqSuffix})</strong>. 
+              With MPI's $500 deductible buy-down (${fmt(fee500)}/yr) and Companion Asset Protection (CAP), you can safely <strong>drop MPI's $143/yr rental car fee</strong> to save <strong>${fmt(loss26)}/year (${fmtDec(loss26 / 12)}/mo)</strong>. 
               In a total loss write-off, CAP reimburses your full <strong>$500 deductible—reducing your out-of-pocket to $0.00</strong> (saving you $500). 
               On partial losses and windshield replacements, CAP reimburses $250, cutting your out-of-pocket deductible in half to just <strong>$250</strong>!
             `;
