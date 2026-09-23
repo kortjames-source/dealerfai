@@ -2039,7 +2039,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
             <div>
               <div class="client-title">
                 <span id="disp-client-name"><?= htmlspecialchars($prefillClient) ?></span>
-                <span style="font-weight: 400; color: #94a3b8;">—</span>
+                <span style="font-weight: 400; color: #94a3b8;">•</span>
                 <span id="disp-vehicle-name" style="font-weight: 600; color: var(--brand-color);"><?= htmlspecialchars($prefillVehicle) ?></span>
               </div>
               <div class="client-subtitle">
@@ -2331,7 +2331,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
         </div>
 
         <!-- ========================================================================= -->
-        <!-- SECTION 1: BUILD VALUE FIRST — WHY CAP ASSET PROTECTION IS ESSENTIAL -->
+        <!-- SECTION 1: BUILD VALUE FIRST: WHY CAP ASSET PROTECTION IS ESSENTIAL -->
         <!-- ========================================================================= -->
         <div class="replacement-showcase-card">
           <div class="showcase-header">
@@ -2339,7 +2339,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
             <h2>When a Vehicle Is Written Off, You Have to Buy Another Car.</h2>
             <p>
               In the event of a total loss (collision, fire, theft, flood, or hail), <strong>MPI only settles for depreciated Actual Cash Value (ACV)</strong>. 
-              Companion Asset Protection (CAP) provides the crucial <strong>Replacement Value Top-Up</strong> directly towards purchasing your replacement vehicle—so you get back into the same vehicle class without thousands of dollars out of pocket.
+              Companion Asset Protection (CAP) provides the crucial <strong>Replacement Value Top-Up</strong> directly towards purchasing your replacement vehicle, so you get back into the same vehicle class without thousands of dollars out of pocket.
             </p>
           </div>
 
@@ -2533,7 +2533,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
         </div>
 
         <!-- ========================================================================= -->
-        <!-- SECTION 3: PRICING & FINANCIAL VALUE — EXECUTIVE COMPARISON -->
+        <!-- SECTION 3: PRICING & FINANCIAL VALUE: EXECUTIVE COMPARISON -->
         <!-- ========================================================================= -->
         <div class="comparison-grid">
           <!-- Card 1: MPI Add-On Costs (New Car + Loss of Use) -->
@@ -2546,7 +2546,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
               <?= $isVehIneligibleMpiNew ? '$11<span class="period">.92/mo</span>' : '$44<span class="period">.58/mo</span>' ?>
             </div>
             <div class="hero-card-subtext">
-              MPI New Vehicle Protection: <strong id="disp-mpi-newveh-sub"><?= $isVehIneligibleMpiNew ? 'Ineligible ($0.00 from MPI)' : ($isVehOneYearMpiNew ? '$392/yr ($32.67/mo) — Max 1 Yr' : '$392/yr ($32.67/mo)') ?></strong><br>
+              MPI New Vehicle Protection: <strong id="disp-mpi-newveh-sub"><?= $isVehIneligibleMpiNew ? 'Ineligible ($0.00 from MPI)' : ($isVehOneYearMpiNew ? '$392/yr ($32.67/mo) (Max 1 Yr)' : '$392/yr ($32.67/mo)') ?></strong><br>
               MPI Loss of Use (Rental Car): <strong id="disp-mpi-lossuse-sub">$143/yr ($11.92/mo)</strong><br>
               Combined MPI Add-On Cost: <strong id="disp-mpi-addons-annual"><?= $isVehIneligibleMpiNew ? '$143/yr (Rental Only)' : '$535/yr (Billed Monthly by MPI)' ?></strong>
             </div>
@@ -2810,7 +2810,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
             <span style="color: #064e3b;" id="disp-strategy-summary">
               If you pay MPI for a $200 deductible, you are paying <strong>$238.00 every year</strong>. 
               By simply keeping MPI's standard $500 deductible and choosing Companion Asset Protection (CAP), you save that <strong>$238.00/year ($19.83/month)</strong>. 
-              In the event of a total loss, CAP reimburses your entire $500 deductible—leaving you with <strong>$0 out of pocket</strong>. 
+              In the event of a total loss, CAP reimburses your entire $500 deductible, leaving you with <strong>$0 out of pocket</strong>. 
               Even in a partial loss (such as a body shop repair or windshield claim), you only pay $250 out of pocket (a mere $50 difference from $200), which is paid for many times over by your annual MPI premium savings!
             </span>
           </div>
@@ -2841,9 +2841,9 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
                 </span>
               </div>
               <p style="margin: 0.5rem 0 0 0; color: #047857; font-size: 0.9rem; line-height: 1.55;">
-                While annual basic MPI Autopac premiums fluctuate with approved Public Utilities Board (PUB) general rate hikes, your MPI bill can also jump unpredictably if an accident or speeding ticket reduces your Driver Safety Rating (DSR) merits—costing you hundreds in lost vehicle discounts and driver license surcharges year after year.
+                While annual basic MPI Autopac premiums fluctuate with approved Public Utilities Board (PUB) general rate hikes, your MPI bill can also jump unpredictably if an accident or speeding ticket reduces your Driver Safety Rating (DSR) merits, costing you hundreds in lost vehicle discounts and driver license surcharges year after year.
                 <br><br>
-                In contrast, Companion Asset Protection (CAP) provides an <strong>unconditional 100% Rate Lock Guarantee for your entire term (<span id="disp-ratelock-years">up to <?= $initialMaxYears ?> years</span>)</strong>. Your rate is financed into your vehicle payment at 0% change—<strong>claims, collisions, or traffic tickets will NEVER increase your rate or reduce your coverage</strong>.
+                In contrast, Companion Asset Protection (CAP) provides an <strong>unconditional 100% Rate Lock Guarantee for your entire term (<span id="disp-ratelock-years">up to <?= $initialMaxYears ?> years</span>)</strong>. Your rate is financed into your vehicle payment with 0% change; <strong>claims, collisions, or traffic tickets will NEVER increase your rate or reduce your coverage</strong>.
               </p>
 
               <!-- Comparison Mini-Grid: MPI Merit Fluctuation vs CAP Fixed Rate Lock -->
@@ -3824,7 +3824,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
         const mpiAllOptionalsAnnual26 = mpiAddonsAnnual26 + dedSavingsAnnual26;
         const mpiAllOptionalsMonthly26 = mpiAllOptionalsAnnual26 / mpiMonthlyDivisor;
 
-        // Update Card 1: MPI Add-On Protection (New Car + Loss of Use) — ALWAYS Monthly
+        // Update Card 1: MPI Add-On Protection (New Car + Loss of Use): ALWAYS Monthly
         const elCardMpiAddons = document.getElementById('card-mpi-addons');
         if (elCardMpiAddons) {
           elCardMpiAddons.style.display = isVehIneligibleMpiNew ? 'none' : '';
@@ -3845,7 +3845,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
           if (isVehIneligibleMpiNew) {
             elNewvehSub.innerHTML = '<span style="color: #dc2626;">Ineligible ($0.00 from MPI on 2024 & older)</span>';
           } else if (isVehOneYearMpiNew) {
-            elNewvehSub.textContent = `${fmt(newveh26)}/yr (${fmtDec(newveh26 / 12)}/mo) — Max 1 Yr`;
+            elNewvehSub.textContent = `${fmt(newveh26)}/yr (${fmtDec(newveh26 / 12)}/mo) (Max 1 Yr)`;
           } else {
             elNewvehSub.textContent = `${fmt(newveh26)}/yr (${fmtDec(newveh26 / 12)}/mo)`;
           }
@@ -4162,7 +4162,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
 
               let relationPill = '';
               if (opt.term < loanTerm) {
-                relationPill = `<div class="cap-relation-pill partial">🛡️ Covers Years 1–${years} of ${loanTerm}-Mo Loan</div>`;
+                relationPill = `<div class="cap-relation-pill partial">🛡️ Covers Years 1-${years} of ${loanTerm}-Mo Loan</div>`;
               } else if (opt.term === loanTerm) {
                 relationPill = `<div class="cap-relation-pill match">✓ Full ${loanTerm}-Mo Loan Match</div>`;
               } else {
@@ -4220,7 +4220,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
         if (elCapLoanSub) {
           const freqDesc = paymentFrequency === 'biweekly' ? 'Bi-Weekly payments' : 'Monthly payments';
           if (selectedCapTerm < loanTerm) {
-            elCapLoanSub.innerHTML = `Protects Years 1–${capYears} • Financed over full <strong>${loanTerm}-month</strong> loan (${freqDesc})`;
+            elCapLoanSub.innerHTML = `Protects Years 1-${capYears} • Financed over full <strong>${loanTerm}-month</strong> loan (${freqDesc})`;
           } else if (selectedCapTerm === loanTerm) {
             elCapLoanSub.innerHTML = `✓ <strong>100% Match</strong> with your <strong>${loanTerm}-month</strong> loan term (${freqDesc})`;
           } else {
@@ -4243,14 +4243,14 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
           let activeWindowLabel = '';
 
           if (isTermShorter) {
-            explanationBadge = `<span style="background: #fef3c7; color: #92400e; font-weight: 700; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem;">Years 1–${capYears} Protection • ${loanTerm}-Mo Financing</span>`;
+            explanationBadge = `<span style="background: #fef3c7; color: #92400e; font-weight: 700; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem;">Years 1-${capYears} Protection • ${loanTerm}-Mo Financing</span>`;
             explanationHtml = `
               <strong>How your financing &amp; coverage work together:</strong><br>
               Your Companion Asset Protection is financed directly into your vehicle loan, adding just <strong>+${fmtDec(capPmt)}${loanFreqSuffix}</strong> (a modest <strong>${fmtDec(capPerDay)}/day</strong>) across all <strong>${loanTerm} months of your loan</strong> with zero out-of-pocket cost today.<br><br>
               <strong>Why this is a smart financial strategy:</strong><br>
-              Vehicles suffer their steepest market depreciation during the first ${capYears} years (Months 1–${currentCap.term}). Having ${currentCap.term}-Month (${capYears}-Year) CAP gives you 100% Replacement Value Top-Up and deductible protection during your highest-risk ownership window, while your ${loanTerm}-month financing keeps the monthly payment ultra-affordable. By Month ${currentCap.term}, your remaining loan balance has significantly dropped, naturally closing the equity gap.
+              Vehicles suffer their steepest market depreciation during the first ${capYears} years (Months 1-${currentCap.term}). Having ${currentCap.term}-Month (${capYears}-Year) CAP gives you 100% Replacement Value Top-Up and deductible protection during your highest-risk ownership window, while your ${loanTerm}-month financing keeps the monthly payment ultra-affordable. By Month ${currentCap.term}, your remaining loan balance has significantly dropped, naturally closing the equity gap.
             `;
-            activeWindowLabel = `Active Months 1–${currentCap.term} (First ${capYears} Years of Ownership)`;
+            activeWindowLabel = `Active Months 1-${currentCap.term} (First ${capYears} Years of Ownership)`;
           } else if (isTermEqual) {
             explanationBadge = `<span style="background: #dcfce7; color: #166534; font-weight: 700; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem;">✓ 100% Loan Term Match</span>`;
             explanationHtml = `
@@ -4263,7 +4263,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
             explanationBadge = `<span style="background: #dbeafe; color: #1e40af; font-weight: 700; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem;">Extends Past Loan Payoff</span>`;
             explanationHtml = `
               <strong>Extended Protection Beyond Loan Payoff:</strong><br>
-              Your CAP coverage protects your vehicle for <strong>${currentCap.term} months (${capYears} years)</strong>—remaining active for an extra <strong>${currentCap.term - loanTerm} months</strong> even after your <strong>${loanTerm}-month vehicle loan</strong> is paid in full!
+              Your CAP coverage protects your vehicle for <strong>${currentCap.term} months (${capYears} years)</strong>, remaining active for an extra <strong>${currentCap.term - loanTerm} months</strong> even after your <strong>${loanTerm}-month vehicle loan</strong> is paid in full!
             `;
             activeWindowLabel = `Active for ${currentCap.term} Months (${currentCap.term - loanTerm} mo past loan payoff)`;
           }
@@ -4285,7 +4285,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
                 <div class="timeline-row">
                   <div class="timeline-label-bar">
                     <span>Vehicle Loan Term (${loanTerm} Months)</span>
-                    <span style="color: #2563eb;">Payment Impact: +${fmtDec(capPmt)}${loanFreqSuffix} (Months 1–${loanTerm})</span>
+                    <span style="color: #2563eb;">Payment Impact: +${fmtDec(capPmt)}${loanFreqSuffix} (Months 1-${loanTerm})</span>
                   </div>
                   <div class="timeline-track">
                     <div class="timeline-fill-loan">
@@ -4305,7 +4305,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
                     </div>
                     ${remPct > 0 ? `
                       <div class="timeline-fill-remaining" style="width: ${remPct}%;">
-                        <span>Months ${currentCap.term + 1}–${loanTerm} (Loan continues)</span>
+                        <span>Months ${currentCap.term + 1}-${loanTerm} (Loan continues)</span>
                       </div>
                     ` : ''}
                   </div>
@@ -4684,7 +4684,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
               If you choose MPI's $200 deductible and add Loss of Use rental car coverage, you are paying MPI <strong>${fmt(fee200 + loss26)} extra every year (${fmtDec((fee200 + loss26) / 12)}/month)</strong> in optional add-on fees. 
               By choosing MPI's $500 deductible buy-down (${fmt(fee500)}/yr) and adding Companion Asset Protection (CAP), you can safely <strong>drop MPI's $143/yr rental car fee</strong> (CAP already includes 30 days of rental car at $0) AND pocket <strong>${fmt(sav200)}/yr</strong> in deductible savings. 
               That puts <strong>${fmt(totalSav)}/year (${fmtDec(totalSav / 12)}/month)</strong> in total savings right back in your pocket! 
-              In a total loss write-off, CAP reimburses your entire $500 deductible—leaving you with <strong>$0 out of pocket</strong> ($200 cheaper than MPI's $200 option). 
+              In a total loss write-off, CAP reimburses your entire $500 deductible, leaving you with <strong>$0 out of pocket</strong> ($200 cheaper than MPI's $200 option). 
               On partial losses and windshield repairs, you pay just $250 out of pocket (a tiny $50 difference), which is paid for over and over by your <strong>${fmt(totalSav)}/yr</strong> Autopac savings!
             `;
           } else if (selectedDeductible === 300) {
@@ -4693,13 +4693,13 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
             elStratSummary.innerHTML = `
               If you choose MPI's $300 deductible and add Loss of Use rental car coverage, you are paying MPI <strong>${fmt(fee300 + loss26)} extra every year (${fmtDec((fee300 + loss26) / 12)}/month)</strong>. 
               By choosing MPI's $500 deductible buy-down (${fmt(fee500)}/yr) and adding Companion Asset Protection (CAP), you drop MPI's rental car fee and pocket <strong>${fmt(totalSav)}/year (${fmtDec(totalSav / 12)}/mo)</strong> in total Autopac savings! 
-              On a total loss, CAP reimburses your entire $500 deductible—leaving you with <strong>$0 out of pocket</strong> (saving $300). 
-              On a partial loss or windshield claim, you pay only $250 out of pocket—which is actually <strong>$50 cheaper</strong> than MPI's $300 deductible, on top of saving <strong>${fmt(totalSav)}/year</strong> in premiums!
+              On a total loss, CAP reimburses your entire $500 deductible, leaving you with <strong>$0 out of pocket</strong> (saving $300). 
+              On a partial loss or windshield claim, you pay only $250 out of pocket, which is actually <strong>$50 cheaper</strong> than MPI's $300 deductible, on top of saving <strong>${fmt(totalSav)}/year</strong> in premiums!
             `;
           } else if (selectedDeductible === 500) {
             elStratSummary.innerHTML = `
               With MPI's $500 deductible buy-down (${fmt(fee500)}/yr) and Companion Asset Protection (CAP), you can safely <strong>drop MPI's $143/yr rental car fee</strong> to save <strong>${fmt(loss26)}/year (${fmtDec(loss26 / 12)}/mo)</strong>. 
-              In a total loss write-off, CAP reimburses your full <strong>$500 deductible—reducing your out-of-pocket to $0.00</strong> (saving you $500). 
+              In a total loss write-off, CAP reimburses your full <strong>$500 deductible, reducing your out-of-pocket to $0.00</strong> (saving you $500). 
               On partial losses and windshield replacements, CAP reimburses $250, cutting your out-of-pocket deductible in half to just <strong>$250</strong>!
             `;
           } else if (selectedDeductible === 750) {
