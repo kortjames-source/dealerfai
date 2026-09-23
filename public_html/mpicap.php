@@ -1373,7 +1373,6 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
     body.presentation-mode .scenario-row:not(.highlight),
     body.presentation-mode #cap-timeline-explainer,
     body.presentation-mode .hero-card-subtext,
-    body.presentation-mode .deductible-selector-container,
     body.presentation-mode .strategy-table-wrapper,
     body.presentation-mode .strategy-table,
     body.presentation-mode #smart-deductible-section .callout-box,
@@ -1390,6 +1389,12 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
     /* Keep the graph prominently displayed in Presentation Mode */
     body.presentation-mode #depreciation-graph-container {
       display: block !important;
+    }
+
+    /* Deductible selector pills remain clickable and visible in Presentation Mode */
+    body.presentation-mode .deductible-selector-container {
+      display: block !important;
+      margin-bottom: 1.25rem;
     }
 
     /* Always display the 3 simplified deductible cards in Presentation Mode */
@@ -2329,9 +2334,17 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
                 <!-- Populated via JavaScript: Level 0 to +20 -->
               </select>
             </div>
-            <div id="disp-top-ded-badge" class="dsr-pill" style="background: #e0f2fe; color: #0369a1; border-color: #bae6fd; cursor: pointer;" title="Click to view Deductible Strategy">
+            <div id="disp-top-ded-badge" class="dsr-pill dsr-pill-select" style="background: #e0f2fe; color: #0369a1; border-color: #bae6fd; cursor: pointer;" title="Select MPI Deductible Option">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
               <span id="disp-top-ded-text">MPI Deductible: $200 (+$19.83/mo)</span>
+              <svg class="dsr-caret" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+              <select id="inp-top-ded-select" class="dsr-select-overlay" aria-label="Select MPI Deductible">
+                <option value="200">$200 Deductible (+$19.83/mo)</option>
+                <option value="300">$300 Deductible (+$15.42/mo)</option>
+                <option value="500">$500 Deductible (+$10.42/mo)</option>
+                <option value="750">$750 Deductible (+$5.00/mo)</option>
+                <option value="1000">$1,000 Base Rate ($0/mo)</option>
+              </select>
             </div>
             <div id="disp-top-mpi-badge" class="dsr-pill" style="background: #f0fdf4; color: #065f46; border-color: #a7f3d0;" title="Estimated Monthly Autopac Insurance">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
@@ -2905,51 +2918,6 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
             </div>
           </div>
 
-          <!-- Simplified Presentation View: 3 High-Impact Value Cards -->
-          <div class="simplified-deductible-grid" id="pres-simplified-deductible">
-            <div class="sim-ded-card highlight">
-              <div class="sim-ded-icon" style="background: rgba(16, 185, 129, 0.15); color: #059669;">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-              </div>
-              <div class="sim-ded-tag" style="color: #059669;">Total Loss Write-Off</div>
-              <div class="sim-ded-amount" id="disp-sim-loss-ded" style="color: #059669;">$0.00 Out of Pocket</div>
-              <div class="sim-ded-desc" id="disp-sim-loss-desc">
-                CAP reimburses up to <strong>$500 deductible</strong> on any total loss write-off claim.
-              </div>
-              <div class="sim-ded-badge" id="disp-sim-loss-badge">
-                ✓ Deductible 100% Reimbursed
-              </div>
-            </div>
-
-            <div class="sim-ded-card">
-              <div class="sim-ded-icon" style="background: rgba(37, 99, 235, 0.12); color: #2563eb;">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
-              </div>
-              <div class="sim-ded-tag" style="color: #2563eb;">Repairs &amp; Windshield Glass</div>
-              <div class="sim-ded-amount" id="disp-sim-part-ded" style="color: #2563eb;">$0.00 Out of Pocket</div>
-              <div class="sim-ded-desc" id="disp-sim-part-desc">
-                CAP reimburses up to <strong>$250</strong> for body shop repairs and windshield replacements.
-              </div>
-              <div class="sim-ded-badge" id="disp-sim-part-badge" style="background: #eff6ff; color: #1e40af; border-color: #bfdbfe;">
-                ✓ Glass &amp; Repair Deductible Covered
-              </div>
-            </div>
-
-            <div class="sim-ded-card">
-              <div class="sim-ded-icon" style="background: rgba(245, 158, 11, 0.15); color: #d97706;">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m21 8-2 2-1.5-3.7A2 2 0 0 0 15.64 5H8.36a2 2 0 0 0-1.86 1.3L5 10 3 8"/><path d="M7 14h.01"/><path d="M17 14h.01"/><rect width="18" height="8" x="3" y="10" rx="2"/><path d="M5 18v2"/><path d="M19 18v2"/></svg>
-              </div>
-              <div class="sim-ded-tag" style="color: #d97706;">Autopac Rental Car Savings</div>
-              <div class="sim-ded-amount" id="disp-sim-rental-sav" style="color: #059669;">Save $143 / yr</div>
-              <div class="sim-ded-desc" id="disp-sim-rental-desc">
-                Drop optional MPI Loss of Use because CAP already provides <strong>30 days of rental car</strong> coverage.
-              </div>
-              <div class="sim-ded-badge" id="disp-sim-rental-badge" style="background: #fef3c7; color: #92400e; border-color: #fde68a;">
-                🚗 30 Days Included • Save $11.92/mo
-              </div>
-            </div>
-          </div>
-
           <!-- Interactive Deductible Selector Bar -->
           <div class="deductible-selector-container">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem;">
@@ -3002,6 +2970,51 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
                 <div class="ded-pill-fee" id="pill-fee-200">+$238/yr</div>
                 <div class="ded-pill-mo" id="pill-mo-200">+$19.83/mo</div>
               </button>
+            </div>
+          </div>
+
+          <!-- Simplified Presentation View: 3 High-Impact Value Cards -->
+          <div class="simplified-deductible-grid" id="pres-simplified-deductible">
+            <div class="sim-ded-card highlight">
+              <div class="sim-ded-icon" style="background: rgba(16, 185, 129, 0.15); color: #059669;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              </div>
+              <div class="sim-ded-tag" style="color: #059669;">Total Loss Write-Off</div>
+              <div class="sim-ded-amount" id="disp-sim-loss-ded" style="color: #059669;">$0.00 Out of Pocket</div>
+              <div class="sim-ded-desc" id="disp-sim-loss-desc">
+                CAP reimburses up to <strong>$500 deductible</strong> on any total loss write-off claim.
+              </div>
+              <div class="sim-ded-badge" id="disp-sim-loss-badge">
+                ✓ Deductible 100% Reimbursed
+              </div>
+            </div>
+
+            <div class="sim-ded-card">
+              <div class="sim-ded-icon" style="background: rgba(37, 99, 235, 0.12); color: #2563eb;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+              </div>
+              <div class="sim-ded-tag" style="color: #2563eb;">Repairs &amp; Windshield Glass</div>
+              <div class="sim-ded-amount" id="disp-sim-part-ded" style="color: #2563eb;">$0.00 Out of Pocket</div>
+              <div class="sim-ded-desc" id="disp-sim-part-desc">
+                CAP reimburses up to <strong>$250</strong> for body shop repairs and windshield replacements.
+              </div>
+              <div class="sim-ded-badge" id="disp-sim-part-badge" style="background: #eff6ff; color: #1e40af; border-color: #bfdbfe;">
+                ✓ Glass &amp; Repair Deductible Covered
+              </div>
+            </div>
+
+            <div class="sim-ded-card">
+              <div class="sim-ded-icon" style="background: rgba(245, 158, 11, 0.15); color: #d97706;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m21 8-2 2-1.5-3.7A2 2 0 0 0 15.64 5H8.36a2 2 0 0 0-1.86 1.3L5 10 3 8"/><path d="M7 14h.01"/><path d="M17 14h.01"/><rect width="18" height="8" x="3" y="10" rx="2"/><path d="M5 18v2"/><path d="M19 18v2"/></svg>
+              </div>
+              <div class="sim-ded-tag" style="color: #d97706;">Autopac Rental Car Savings</div>
+              <div class="sim-ded-amount" id="disp-sim-rental-sav" style="color: #059669;">Save $143 / yr</div>
+              <div class="sim-ded-desc" id="disp-sim-rental-desc">
+                Drop optional MPI Loss of Use because CAP already provides <strong>30 days of rental car</strong> coverage.
+              </div>
+              <div class="sim-ded-badge" id="disp-sim-rental-badge" style="background: #fef3c7; color: #92400e; border-color: #fde68a;">
+                🚗 30 Days Included • Save $11.92/mo
+              </div>
             </div>
           </div>
 
@@ -3539,12 +3552,23 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
         });
       });
 
-      // Top deductible badge click handler
+      // Top deductible select dropdown handler
+      const inpTopDed = document.getElementById('inp-top-ded-select');
+      if (inpTopDed) {
+        inpTopDed.addEventListener('change', (e) => {
+          selectedDeductible = parseInt(e.target.value, 10) || 200;
+          recalculate();
+        });
+      }
+
+      // Top deductible badge click handler (fallback if clicking badge outside select)
       const topDedBadge = document.getElementById('disp-top-ded-badge');
       if (topDedBadge) {
-        topDedBadge.addEventListener('click', () => {
-          const dedSec = document.getElementById('smart-deductible-section');
-          if (dedSec) dedSec.scrollIntoView({ behavior: 'smooth' });
+        topDedBadge.addEventListener('click', (e) => {
+          if (e.target !== inpTopDed) {
+            const dedSec = document.getElementById('smart-deductible-section');
+            if (dedSec) dedSec.scrollIntoView({ behavior: 'smooth' });
+          }
         });
       }
 
@@ -3968,6 +3992,11 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
           elActiveDedBadge.textContent = selectedDeductible === 1000
             ? `Comparing: $1,000 Base Deductible ($0 Extra Fee • Included in Basic)`
             : `Comparing: $${selectedDeductible} Deductible (${dedYrText} • ${dedMoText.replace(/[()]/g, '')})`;
+        }
+
+        const inpTopDed = document.getElementById('inp-top-ded-select');
+        if (inpTopDed) {
+          inpTopDed.value = String(selectedDeductible);
         }
 
         // Vehicle Model Year and MPI New Vehicle Protection Underwriting Rules:
