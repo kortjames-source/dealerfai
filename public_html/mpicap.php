@@ -1363,127 +1363,125 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
     }
 
     /* ========================================================================= */
-    /* SIMPLIFIED HIGH-IMPACT PRESENTATION MODE                                  */
+    /* PURE VISUAL PRESENTATION MODE (GRAPHS ACTIVE • WORDS PURGED)              */
     /* ========================================================================= */
 
-    /* Default Simplified Presentation: Hide technical charts and dense tables */
-    body.presentation-mode:not(.show-deep-dive) #depreciation-graph-container,
-    body.presentation-mode:not(.show-deep-dive) #cap-timeline-explainer,
-    body.presentation-mode:not(.show-deep-dive) .deductible-selector-container,
-    body.presentation-mode:not(.show-deep-dive) .strategy-table-wrapper,
-    body.presentation-mode:not(.show-deep-dive) .strategy-table,
-    body.presentation-mode:not(.show-deep-dive) #smart-deductible-section .callout-box,
-    body.presentation-mode:not(.show-deep-dive) .deductible-advisory-note {
+    /* Strip long paragraphs, descriptive essays, and dense tables in Presentation Mode */
+    body.presentation-mode .showcase-header p,
+    body.presentation-mode .pillar-desc,
+    body.presentation-mode .scen-hero-sub,
+    body.presentation-mode .scenario-row:not(.highlight),
+    body.presentation-mode #cap-timeline-explainer,
+    body.presentation-mode .hero-card-subtext,
+    body.presentation-mode .deductible-selector-container,
+    body.presentation-mode .strategy-table-wrapper,
+    body.presentation-mode .strategy-table,
+    body.presentation-mode #smart-deductible-section .callout-box,
+    body.presentation-mode .deductible-advisory-note,
+    body.presentation-mode #smart-deductible-section .strategy-header p,
+    body.presentation-mode .rate-lock-banner-essay,
+    body.presentation-mode .rate-lock-comparison-grid,
+    body.presentation-mode .disclosure-card,
+    body.presentation-mode .pres-deep-dive-bar,
+    body.presentation-mode .pres-graph-hint {
       display: none !important;
     }
 
-    /* In Simplified Presentation, show high-impact cards and peek buttons */
-    body.presentation-mode:not(.show-deep-dive) .simplified-deductible-grid {
+    /* Keep the graph prominently displayed in Presentation Mode */
+    body.presentation-mode #depreciation-graph-container {
+      display: block !important;
+    }
+
+    /* Always display the 3 simplified deductible cards in Presentation Mode */
+    body.presentation-mode .simplified-deductible-grid {
       display: grid !important;
     }
 
-    body.presentation-mode:not(.show-deep-dive) .pres-graph-hint {
-      display: flex !important;
-    }
-
-    /* Deep Dive Bar: Visible ONLY in presentation mode */
-    .pres-deep-dive-bar {
-      display: none;
-    }
-    body.presentation-mode .pres-deep-dive-bar {
-      display: flex;
-      justify-content: center;
-      margin: 2.25rem 0 1.5rem 0;
-    }
-
-    /* By default (outside presentation mode), hide presentation-only elements */
+    /* Outside presentation mode, hide simplified cards and presentation subs */
     .simplified-deductible-grid,
-    .pres-graph-hint {
+    .pres-hero-sub,
+    .rate-lock-short-statement {
       display: none !important;
     }
 
-    /* When Deep Dive is active in presentation mode */
-    body.presentation-mode.show-deep-dive #depreciation-graph-container {
+    /* Presentation Mode 1-Line Subtitles on Hero Cards */
+    body.presentation-mode .pres-hero-sub {
       display: block !important;
-      animation: fadeInSlide 0.35s ease forwards;
+      font-size: 0.88rem;
+      color: #475569;
+      font-weight: 600;
+      margin: 0.4rem 0 0.85rem 0;
+      line-height: 1.4;
     }
-    body.presentation-mode.show-deep-dive #cap-timeline-explainer {
+
+    /* Rate Lock Short Statement */
+    body.presentation-mode .rate-lock-short-statement {
       display: block !important;
-      animation: fadeInSlide 0.35s ease forwards;
-    }
-    body.presentation-mode.show-deep-dive .deductible-selector-container,
-    body.presentation-mode.show-deep-dive .strategy-table-wrapper,
-    body.presentation-mode.show-deep-dive .strategy-table,
-    body.presentation-mode.show-deep-dive #smart-deductible-section .callout-box,
-    body.presentation-mode.show-deep-dive .deductible-advisory-note {
-      display: block !important;
-      animation: fadeInSlide 0.35s ease forwards;
-    }
-    body.presentation-mode.show-deep-dive .simplified-deductible-grid {
-      display: none !important;
-    }
-    body.presentation-mode.show-deep-dive .pres-graph-hint {
-      display: none !important;
+      margin: 0.5rem 0 1rem 0;
+      font-size: 0.95rem;
+      color: #047857;
+      font-weight: 600;
+      line-height: 1.5;
     }
 
-    @keyframes fadeInSlide {
-      from {
-        opacity: 0;
-        transform: translateY(12px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* Presentation Mode High-Impact Typography & Spacing */
-    body.presentation-mode .replacement-showcase-card {
-      margin-bottom: 2rem;
-    }
-
-    body.presentation-mode .showcase-header h2 {
-      font-size: 1.85rem;
-      letter-spacing: -0.02em;
-      line-height: 1.25;
-    }
-
+    /* Presentation Mode Pillar Badges: Bold, Compact Stat Cards */
     body.presentation-mode .pillars-grid {
       gap: 1.25rem;
+      margin-top: 1.25rem;
     }
-
     body.presentation-mode .pillar-item {
       padding: 1.35rem 1.15rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
       box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
     }
-
+    body.presentation-mode .pillar-icon {
+      margin-bottom: 0.65rem;
+      width: 48px;
+      height: 48px;
+    }
     body.presentation-mode .pillar-title {
-      font-size: 1.05rem;
+      font-size: 1.1rem;
+      font-weight: 800;
+      line-height: 1.3;
     }
 
+    /* Total Loss Scenario Contrast in Presentation Mode */
     body.presentation-mode .scenario-box {
-      padding: 1.75rem;
+      padding: 1.5rem;
       border-radius: var(--radius-lg);
+      margin-top: 1.5rem;
     }
-
+    body.presentation-mode .scen-hero-callout {
+      margin-bottom: 0.75rem;
+      padding: 1.15rem 1.25rem;
+    }
     body.presentation-mode .scen-hero-amount {
-      font-size: 2.25rem;
+      font-size: 2.35rem;
+      font-weight: 800;
+      margin: 0.25rem 0 0 0;
+      letter-spacing: -0.02em;
+    }
+    body.presentation-mode .scenario-row.highlight {
+      font-size: 1.15rem;
+      font-weight: 800;
+      padding: 0.85rem 1rem;
+      border-radius: var(--radius-md);
+      margin-top: 0.5rem;
+      display: flex !important;
+      justify-content: space-between;
+      align-items: center;
     }
 
+    /* Term Selection Cards in Presentation Mode */
     body.presentation-mode .cap-terms-container {
-      margin-bottom: 2.5rem;
+      margin-bottom: 2.25rem;
     }
-
     body.presentation-mode .cap-term-card {
       padding: 1.5rem;
-    }
-
-    body.presentation-mode .hero-card {
-      padding: 1.5rem;
-    }
-
-    body.presentation-mode .hero-amount {
-      font-size: 2.5rem;
     }
 
     /* Simplified Deductible Impact Cards */
@@ -1565,98 +1563,12 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
       width: fit-content;
     }
 
-    /* Deep Dive Toggle Button */
-    .btn-deep-dive-toggle {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.75rem;
-      background: #ffffff;
-      color: #1e293b;
-      border: 1.5px solid #cbd5e1;
-      padding: 0.85rem 1.75rem;
-      border-radius: 9999px;
-      font-size: 0.95rem;
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
-      transition: all 0.25s ease;
+    /* Hero Cards in Presentation Mode */
+    body.presentation-mode .hero-card {
+      padding: 1.5rem;
     }
-
-    .btn-deep-dive-toggle:hover {
-      background: #f8fafc;
-      border-color: #3b82f6;
-      color: #1d4ed8;
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(59, 130, 246, 0.15);
-    }
-
-    .btn-deep-dive-icon {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #2563eb;
-    }
-
-    .btn-deep-dive-badge {
-      background: #f1f5f9;
-      color: #475569;
-      font-size: 0.72rem;
-      font-weight: 700;
-      padding: 0.2rem 0.55rem;
-      border-radius: 9999px;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-
-    body.presentation-mode.show-deep-dive .btn-deep-dive-toggle {
-      background: #0f172a;
-      color: #ffffff;
-      border-color: #334155;
-      box-shadow: 0 4px 20px rgba(15, 23, 42, 0.25);
-    }
-
-    body.presentation-mode.show-deep-dive .btn-deep-dive-toggle:hover {
-      background: #1e293b;
-      border-color: #475569;
-    }
-
-    body.presentation-mode.show-deep-dive .btn-deep-dive-icon {
-      color: #38bdf8;
-    }
-
-    body.presentation-mode.show-deep-dive .btn-deep-dive-badge {
-      background: rgba(255, 255, 255, 0.18);
-      color: #e2e8f0;
-    }
-
-    /* Presentation Graph Hint Button */
-    .pres-graph-hint {
-      display: none;
-      justify-content: center;
-      margin: 0.75rem 0 0.5rem 0;
-    }
-
-    .btn-pres-graph-expand {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.45rem;
-      background: rgba(255, 255, 255, 0.12);
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      color: #ffffff;
-      padding: 0.4rem 0.85rem;
-      border-radius: 9999px;
-      font-size: 0.78rem;
-      font-weight: 600;
-      cursor: pointer;
-      backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
-      transition: all 0.2s ease;
-    }
-
-    .btn-pres-graph-expand:hover {
-      background: rgba(255, 255, 255, 0.22);
-      border-color: rgba(255, 255, 255, 0.4);
-      transform: translateY(-1px);
+    body.presentation-mode .hero-amount {
+      font-size: 2.5rem;
     }
 
     /* Precision 3-Page Print Stylesheet */
@@ -2770,14 +2682,6 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
               </div>
             </div>
 
-            <!-- Discrete presentation button to reveal graph early if customer asks -->
-            <div class="pres-graph-hint" id="pres-graph-hint">
-              <button type="button" class="btn-pres-graph-expand" id="btn-pres-graph-hint">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
-                <span>Tap to View 7-Year Depreciation Curve &amp; Market Value Chart</span>
-              </button>
-            </div>
-
             <!-- Visual Depreciation & Equity Protection Graph -->
             <div class="depreciation-graph-wrap" id="depreciation-graph-container">
               <div class="deprec-legend">
@@ -2916,6 +2820,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
             <div class="hero-amount" id="disp-mpi-addons-amount" style="color: var(--mpi-blue);">
               <?= $isVehIneligibleMpiNew ? '$11<span class="period">.92/mo</span>' : '$44<span class="period">.58/mo</span>' ?>
             </div>
+            <div class="pres-hero-sub" id="disp-mpi-addons-pres-sub">Billed monthly by MPI. Limited 1 to 2 year protection.</div>
             <div class="hero-card-subtext">
               MPI New Vehicle Protection: <strong id="disp-mpi-newveh-sub"><?= $isVehIneligibleMpiNew ? 'Ineligible ($0.00 from MPI)' : ($isVehOneYearMpiNew ? '$392/yr ($32.67/mo) (Max 1 Yr)' : '$392/yr ($32.67/mo)') ?></strong><br>
               MPI Loss of Use (Rental Car): <strong id="disp-mpi-lossuse-sub">$143/yr ($11.92/mo)</strong><br>
@@ -2936,6 +2841,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
             <div class="hero-amount" id="disp-cap-amount" style="color: var(--cap-green);">
               $44<span class="period">.90/mo</span>
             </div>
+            <div class="pres-hero-sub" id="disp-cap-pres-sub">Up to 7 years locked buying power. Reimburses deductible.</div>
             <div class="hero-card-subtext">
               <strong id="disp-cap-term-label">60-Month (5-Year)</strong> Replacement Protection<br>
               <span id="disp-card-cap-topup-text">Includes: <strong>Up to $60,000 Top-Up + 30 Days Rental</strong></span><br>
@@ -2960,6 +2866,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
             <div class="hero-amount" id="disp-net-cap-amount" style="color: #059669;">
               Save $21<span class="period">.34/mo</span>
             </div>
+            <div class="pres-hero-sub" id="disp-strat-pres-sub">Drop MPI rental + optimize deductible to offset your cost.</div>
             <div id="disp-strat-period-line" style="font-size: 0.88rem; font-weight: 700; color: #047857; margin-top: -0.25rem; margin-bottom: 0.75rem;">
               -$256.00 / year total reduction on your MPI Autopac bill
             </div>
@@ -3240,16 +3147,6 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
         <!-- ========================================================================= -->
         <!-- PRESENTATION MODE: IN-DEPTH TECHNICAL BREAKDOWN TOGGLE                    -->
         <!-- ========================================================================= -->
-        <div class="pres-deep-dive-bar" id="pres-deep-dive-bar">
-          <button type="button" class="btn-deep-dive-toggle" id="btn-deep-dive-toggle">
-            <span class="btn-deep-dive-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
-            </span>
-            <span class="btn-deep-dive-text" id="btn-deep-dive-text">View Detailed Financial Breakdown &amp; Graphs</span>
-            <span class="btn-deep-dive-badge" id="btn-deep-dive-badge">Optional Math Breakdown</span>
-          </button>
-        </div>
-
         <!-- ========================================================================= -->
         <!-- SECTION 5: 100% RATE LOCK GUARANTEE CLOSER -->
         <!-- ========================================================================= -->
@@ -3267,14 +3164,18 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
                   Annual MPI Premiums Fluctuate
                 </span>
               </div>
-              <p style="margin: 0.5rem 0 0 0; color: #047857; font-size: 0.9rem; line-height: 1.55;">
+              <p class="rate-lock-banner-essay" style="margin: 0.5rem 0 0 0; color: #047857; font-size: 0.9rem; line-height: 1.55;">
                 While annual basic MPI Autopac premiums fluctuate with approved Public Utilities Board (PUB) general rate hikes, your MPI bill can also jump unpredictably if an accident or speeding ticket reduces your Driver Safety Rating (DSR) merits, costing you hundreds in lost vehicle discounts and driver license surcharges year after year.
                 <br><br>
                 In contrast, Companion Asset Protection (CAP) provides an <strong>unconditional 100% Rate Lock Guarantee for your entire term (<span id="disp-ratelock-years">up to <?= $initialMaxYears ?> years</span>)</strong>. Your rate is financed into your vehicle payment with 0% change; <strong>claims, collisions, or traffic tickets will NEVER increase your rate or reduce your coverage</strong>.
               </p>
 
+              <p class="rate-lock-short-statement">
+                Your payment is financed directly into your vehicle loan and 100% locked. Claims, collisions, or traffic tickets will never increase your rate.
+              </p>
+
               <!-- Comparison Mini-Grid: MPI Merit Fluctuation vs CAP Fixed Rate Lock -->
-              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0.85rem; margin-top: 1rem;">
+              <div class="rate-lock-comparison-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0.85rem; margin-top: 1rem;">
                 <div style="background: rgba(220, 38, 38, 0.06); border: 1px solid rgba(220, 38, 38, 0.2); border-radius: var(--radius-md); padding: 0.85rem 1rem;">
                   <div style="font-weight: 700; font-size: 0.85rem; color: #991b1b; display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.35rem;">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
@@ -3551,49 +3452,15 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
         }
       }
 
-      // Presentation mode controls & Deep Dive expansion
-      const btnDeepDiveToggle = document.getElementById('btn-deep-dive-toggle');
-      const btnDeepDiveText = document.getElementById('btn-deep-dive-text');
-      const btnDeepDiveBadge = document.getElementById('btn-deep-dive-badge');
-      const btnPresGraphHint = document.getElementById('btn-pres-graph-hint');
-
-      function toggleDeepDive(forceState) {
-        const shouldShow = typeof forceState === 'boolean'
-          ? forceState
-          : !document.body.classList.contains('show-deep-dive');
-
-        if (shouldShow) {
-          document.body.classList.add('show-deep-dive');
-          if (btnDeepDiveText) btnDeepDiveText.textContent = 'Hide Detailed Analysis (Return to Simplified View)';
-          if (btnDeepDiveBadge) btnDeepDiveBadge.textContent = 'Detailed View Active';
-          const icon = btnDeepDiveToggle ? btnDeepDiveToggle.querySelector('.btn-deep-dive-icon') : null;
-          if (icon) {
-            icon.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
-          }
-          // Redraw graph so SVG renders with fresh container dimensions
-          recalculate();
-        } else {
-          document.body.classList.remove('show-deep-dive');
-          if (btnDeepDiveText) btnDeepDiveText.textContent = 'View Detailed Financial Breakdown & Graphs';
-          if (btnDeepDiveBadge) btnDeepDiveBadge.textContent = 'Optional Math Breakdown';
-          const icon = btnDeepDiveToggle ? btnDeepDiveToggle.querySelector('.btn-deep-dive-icon') : null;
-          if (icon) {
-            icon.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>`;
-          }
-        }
-      }
-
+      // Presentation mode controls
       function setPresentationMode(enable) {
         if (enable) {
           document.body.classList.add('presentation-mode');
-          document.body.classList.remove('show-deep-dive');
-          toggleDeepDive(false);
           window.scrollTo({ top: 0, behavior: 'smooth' });
         } else {
           document.body.classList.remove('presentation-mode');
-          document.body.classList.remove('show-deep-dive');
-          toggleDeepDive(false);
         }
+        recalculate();
         if (btnTogglePres) {
           btnTogglePres.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg> <span>Present to Client</span>`;
         }
@@ -3602,24 +3469,6 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
       if (btnTogglePres) {
         btnTogglePres.addEventListener('click', () => {
           setPresentationMode(!document.body.classList.contains('presentation-mode'));
-        });
-      }
-
-      if (btnDeepDiveToggle) {
-        btnDeepDiveToggle.addEventListener('click', () => {
-          toggleDeepDive();
-        });
-      }
-
-      if (btnPresGraphHint) {
-        btnPresGraphHint.addEventListener('click', () => {
-          toggleDeepDive(true);
-          const graphEl = document.getElementById('depreciation-graph-container');
-          if (graphEl) {
-            setTimeout(() => {
-              graphEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }, 100);
-          }
         });
       }
 
@@ -4381,6 +4230,15 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
           }
         }
 
+        const elMpiPresSub = document.getElementById('disp-mpi-addons-pres-sub');
+        if (elMpiPresSub) {
+          elMpiPresSub.textContent = isVehIneligibleMpiNew
+            ? 'MPI New Vehicle Protection ineligible on pre-owned. ACV only.'
+            : (isVehOneYearMpiNew
+              ? 'Billed monthly by MPI. Limited 1-year protection.'
+              : 'Billed monthly by MPI. Limited 2-year protection.');
+        }
+
         // Vehicle Sale Price and Over $75,000 Luxury Rule
         const vehPrice = parseFloat(document.getElementById('inp-veh-price').value) || 0;
         const isLuxuryOrOver75k = vehPrice > 75000;
@@ -4737,6 +4595,11 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
           }
         }
 
+        const elCapPresSub = document.getElementById('disp-cap-pres-sub');
+        if (elCapPresSub) {
+          elCapPresSub.textContent = `${capYears}-Year locked buying power. Reimburses deductible.`;
+        }
+
         // Render Timeline & Financing vs Protection Explainer
         const timelineContainer = document.getElementById('cap-timeline-explainer');
         if (timelineContainer && currentCap) {
@@ -4982,6 +4845,15 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
           }
           if (elStratBadge) {
             elStratBadge.textContent = `Save ${fmtDec(lossSavMonthly)}/mo on Rental + $500 Write-Off / $250 Repair Benefit`;
+          }
+        }
+
+        const elStratPresSub = document.getElementById('disp-strat-pres-sub');
+        if (elStratPresSub) {
+          if (selectedDeductible === 200 || selectedDeductible === 300) {
+            elStratPresSub.textContent = 'Switch to $500 deductible + drop MPI rental to offset cost.';
+          } else {
+            elStratPresSub.textContent = 'Drop MPI rental since CAP includes 30 days of rental car.';
           }
         }
 
