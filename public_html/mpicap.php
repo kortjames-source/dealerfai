@@ -700,8 +700,9 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
     }
 
     .showcase-header {
-      max-width: 850px;
-      margin-bottom: 2rem;
+      text-align: center;
+      max-width: 1050px;
+      margin: 0 auto 2.5rem auto;
     }
 
     .showcase-header .badge-tag {
@@ -710,27 +711,29 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
       color: #ffffff;
       font-weight: 700;
       font-size: 0.75rem;
-      padding: 0.3rem 0.75rem;
+      padding: 0.35rem 0.85rem;
       border-radius: 9999px;
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      margin-bottom: 0.75rem;
+      margin-bottom: 0.85rem;
     }
 
     .showcase-header h2 {
-      text-align: left;
+      text-align: center;
       color: #ffffff;
-      font-size: 2rem;
+      font-size: 2.15rem;
       font-weight: 800;
-      margin-bottom: 0.75rem;
+      margin: 0 auto 0.85rem auto;
       letter-spacing: -0.025em;
+      line-height: 1.25;
     }
 
     .showcase-header p {
       font-size: 1.05rem;
-      color: rgba(255, 255, 255, 0.85);
-      line-height: 1.6;
-      margin: 0;
+      color: rgba(255, 255, 255, 0.9);
+      line-height: 1.65;
+      margin: 0 auto;
+      max-width: 950px;
     }
 
     .pillars-grid {
