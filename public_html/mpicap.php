@@ -1311,6 +1311,57 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
       padding-top: 2rem;
     }
 
+    /* Hide the in-your-face top action bar button during presentation mode */
+    body.presentation-mode .top-action-bar #btn-toggle-presentation {
+      display: none !important;
+    }
+
+    /* Floating Exit Presentation Button (Discrete Corner Control) */
+    .floating-exit-pres {
+      display: none;
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      z-index: 9999;
+      align-items: center;
+      gap: 0.45rem;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      color: #cbd5e1;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 9999px;
+      padding: 0.45rem 0.85rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+      transition: all 0.2s ease;
+      opacity: 0.45;
+    }
+
+    .floating-exit-pres kbd {
+      background: rgba(255, 255, 255, 0.18);
+      color: #f1f5f9;
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-size: 0.65rem;
+      font-family: inherit;
+    }
+
+    .floating-exit-pres:hover {
+      opacity: 1;
+      color: #ffffff;
+      background: rgba(15, 23, 42, 0.92);
+      border-color: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+    }
+
+    body.presentation-mode .floating-exit-pres {
+      display: inline-flex;
+    }
+
     /* Precision 3-Page Print Stylesheet */
     @media print {
       @page {
@@ -1346,6 +1397,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
       .loan-freq-wrapper,
       .action-btn,
       .presentation-toggle,
+      .floating-exit-pres,
       .scenario-year-selector,
       .dsr-caret,
       .dsr-select-overlay,
@@ -2905,6 +2957,13 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
           </p>
         </div>
 
+        <!-- Discrete Floating Exit Presentation Button (Only active in Presentation Mode) -->
+        <button type="button" class="floating-exit-pres" id="btn-floating-exit-pres" title="Exit Presentation Mode (or press Esc)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          <span>Exit Presentation</span>
+          <kbd>Esc</kbd>
+        </button>
+
       </div>
     </main>
 
@@ -3117,16 +3176,37 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
         }
       }
 
-      // Presentation mode toggle
+      // Presentation mode controls
+      function setPresentationMode(enable) {
+        if (enable) {
+          document.body.classList.add('presentation-mode');
+        } else {
+          document.body.classList.remove('presentation-mode');
+        }
+        if (btnTogglePres) {
+          btnTogglePres.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg> <span>Present to Client</span>`;
+        }
+      }
+
       if (btnTogglePres) {
         btnTogglePres.addEventListener('click', () => {
-          document.body.classList.toggle('presentation-mode');
-          const isPres = document.body.classList.contains('presentation-mode');
-          btnTogglePres.innerHTML = isPres
-            ? `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> <span>Exit Presentation</span>`
-            : `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg> <span>Present to Client</span>`;
+          setPresentationMode(!document.body.classList.contains('presentation-mode'));
         });
       }
+
+      const btnFloatingExit = document.getElementById('btn-floating-exit-pres');
+      if (btnFloatingExit) {
+        btnFloatingExit.addEventListener('click', () => {
+          setPresentationMode(false);
+        });
+      }
+
+      // Allow pressing Escape key to smoothly exit presentation mode
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && document.body.classList.contains('presentation-mode')) {
+          setPresentationMode(false);
+        }
+      });
 
       // Print handler
       if (btnPrint) {
