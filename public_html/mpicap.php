@@ -1362,6 +1362,303 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
       display: inline-flex;
     }
 
+    /* ========================================================================= */
+    /* SIMPLIFIED HIGH-IMPACT PRESENTATION MODE                                  */
+    /* ========================================================================= */
+
+    /* Default Simplified Presentation: Hide technical charts and dense tables */
+    body.presentation-mode:not(.show-deep-dive) #depreciation-graph-container,
+    body.presentation-mode:not(.show-deep-dive) #cap-timeline-explainer,
+    body.presentation-mode:not(.show-deep-dive) .deductible-selector-container,
+    body.presentation-mode:not(.show-deep-dive) .strategy-table-wrapper,
+    body.presentation-mode:not(.show-deep-dive) .strategy-table,
+    body.presentation-mode:not(.show-deep-dive) #smart-deductible-section .callout-box,
+    body.presentation-mode:not(.show-deep-dive) .deductible-advisory-note {
+      display: none !important;
+    }
+
+    /* In Simplified Presentation, show high-impact cards and peek buttons */
+    body.presentation-mode:not(.show-deep-dive) .simplified-deductible-grid {
+      display: grid !important;
+    }
+
+    body.presentation-mode:not(.show-deep-dive) .pres-graph-hint {
+      display: flex !important;
+    }
+
+    /* Deep Dive Bar: Visible ONLY in presentation mode */
+    .pres-deep-dive-bar {
+      display: none;
+    }
+    body.presentation-mode .pres-deep-dive-bar {
+      display: flex;
+      justify-content: center;
+      margin: 2.25rem 0 1.5rem 0;
+    }
+
+    /* By default (outside presentation mode), hide presentation-only elements */
+    .simplified-deductible-grid,
+    .pres-graph-hint {
+      display: none !important;
+    }
+
+    /* When Deep Dive is active in presentation mode */
+    body.presentation-mode.show-deep-dive #depreciation-graph-container {
+      display: block !important;
+      animation: fadeInSlide 0.35s ease forwards;
+    }
+    body.presentation-mode.show-deep-dive #cap-timeline-explainer {
+      display: block !important;
+      animation: fadeInSlide 0.35s ease forwards;
+    }
+    body.presentation-mode.show-deep-dive .deductible-selector-container,
+    body.presentation-mode.show-deep-dive .strategy-table-wrapper,
+    body.presentation-mode.show-deep-dive .strategy-table,
+    body.presentation-mode.show-deep-dive #smart-deductible-section .callout-box,
+    body.presentation-mode.show-deep-dive .deductible-advisory-note {
+      display: block !important;
+      animation: fadeInSlide 0.35s ease forwards;
+    }
+    body.presentation-mode.show-deep-dive .simplified-deductible-grid {
+      display: none !important;
+    }
+    body.presentation-mode.show-deep-dive .pres-graph-hint {
+      display: none !important;
+    }
+
+    @keyframes fadeInSlide {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Presentation Mode High-Impact Typography & Spacing */
+    body.presentation-mode .replacement-showcase-card {
+      margin-bottom: 2rem;
+    }
+
+    body.presentation-mode .showcase-header h2 {
+      font-size: 1.85rem;
+      letter-spacing: -0.02em;
+      line-height: 1.25;
+    }
+
+    body.presentation-mode .pillars-grid {
+      gap: 1.25rem;
+    }
+
+    body.presentation-mode .pillar-item {
+      padding: 1.35rem 1.15rem;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+    }
+
+    body.presentation-mode .pillar-title {
+      font-size: 1.05rem;
+    }
+
+    body.presentation-mode .scenario-box {
+      padding: 1.75rem;
+      border-radius: var(--radius-lg);
+    }
+
+    body.presentation-mode .scen-hero-amount {
+      font-size: 2.25rem;
+    }
+
+    body.presentation-mode .cap-terms-container {
+      margin-bottom: 2.5rem;
+    }
+
+    body.presentation-mode .cap-term-card {
+      padding: 1.5rem;
+    }
+
+    body.presentation-mode .hero-card {
+      padding: 1.5rem;
+    }
+
+    body.presentation-mode .hero-amount {
+      font-size: 2.5rem;
+    }
+
+    /* Simplified Deductible Impact Cards */
+    .simplified-deductible-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+      margin-top: 1.25rem;
+    }
+
+    .sim-ded-card {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+      transition: all 0.25s ease;
+      position: relative;
+    }
+
+    .sim-ded-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      border-color: #cbd5e1;
+    }
+
+    .sim-ded-card.highlight {
+      border-color: #10b981;
+      background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 100%);
+      box-shadow: 0 4px 18px rgba(16, 185, 129, 0.12);
+    }
+
+    .sim-ded-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0.85rem;
+    }
+
+    .sim-ded-tag {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.35rem;
+    }
+
+    .sim-ded-amount {
+      font-size: 1.75rem;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+    }
+
+    .sim-ded-desc {
+      font-size: 0.88rem;
+      color: #475569;
+      line-height: 1.5;
+      flex: 1;
+      margin-bottom: 1rem;
+    }
+
+    .sim-ded-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.35rem 0.65rem;
+      border-radius: 6px;
+      background: #ecfdf5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+      width: fit-content;
+    }
+
+    /* Deep Dive Toggle Button */
+    .btn-deep-dive-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: #ffffff;
+      color: #1e293b;
+      border: 1.5px solid #cbd5e1;
+      padding: 0.85rem 1.75rem;
+      border-radius: 9999px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+      transition: all 0.25s ease;
+    }
+
+    .btn-deep-dive-toggle:hover {
+      background: #f8fafc;
+      border-color: #3b82f6;
+      color: #1d4ed8;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(59, 130, 246, 0.15);
+    }
+
+    .btn-deep-dive-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #2563eb;
+    }
+
+    .btn-deep-dive-badge {
+      background: #f1f5f9;
+      color: #475569;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0.2rem 0.55rem;
+      border-radius: 9999px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    body.presentation-mode.show-deep-dive .btn-deep-dive-toggle {
+      background: #0f172a;
+      color: #ffffff;
+      border-color: #334155;
+      box-shadow: 0 4px 20px rgba(15, 23, 42, 0.25);
+    }
+
+    body.presentation-mode.show-deep-dive .btn-deep-dive-toggle:hover {
+      background: #1e293b;
+      border-color: #475569;
+    }
+
+    body.presentation-mode.show-deep-dive .btn-deep-dive-icon {
+      color: #38bdf8;
+    }
+
+    body.presentation-mode.show-deep-dive .btn-deep-dive-badge {
+      background: rgba(255, 255, 255, 0.18);
+      color: #e2e8f0;
+    }
+
+    /* Presentation Graph Hint Button */
+    .pres-graph-hint {
+      display: none;
+      justify-content: center;
+      margin: 0.75rem 0 0.5rem 0;
+    }
+
+    .btn-pres-graph-expand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      color: #ffffff;
+      padding: 0.4rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      transition: all 0.2s ease;
+    }
+
+    .btn-pres-graph-expand:hover {
+      background: rgba(255, 255, 255, 0.22);
+      border-color: rgba(255, 255, 255, 0.4);
+      transform: translateY(-1px);
+    }
+
     /* Precision 3-Page Print Stylesheet */
     @media print {
       @page {
@@ -1398,6 +1695,9 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
       .action-btn,
       .presentation-toggle,
       .floating-exit-pres,
+      .pres-deep-dive-bar,
+      .pres-graph-hint,
+      .simplified-deductible-grid,
       .scenario-year-selector,
       .dsr-caret,
       .dsr-select-overlay,
@@ -1405,6 +1705,17 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
       #btn-load-sample,
       .timeline-cards-grid {
         display: none !important;
+      }
+
+      /* Ensure print output always shows full charts regardless of screen state */
+      body.presentation-mode #depreciation-graph-container,
+      body.presentation-mode #cap-timeline-explainer,
+      body.presentation-mode .deductible-selector-container,
+      body.presentation-mode .strategy-table-wrapper,
+      body.presentation-mode .strategy-table,
+      body.presentation-mode #smart-deductible-section .callout-box,
+      body.presentation-mode .deductible-advisory-note {
+        display: block !important;
       }
 
       .main-container,
@@ -2459,6 +2770,14 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
               </div>
             </div>
 
+            <!-- Discrete presentation button to reveal graph early if customer asks -->
+            <div class="pres-graph-hint" id="pres-graph-hint">
+              <button type="button" class="btn-pres-graph-expand" id="btn-pres-graph-hint">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                <span>Tap to View 7-Year Depreciation Curve &amp; Market Value Chart</span>
+              </button>
+            </div>
+
             <!-- Visual Depreciation & Equity Protection Graph -->
             <div class="depreciation-graph-wrap" id="depreciation-graph-container">
               <div class="deprec-legend">
@@ -2679,6 +2998,51 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
             </div>
           </div>
 
+          <!-- Simplified Presentation View: 3 High-Impact Value Cards -->
+          <div class="simplified-deductible-grid" id="pres-simplified-deductible">
+            <div class="sim-ded-card highlight">
+              <div class="sim-ded-icon" style="background: rgba(16, 185, 129, 0.15); color: #059669;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              </div>
+              <div class="sim-ded-tag" style="color: #059669;">Total Loss Write-Off</div>
+              <div class="sim-ded-amount" id="disp-sim-loss-ded" style="color: #059669;">$0.00 Out of Pocket</div>
+              <div class="sim-ded-desc" id="disp-sim-loss-desc">
+                CAP reimburses up to <strong>$500 deductible</strong> on any total loss write-off claim.
+              </div>
+              <div class="sim-ded-badge" id="disp-sim-loss-badge">
+                ✓ Deductible 100% Reimbursed
+              </div>
+            </div>
+
+            <div class="sim-ded-card">
+              <div class="sim-ded-icon" style="background: rgba(37, 99, 235, 0.12); color: #2563eb;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+              </div>
+              <div class="sim-ded-tag" style="color: #2563eb;">Repairs &amp; Windshield Glass</div>
+              <div class="sim-ded-amount" id="disp-sim-part-ded" style="color: #2563eb;">$0.00 Out of Pocket</div>
+              <div class="sim-ded-desc" id="disp-sim-part-desc">
+                CAP reimburses up to <strong>$250</strong> for body shop repairs and windshield replacements.
+              </div>
+              <div class="sim-ded-badge" id="disp-sim-part-badge" style="background: #eff6ff; color: #1e40af; border-color: #bfdbfe;">
+                ✓ Glass &amp; Repair Deductible Covered
+              </div>
+            </div>
+
+            <div class="sim-ded-card">
+              <div class="sim-ded-icon" style="background: rgba(245, 158, 11, 0.15); color: #d97706;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m21 8-2 2-1.5-3.7A2 2 0 0 0 15.64 5H8.36a2 2 0 0 0-1.86 1.3L5 10 3 8"/><path d="M7 14h.01"/><path d="M17 14h.01"/><rect width="18" height="8" x="3" y="10" rx="2"/><path d="M5 18v2"/><path d="M19 18v2"/></svg>
+              </div>
+              <div class="sim-ded-tag" style="color: #d97706;">Autopac Rental Car Savings</div>
+              <div class="sim-ded-amount" id="disp-sim-rental-sav" style="color: #059669;">Save $143 / yr</div>
+              <div class="sim-ded-desc" id="disp-sim-rental-desc">
+                Drop optional MPI Loss of Use because CAP already provides <strong>30 days of rental car</strong> coverage.
+              </div>
+              <div class="sim-ded-badge" id="disp-sim-rental-badge" style="background: #fef3c7; color: #92400e; border-color: #fde68a;">
+                🚗 30 Days Included • Save $11.92/mo
+              </div>
+            </div>
+          </div>
+
           <!-- Interactive Deductible Selector Bar -->
           <div class="deductible-selector-container">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem;">
@@ -2734,7 +3098,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
             </div>
           </div>
 
-          <div style="overflow-x: auto;">
+          <div class="strategy-table-wrapper" style="overflow-x: auto;">
             <table class="strategy-table">
               <thead>
                 <tr>
@@ -2865,12 +3229,25 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
             </span>
           </div>
 
-          <div style="margin-top: 1rem; font-size: 0.78rem; color: #64748b; line-height: 1.5; display: flex; align-items: flex-start; gap: 0.45rem;">
+          <div class="deductible-advisory-note" style="margin-top: 1rem; font-size: 0.78rem; color: #64748b; line-height: 1.5; display: flex; align-items: flex-start; gap: 0.45rem;">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" style="flex-shrink: 0; margin-top: 2px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
             <span>
               <strong>Autopac Insurance Advisory:</strong> Vehicle registration, basic insurance, and optional deductible buy-downs are provided exclusively through Manitoba Public Insurance (MPI) and licensed Autopac brokers. Premium estimates and savings illustrated are based on standard published rate schedules. Please consult your licensed insurance broker to confirm individual coverage, discounts, and deductible selection.
             </span>
           </div>
+        </div>
+
+        <!-- ========================================================================= -->
+        <!-- PRESENTATION MODE: IN-DEPTH TECHNICAL BREAKDOWN TOGGLE                    -->
+        <!-- ========================================================================= -->
+        <div class="pres-deep-dive-bar" id="pres-deep-dive-bar">
+          <button type="button" class="btn-deep-dive-toggle" id="btn-deep-dive-toggle">
+            <span class="btn-deep-dive-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+            </span>
+            <span class="btn-deep-dive-text" id="btn-deep-dive-text">View Detailed Financial Breakdown &amp; Graphs</span>
+            <span class="btn-deep-dive-badge" id="btn-deep-dive-badge">Optional Math Breakdown</span>
+          </button>
         </div>
 
         <!-- ========================================================================= -->
@@ -3174,12 +3551,48 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
         }
       }
 
-      // Presentation mode controls
+      // Presentation mode controls & Deep Dive expansion
+      const btnDeepDiveToggle = document.getElementById('btn-deep-dive-toggle');
+      const btnDeepDiveText = document.getElementById('btn-deep-dive-text');
+      const btnDeepDiveBadge = document.getElementById('btn-deep-dive-badge');
+      const btnPresGraphHint = document.getElementById('btn-pres-graph-hint');
+
+      function toggleDeepDive(forceState) {
+        const shouldShow = typeof forceState === 'boolean'
+          ? forceState
+          : !document.body.classList.contains('show-deep-dive');
+
+        if (shouldShow) {
+          document.body.classList.add('show-deep-dive');
+          if (btnDeepDiveText) btnDeepDiveText.textContent = 'Hide Detailed Analysis (Return to Simplified View)';
+          if (btnDeepDiveBadge) btnDeepDiveBadge.textContent = 'Detailed View Active';
+          const icon = btnDeepDiveToggle ? btnDeepDiveToggle.querySelector('.btn-deep-dive-icon') : null;
+          if (icon) {
+            icon.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+          }
+          // Redraw graph so SVG renders with fresh container dimensions
+          recalculate();
+        } else {
+          document.body.classList.remove('show-deep-dive');
+          if (btnDeepDiveText) btnDeepDiveText.textContent = 'View Detailed Financial Breakdown & Graphs';
+          if (btnDeepDiveBadge) btnDeepDiveBadge.textContent = 'Optional Math Breakdown';
+          const icon = btnDeepDiveToggle ? btnDeepDiveToggle.querySelector('.btn-deep-dive-icon') : null;
+          if (icon) {
+            icon.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>`;
+          }
+        }
+      }
+
       function setPresentationMode(enable) {
         if (enable) {
           document.body.classList.add('presentation-mode');
+          document.body.classList.remove('show-deep-dive');
+          toggleDeepDive(false);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
         } else {
           document.body.classList.remove('presentation-mode');
+          document.body.classList.remove('show-deep-dive');
+          toggleDeepDive(false);
         }
         if (btnTogglePres) {
           btnTogglePres.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg> <span>Present to Client</span>`;
@@ -3189,6 +3602,24 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
       if (btnTogglePres) {
         btnTogglePres.addEventListener('click', () => {
           setPresentationMode(!document.body.classList.contains('presentation-mode'));
+        });
+      }
+
+      if (btnDeepDiveToggle) {
+        btnDeepDiveToggle.addEventListener('click', () => {
+          toggleDeepDive();
+        });
+      }
+
+      if (btnPresGraphHint) {
+        btnPresGraphHint.addEventListener('click', () => {
+          toggleDeepDive(true);
+          const graphEl = document.getElementById('depreciation-graph-container');
+          if (graphEl) {
+            setTimeout(() => {
+              graphEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+          }
         });
       }
 
@@ -4775,6 +5206,53 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
         if (elRateLockYears) {
           elRateLockYears.textContent = `up to ${maxAllowedYears} years`;
         }
+
+        // Update Simplified Presentation Deductible Cards
+        const elSimLossDed = document.getElementById('disp-sim-loss-ded');
+        const elSimLossDesc = document.getElementById('disp-sim-loss-desc');
+        const elSimLossBadge = document.getElementById('disp-sim-loss-badge');
+
+        if (selectedDeductible <= 500) {
+          if (elSimLossDed) elSimLossDed.textContent = '$0.00 Out of Pocket';
+          if (elSimLossDesc) elSimLossDesc.innerHTML = `CAP reimburses your full <strong>$${selectedDeductible.toLocaleString()} deductible</strong> on a total loss write-off claim (up to $500 covered).`;
+          if (elSimLossBadge) elSimLossBadge.textContent = '✓ Deductible 100% Reimbursed';
+        } else {
+          const oop = selectedDeductible - 500;
+          if (elSimLossDed) elSimLossDed.textContent = `$${oop.toLocaleString()} Out of Pocket`;
+          if (elSimLossDesc) elSimLossDesc.innerHTML = `CAP reimburses <strong>$500</strong> towards your $${selectedDeductible.toLocaleString()} deductible ($500 saved directly).`;
+          if (elSimLossBadge) elSimLossBadge.textContent = '✓ $500 Reimbursed Directly to You';
+        }
+
+        const elSimPartDed = document.getElementById('disp-sim-part-ded');
+        const elSimPartDesc = document.getElementById('disp-sim-part-desc');
+        const elSimPartBadge = document.getElementById('disp-sim-part-badge');
+
+        if (selectedDeductible === 200) {
+          if (elSimPartDed) elSimPartDed.textContent = '$0.00 Out of Pocket';
+          if (elSimPartDesc) elSimPartDesc.innerHTML = `CAP covers up to $250, wiping out <strong>100% of your $200 repair and windshield deductible</strong>.`;
+          if (elSimPartBadge) elSimPartBadge.textContent = '✓ 100% Reimbursed ($0 Out of Pocket)';
+        } else if (selectedDeductible === 300) {
+          if (elSimPartDed) elSimPartDed.textContent = '$50.00 Out of Pocket';
+          if (elSimPartDesc) elSimPartDesc.innerHTML = `CAP reimburses $250 towards repairs and windshield replacements, leaving just <strong>$50 out of pocket</strong>.`;
+          if (elSimPartBadge) elSimPartBadge.textContent = '✓ $250 Reimbursed on Repairs & Glass';
+        } else if (selectedDeductible === 500) {
+          if (elSimPartDed) elSimPartDed.textContent = '$250.00 Out of Pocket';
+          if (elSimPartDesc) elSimPartDesc.innerHTML = `CAP reimburses $250, cutting your $500 repair and windshield deductible <strong>in half to $250</strong>.`;
+          if (elSimPartBadge) elSimPartBadge.textContent = '✓ Deductible Cut in Half (Save $250)';
+        } else {
+          const partOop = selectedDeductible - 250;
+          if (elSimPartDed) elSimPartDed.textContent = `$${partOop.toLocaleString()} Out of Pocket`;
+          if (elSimPartDesc) elSimPartDesc.innerHTML = `CAP reimburses <strong>$250</strong> on partial losses, body repairs, and windshield glass replacements.`;
+          if (elSimPartBadge) elSimPartBadge.textContent = '✓ $250 Reimbursed on Repairs & Glass';
+        }
+
+        const elSimRentalSav = document.getElementById('disp-sim-rental-sav');
+        const elSimRentalDesc = document.getElementById('disp-sim-rental-desc');
+        const elSimRentalBadge = document.getElementById('disp-sim-rental-badge');
+
+        if (elSimRentalSav) elSimRentalSav.textContent = `Save ${fmt(loss26)} / yr`;
+        if (elSimRentalDesc) elSimRentalDesc.innerHTML = `Drop optional MPI Loss of Use because CAP already provides <strong>30 days of rental car</strong> coverage.`;
+        if (elSimRentalBadge) elSimRentalBadge.textContent = `🚗 30 Days Included • Save ${fmtDec(loss26 / 12)}/mo`;
 
         // Persist current state to localStorage (local to this computer/device)
         saveState();
