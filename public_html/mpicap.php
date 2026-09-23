@@ -209,6 +209,62 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
       font-weight: 700;
     }
 
+    .dsr-pill-select {
+      position: relative;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s ease;
+    }
+
+    .dsr-pill-select:hover {
+      background: #d1fae5;
+      border-color: #6ee7b7;
+      box-shadow: 0 2px 6px rgba(5, 150, 105, 0.18);
+      transform: translateY(-1px);
+    }
+
+    .dsr-pill-select:active {
+      transform: translateY(0);
+    }
+
+    .dsr-pill-select:focus-within {
+      outline: 2px solid #059669;
+      outline-offset: 2px;
+    }
+
+    .dsr-pill-select > svg,
+    .dsr-pill-select > span {
+      pointer-events: none;
+    }
+
+    .dsr-select-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      border: none;
+      background: transparent;
+      font-size: 16px;
+      z-index: 2;
+    }
+
+    .dsr-caret {
+      opacity: 0.65;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .dsr-pill-select:hover .dsr-caret {
+      opacity: 1;
+      transform: translateY(1px);
+    }
+
     .freq-toggle-group {
       display: inline-flex;
       background: #f1f5f9;
@@ -1251,9 +1307,13 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
                 MPI Manitoba Public Insurance & Companion Asset Protection (CAP) Analysis
               </div>
             </div>
-            <div id="disp-dsr-badge" class="dsr-pill">
+            <div id="disp-dsr-badge" class="dsr-pill dsr-pill-select" title="Click to select Driver Safety Rating (DSR) & Safe Driver Vehicle Discount">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
               <span id="disp-dsr-text">Level 0 • Base Rate (0% Discount)</span>
+              <svg class="dsr-caret" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+              <select id="inp-dsr-level" class="dsr-select-overlay" aria-label="Select Driver Safety Rating (DSR)">
+                <!-- Populated via JavaScript: Level 0 to +20 -->
+              </select>
             </div>
             <div id="disp-top-ded-badge" class="dsr-pill" style="background: #e0f2fe; color: #0369a1; border-color: #bae6fd; cursor: pointer;" title="Click to view Deductible Strategy">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
@@ -1303,7 +1363,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
 
           <div class="manager-panel-body">
             <!-- Client & Deal Information -->
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
               <div class="form-group">
                 <label for="inp-client-name">Client Name</label>
                 <input type="text" id="inp-client-name" class="form-control-sm" value="<?= htmlspecialchars($prefillClient) ?>">
@@ -1326,12 +1386,6 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
               <div class="form-group">
                 <label for="inp-vehicle-name">Vehicle Description / Make / Model</label>
                 <input type="text" id="inp-vehicle-name" class="form-control-sm" value="<?= htmlspecialchars($prefillVehicle) ?>">
-              </div>
-              <div class="form-group">
-                <label for="inp-dsr-level">Driver Safety Rating (DSR)</label>
-                <select id="inp-dsr-level" class="form-control-sm">
-                  <!-- Populated via JavaScript: Level 0 to +20 -->
-                </select>
               </div>
             </div>
 
@@ -2091,14 +2145,31 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
       // Populate DSR Select dropdown (Level 0 Base selected by default)
       const dsrSelect = document.getElementById('inp-dsr-level');
       if (dsrSelect) {
+        dsrSelect.innerHTML = '';
         DSR_SCALE.forEach(item => {
           const opt = document.createElement('option');
           opt.value = item.level;
-          const labelPrefix = item.level > 0 ? `+${item.level}` : '0 (Base)';
+          const labelPrefix = item.level > 0 ? `+${item.level}` : '0 (Base Rate)';
           const tag = item.isNew ? ' [NEW 2026]' : '';
-          opt.textContent = `Level ${labelPrefix} — ${item.discount}% Vehicle Discount (Driver Fee $${item.driverFee})${tag}`;
+          opt.textContent = item.level > 0 
+            ? `Level ${labelPrefix} • ${item.discount}% Safe Driver Discount (Driver Fee $${item.driverFee})${tag}`
+            : `Level 0 (Base Rate) • 0% Discount (Driver Fee $${item.driverFee})`;
           if (item.level === 0) opt.selected = true;
           dsrSelect.appendChild(opt);
+        });
+      }
+
+      // Allow clicking badge or wrapper to focus/trigger select
+      const dsrBadgeWrapper = document.getElementById('disp-dsr-badge');
+      if (dsrBadgeWrapper) {
+        dsrBadgeWrapper.addEventListener('click', (e) => {
+          const sel = document.getElementById('inp-dsr-level');
+          if (sel && e.target !== sel) {
+            sel.focus();
+            if (typeof sel.showPicker === 'function') {
+              try { sel.showPicker(); } catch (err) {}
+            }
+          }
         });
       }
 
@@ -2637,10 +2708,21 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
         const elDsrDiscountLabel = document.getElementById('disp-dsr-discount-label');
         if (elDsrDiscountLabel) {
           elDsrDiscountLabel.textContent = dsrDiscPct > 0 
-            ? `Level ${dsrSign} (${dsrDiscPct}% discount applied below)`
-            : 'Level 0 Base (0% Discount)';
+            ? `Level ${dsrSign} (${dsrDiscPct}% discount applied • change via top green badge ↗)`
+            : 'Level 0 Base (0% Discount • change via top green badge ↗)';
           elDsrDiscountLabel.style.color = dsrDiscPct > 0 ? '#059669' : '#64748b';
           elDsrDiscountLabel.style.fontWeight = dsrDiscPct > 0 ? '700' : 'normal';
+          elDsrDiscountLabel.style.cursor = 'pointer';
+          elDsrDiscountLabel.title = 'Click to change Driver Safety Rating on top badge';
+          elDsrDiscountLabel.onclick = () => {
+            const sel = document.getElementById('inp-dsr-level');
+            if (sel) {
+              sel.focus();
+              if (typeof sel.showPicker === 'function') {
+                try { sel.showPicker(); } catch (err) {}
+              }
+            }
+          };
         }
 
         const elBasic26Net = document.getElementById('disp-26-basic-net');
