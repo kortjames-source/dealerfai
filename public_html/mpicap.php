@@ -1476,7 +1476,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
                       <td><input type="number" class="form-control-sm mpi-input" data-col="2025" id="mpi-25-ded-300" value="92" placeholder="e.g. 92"></td>
                     </tr>
                     <tr>
-                      <td style="padding-left: 1.25rem;">↳ <strong>$200 Deductible</strong> Buy-Down Fee (Default Quote)</td>
+                      <td style="padding-left: 1.25rem;">↳ <strong>$200 Deductible</strong> Buy-Down Fee</td>
                       <td><input type="number" class="form-control-sm mpi-input" data-col="2026" id="mpi-26-ded-200" value="238" placeholder="e.g. 238"></td>
                       <td><input type="number" class="form-control-sm mpi-input" data-col="2025" id="mpi-25-ded-200" value="117" placeholder="e.g. 117"></td>
                     </tr>
@@ -1893,7 +1893,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
               <button type="button" class="ded-pill-btn active" data-ded="200">
                 <div class="ded-pill-top">
                   <span class="ded-pill-val">$200</span>
-                  <span class="ded-pill-badge">Selected Quote</span>
+                  <span class="ded-pill-badge">Selected</span>
                 </div>
                 <div class="ded-pill-fee" id="pill-fee-200">+$238/yr</div>
                 <div class="ded-pill-mo" id="pill-mo-200">+$19.83/mo</div>
@@ -2583,7 +2583,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
           750: 'Buy-Down',
           500: 'Smart Choice',
           300: 'Buy-Down',
-          200: 'MPI Standard'
+          200: 'Buy-Down'
         };
 
         document.querySelectorAll('.ded-pill-btn').forEach(btn => {
@@ -2592,7 +2592,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
           if (bDed === selectedDeductible) {
             btn.classList.add('active');
             if (badge) {
-              badge.textContent = bDed === 200 ? 'Selected Quote' : 'Selected';
+              badge.textContent = 'Selected';
             }
           } else {
             btn.classList.remove('active');
