@@ -4325,10 +4325,10 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
           if (isTermShorter) {
             explanationBadge = `<span style="background: #fef3c7; color: #92400e; font-weight: 700; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem;">Years 1-${capYears} Protection • ${loanTerm}-Mo Financing</span>`;
             explanationHtml = `
-              <strong>How your financing &amp; coverage work together:</strong><br>
-              Your Companion Asset Protection is financed directly into your vehicle loan, adding just <strong>+${fmtDec(capPmt)}${loanFreqSuffix}</strong> (a modest <strong>${fmtDec(capPerDay)}/day</strong>) across all <strong>${loanTerm} months of your loan</strong> with zero out-of-pocket cost today.<br><br>
-              <strong>Why this is a smart financial strategy:</strong><br>
-              Vehicles suffer their steepest market depreciation during the first ${capYears} years (Months 1-${currentCap.term}). Having ${currentCap.term}-Month (${capYears}-Year) CAP gives you 100% Replacement Value Top-Up and deductible protection during your highest-risk ownership window, while your ${loanTerm}-month financing keeps the monthly payment ultra-affordable. By Month ${currentCap.term}, your remaining loan balance has significantly dropped, naturally closing the equity gap.
+              <strong>Active Ownership Protection:</strong><br>
+              Provides 100% Replacement Value Top-Up and deductible reimbursement throughout Months 1 to ${currentCap.term} (${capYears} years) of ownership.<br><br>
+              <strong>Financing Flexibility:</strong><br>
+              Financing your protection across your ${loanTerm}-month vehicle loan keeps your payment affordable at just <strong>+${fmtDec(capPmt)}${loanFreqSuffix}</strong> (<strong>${fmtDec(capPerDay)}/day</strong>) with zero out-of-pocket payment today.
             `;
             activeWindowLabel = `Active Months 1-${currentCap.term} (First ${capYears} Years of Ownership)`;
           } else if (isTermEqual) {
