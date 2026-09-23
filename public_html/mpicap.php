@@ -378,9 +378,9 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
     }
 
     .hero-card.combined {
-      border-color: var(--brand-color);
-      background: linear-gradient(180deg, #ffffff 0%, rgba(0, 102, 204, 0.04) 100%);
-      box-shadow: 0 10px 25px -5px rgba(0, 102, 204, 0.15);
+      border-color: #059669;
+      background: linear-gradient(180deg, #ffffff 0%, rgba(16, 185, 129, 0.04) 100%);
+      box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.15);
     }
 
     .hero-card-tag {
@@ -1725,21 +1725,24 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
             </div>
           </div>
 
-          <!-- Card 3: Deductible Strategy ($500 MPI Deductible + CAP) -->
+          <!-- Card 3: Deductible Savings ($500 MPI Deductible + CAP) -->
           <div class="hero-card combined">
-            <div class="hero-card-tag" style="color: var(--brand-color);">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              <span id="disp-card-strat-tag">Smart Deductible Strategy</span>
+            <div class="hero-card-tag" style="color: #059669;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              <span id="disp-card-strat-tag">Smart Deductible Savings</span>
             </div>
-            <div class="hero-amount" id="disp-net-cap-amount" style="color: var(--brand-color);">
-              $35<span class="period">.48/mo net</span>
+            <div class="hero-amount" id="disp-net-cap-amount" style="color: #059669;">
+              Save $113<span class="period">/yr</span>
+            </div>
+            <div id="disp-strat-period-line" style="font-size: 0.88rem; font-weight: 700; color: #047857; margin-top: -0.25rem; margin-bottom: 0.75rem;">
+              Save $9.42/mo on your MPI bill
             </div>
             <div class="hero-card-subtext" id="disp-card-strat-subtext">
-              Select <strong>$500 MPI Deductible</strong> & save <strong id="disp-ded-savings-sub">$113/yr ($9.42/mo on MPI)</strong>.<br>
+              Choose <strong>$500 MPI Deductible</strong> &amp; pocket <strong>$113/yr ($9.42/mo)</strong> in MPI savings.<br>
               In a Total Loss: CAP pays $500 &rarr; <strong>$0 Out of Pocket</strong> ($200 saved)!<br>
               In a Partial Loss (repairs &amp; windshields): CAP pays $250 &rarr; <strong>Only $250 Out of Pocket</strong>!
             </div>
-            <div class="fixed-badge" style="background: #e0f2fe; color: #0369a1;">
+            <div class="fixed-badge" style="background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0;">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
               <span id="disp-strategy-badge-text">Save $113/yr on MPI + $0 Deductible on Write-off</span>
             </div>
@@ -3114,8 +3117,9 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
         const fee300 = dedRates26[300];
         const fee200 = dedRates26[200];
 
-        // Update Card 3: Deductible Strategy
+        // Update Card 3: Deductible Savings
         const elNetCap = document.getElementById('disp-net-cap-amount');
+        const elStratPeriodLine = document.getElementById('disp-strat-period-line');
         const elCardStratTag = document.getElementById('disp-card-strat-tag');
         const elCardStratSubtext = document.getElementById('disp-card-strat-subtext');
         const elStratBadge = document.getElementById('disp-strategy-badge-text');
@@ -3125,13 +3129,19 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
           const dedSavLoanPeriod = dedSavAnnual / loanPeriodDivisor;
           const netCapPmt = Math.max(0, capPmt - dedSavLoanPeriod);
 
-          if (elCardStratTag) elCardStratTag.textContent = 'Smart Deductible Strategy';
-          if (elNetCap) elNetCap.innerHTML = `${fmtDec(netCapPmt)}<span class="period">${loanFreqSuffix} net</span>`;
+          if (elCardStratTag) elCardStratTag.textContent = 'Smart Deductible Savings';
+          if (elNetCap) elNetCap.innerHTML = `Save ${fmt(dedSavAnnual)}<span class="period">/yr</span>`;
+          if (elStratPeriodLine) {
+            elStratPeriodLine.textContent = `Save ${fmtDec(dedSavLoanPeriod)}${loanFreqSuffix} on your MPI bill`;
+          }
           if (elCardStratSubtext) {
             elCardStratSubtext.innerHTML = `
-              Choose <strong>$500 MPI Deductible</strong> & save <strong>${fmt(dedSavAnnual)}/yr (${fmtDec(dedSavAnnual / 12)}/mo on MPI)</strong>.<br>
-              In a Total Loss: CAP pays $500 &rarr; <strong>$0 Out of Pocket</strong> ($${selectedDeductible} saved)!<br>
-              In a Partial Loss (repairs &amp; windshields): CAP pays $250 &rarr; <strong>Only $250 Out of Pocket</strong>!
+              Choose <strong>$500 MPI Deductible</strong> &amp; pocket <strong>${fmt(dedSavAnnual)}/yr (${fmtDec(dedSavLoanPeriod)}${loanFreqSuffix})</strong> in MPI savings.<br>
+              In a Total Loss: CAP pays $500 &rarr; <strong>$0 Out of Pocket</strong> ($${selectedDeductible} saved vs MPI)!<br>
+              In a Partial Loss (repairs &amp; windshields): CAP pays $250 &rarr; <strong>Only $250 Out of Pocket</strong>!<br>
+              <span style="display: inline-block; margin-top: 0.35rem; color: #047857; font-weight: 600;">
+                💡 Budget tip: Deductible savings offsets your CAP loan cost down to just <strong>${fmtDec(netCapPmt)}${loanFreqSuffix}</strong>!
+              </span>
             `;
           }
           if (elStratBadge) {
@@ -3139,10 +3149,13 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
           }
         } else if (selectedDeductible === 500) {
           if (elCardStratTag) elCardStratTag.textContent = 'Zero-Deductible Total Loss';
-          if (elNetCap) elNetCap.innerHTML = `${fmtDec(capPmt)}<span class="period">${loanFreqSuffix}</span>`;
+          if (elNetCap) elNetCap.innerHTML = `Save $500<span class="period">on write-off</span>`;
+          if (elStratPeriodLine) {
+            elStratPeriodLine.textContent = `$0.00 Out of Pocket on Total Loss`;
+          }
           if (elCardStratSubtext) {
             elCardStratSubtext.innerHTML = `
-              Keep your <strong>$500 MPI Deductible</strong> (${fmt(fee500)}/yr) with CAP:<br>
+              Keep your <strong>$500 MPI Deductible</strong> (${fmt(fee500)}/yr) without paying for expensive $200 buy-downs:<br>
               In a Total Loss: CAP pays $500 &rarr; <strong>$0 Out of Pocket</strong> ($500 saved)!<br>
               In a Partial Loss (repairs &amp; windshields): CAP pays $250 &rarr; <strong>Cuts deductible in half to $250</strong>!
             `;
@@ -3152,7 +3165,10 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
           }
         } else if (selectedDeductible === 750) {
           if (elCardStratTag) elCardStratTag.textContent = 'Deductible Protection ($750)';
-          if (elNetCap) elNetCap.innerHTML = `${fmtDec(capPmt)}<span class="period">${loanFreqSuffix}</span>`;
+          if (elNetCap) elNetCap.innerHTML = `Save $500<span class="period">on write-off</span>`;
+          if (elStratPeriodLine) {
+            elStratPeriodLine.textContent = `Pay only $250 Out of Pocket on Write-Off`;
+          }
           if (elCardStratSubtext) {
             elCardStratSubtext.innerHTML = `
               Keep your <strong>$750 MPI Deductible</strong> (${fmt(fee750)}/yr) with CAP:<br>
@@ -3164,8 +3180,11 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
             elStratBadge.textContent = `CAP Reimburses $500 on Total Loss & $250 on Repairs`;
           }
         } else { // 1000
-          if (elCardStratTag) elCardStratTag.textContent = 'Deductible Protection (Base $1,000)';
-          if (elNetCap) elNetCap.innerHTML = `${fmtDec(capPmt)}<span class="period">${loanFreqSuffix}</span>`;
+          if (elCardStratTag) elCardStratTag.textContent = 'Base Deductible Protection';
+          if (elNetCap) elNetCap.innerHTML = `Save $500<span class="period">on write-off</span>`;
+          if (elStratPeriodLine) {
+            elStratPeriodLine.textContent = `Zero MPI Buy-Down Fees • Cuts Deductible by 50%`;
+          }
           if (elCardStratSubtext) {
             elCardStratSubtext.innerHTML = `
               Keep MPI's <strong>$1,000 Base Deductible</strong> ($0 buy-down fees) with CAP:<br>
