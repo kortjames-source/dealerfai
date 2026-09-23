@@ -2409,8 +2409,8 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
                   <span class="deprec-legend-box cap-zone"></span>
                   <span><strong>CAP Protection Zone</strong> (Direct Cash Credit Towards Next Vehicle)</span>
                 </div>
-                <div class="deprec-legend-item">
-                  <span class="deprec-cutoff-badge" id="disp-deprec-cutoff-badge"><?= $isVehIneligibleMpiNew ? '⚠️ MPI Ineligible (Pre-Owned) • Day 1 ACV Only' : ($isVehOneYearMpiNew ? '⚠️ MPI 1-Year Limit' : '⚠️ MPI 2-Year Cutoff') ?></span>
+                <div class="deprec-legend-item" id="disp-deprec-cutoff-item" style="<?= $isVehIneligibleMpiNew ? 'display: none;' : '' ?>">
+                  <span class="deprec-cutoff-badge" id="disp-deprec-cutoff-badge"><?= $isVehOneYearMpiNew ? '⚠️ MPI 1-Year Limit' : '⚠️ MPI 2-Year Cutoff' ?></span>
                 </div>
               </div>
               <div class="deprec-svg-wrap">
@@ -3301,7 +3301,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
         if (!svgEl) return;
 
         const pts = [
-          { year: 0, pct: 1.00, label: 'Day 1', sub: isVehIneligible ? 'ACV Only' : '100% Value', x: 75.0, y: 36.0 },
+          { year: 0, pct: 1.00, label: 'Day 1', sub: '100% Value', x: 75.0, y: 36.0 },
           { year: 1, pct: 0.80, label: 'Yr 1 (12m)', sub: isVehOneYear ? 'MPI Cutoff' : '~80% ACV', x: 167.1, y: 67.8 },
           { year: 2, pct: 0.70, label: 'Yr 2 (24m)', sub: (!isVehIneligible && !isVehOneYear) ? 'MPI Cutoff' : '~70% ACV', x: 259.3, y: 83.7 },
           { year: 3, pct: 0.61, label: 'Yr 3 (36m)', sub: '~61% ACV', x: 351.4, y: 98.0 },
@@ -3375,16 +3375,11 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
           `;
         });
 
-        // Dynamic Cutoff or Pre-owned Ineligible Marker
+        // Dynamic Cutoff Marker (2-Year Cutoff for 2026+, 1-Year Cutoff for 2025. None for pre-owned)
         let cutoffHtml = '';
         if (isVehIneligible) {
-          // Pre-owned / ineligible: MPI pays ACV only from Day 1
-          cutoffHtml = `
-            <!-- MPI Ineligible Pre-Owned Marker -->
-            <line x1="75.0" y1="36" x2="75.0" y2="195" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,3" opacity="0.8"/>
-            <rect x="76" y="172" width="144" height="18" rx="3" fill="rgba(185, 28, 28, 0.95)" stroke="#fca5a5" stroke-width="1" filter="url(#graphShadow)"/>
-            <text x="148" y="184.5" fill="#ffffff" font-size="8.5" font-weight="700" text-anchor="middle">⚠️ MPI INELIGIBLE • ACV ONLY</text>
-          `;
+          // Pre-owned: No cutoff marker or box on the graph
+          cutoffHtml = '';
         } else if (isVehOneYear) {
           // 2025: 1-Year Cutoff Marker at Yr 1 (x=167.1)
           cutoffHtml = `
@@ -3949,23 +3944,24 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
         if (elScenTotalPower) elScenTotalPower.textContent = `${fmt(scenVehPrice)} (100% Value)`;
 
         // Update Depreciation Graph Legend Cutoff Badge
+        const elDeprecCutoffItem = document.getElementById('disp-deprec-cutoff-item');
         const elDeprecCutoffBadge = document.getElementById('disp-deprec-cutoff-badge');
-        if (elDeprecCutoffBadge) {
+        if (elDeprecCutoffItem && elDeprecCutoffBadge) {
           if (isVehIneligibleMpiNew) {
-            elDeprecCutoffBadge.textContent = '⚠️ MPI Ineligible (Pre-Owned) • Day 1 ACV Only';
-            elDeprecCutoffBadge.style.background = '#fef2f2';
-            elDeprecCutoffBadge.style.color = '#dc2626';
-            elDeprecCutoffBadge.style.borderColor = '#fecaca';
-          } else if (isVehOneYearMpiNew) {
-            elDeprecCutoffBadge.textContent = '⚠️ MPI 1-Year Limit';
-            elDeprecCutoffBadge.style.background = '#fffbeb';
-            elDeprecCutoffBadge.style.color = '#b45309';
-            elDeprecCutoffBadge.style.borderColor = '#fde68a';
+            elDeprecCutoffItem.style.display = 'none';
           } else {
-            elDeprecCutoffBadge.textContent = '⚠️ MPI 2-Year Cutoff';
-            elDeprecCutoffBadge.style.background = '#fee2e2';
-            elDeprecCutoffBadge.style.color = '#991b1b';
-            elDeprecCutoffBadge.style.borderColor = '#fca5a5';
+            elDeprecCutoffItem.style.display = 'inline-flex';
+            if (isVehOneYearMpiNew) {
+              elDeprecCutoffBadge.textContent = '⚠️ MPI 1-Year Limit';
+              elDeprecCutoffBadge.style.background = '#fffbeb';
+              elDeprecCutoffBadge.style.color = '#b45309';
+              elDeprecCutoffBadge.style.borderColor = '#fde68a';
+            } else {
+              elDeprecCutoffBadge.textContent = '⚠️ MPI 2-Year Cutoff';
+              elDeprecCutoffBadge.style.background = '#fee2e2';
+              elDeprecCutoffBadge.style.color = '#991b1b';
+              elDeprecCutoffBadge.style.borderColor = '#fca5a5';
+            }
           }
         }
 
