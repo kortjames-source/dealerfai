@@ -3208,17 +3208,17 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
           if (elCardStratTag) elCardStratTag.textContent = 'Base Deductible Protection';
           if (elNetCap) elNetCap.innerHTML = `Save $500<span class="period">on write-off</span>`;
           if (elStratPeriodLine) {
-            elStratPeriodLine.textContent = `Zero MPI Buy-Down Fees • Cuts Deductible by 50%`;
+            elStratPeriodLine.textContent = `Zero Buy-Down Fees • Reimburses $500 on Write-Off / $250 on Repairs`;
           }
           if (elCardStratSubtext) {
             elCardStratSubtext.innerHTML = `
               Keep MPI's <strong>$1,000 Base Deductible</strong> ($0 buy-down fees) with CAP:<br>
-              In a Total Loss: CAP pays $500 &rarr; <strong>Slashes your deductible by 50% to $500</strong>!<br>
-              In a Partial Loss (repairs &amp; windshields): CAP pays $250 &rarr; <strong>Reduces deductible to $750</strong>!
+              In a Total Loss (Write-Off Only): CAP pays $500 &rarr; <strong>Slashes deductible by 50% to $500</strong>!<br>
+              In a Partial Loss (repairs &amp; windshields): CAP pays $250 &rarr; <strong>Reduces deductible to $750</strong> ($250 reimbursed)!
             `;
           }
           if (elStratBadge) {
-            elStratBadge.textContent = `Zero MPI Buy-Down Fees • CAP Cuts Deductible by $500`;
+            elStratBadge.textContent = `Zero MPI Fees • Reimburses $500 on Write-Off & $250 on Repairs`;
           }
         }
 
@@ -3327,7 +3327,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
           } else if (selectedDeductible === 750) {
             elTableDedPill.textContent = `CAP Reimburses $500`;
           } else {
-            elTableDedPill.textContent = `Zero Buy-Down Fee • Reimburses $500`;
+            elTableDedPill.textContent = `Zero Buy-Down Fee • Reimburses $500 on Write-Off / $250 on Repairs`;
           }
         }
 
