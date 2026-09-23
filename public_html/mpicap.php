@@ -1941,6 +1941,13 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
               Even in a partial loss (such as a body shop repair or windshield claim), you only pay $250 out of pocket (a mere $50 difference from $200), which is paid for many times over by your annual MPI premium savings!
             </span>
           </div>
+
+          <div style="margin-top: 1rem; font-size: 0.78rem; color: #64748b; line-height: 1.5; display: flex; align-items: flex-start; gap: 0.45rem;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" style="flex-shrink: 0; margin-top: 2px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            <span>
+              <strong>Autopac Insurance Advisory:</strong> Vehicle registration, basic insurance, and optional deductible buy-downs are provided exclusively through Manitoba Public Insurance (MPI) and licensed Autopac brokers. Premium estimates and savings illustrated are based on standard published rate schedules. Please consult your licensed insurance broker to confirm individual coverage, discounts, and deductible selection.
+            </span>
+          </div>
         </div>
 
         <!-- ========================================================================= -->
@@ -2003,6 +2010,24 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
             <span class="rate-lock-pill"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> $500 Write-Off Deductible Reimbursed</span>
             <span class="rate-lock-pill"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> 30-Day Rental Vehicle Included</span>
           </div>
+        </div>
+
+        <!-- ========================================================================= -->
+        <!-- SECTION: INSURANCE ADVISORY & BROKER DISCLOSURE -->
+        <!-- ========================================================================= -->
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: var(--radius-lg); padding: 1.25rem 1.5rem; margin-top: 2rem; margin-bottom: 0.5rem;">
+          <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <h4 style="margin: 0; font-size: 0.85rem; font-weight: 700; color: #334155; text-transform: uppercase; letter-spacing: 0.05em;">
+              Insurance Advisory &amp; Broker Disclosure
+            </h4>
+          </div>
+          <p style="margin: 0; font-size: 0.8rem; color: #64748b; line-height: 1.6;">
+            Companion Asset Protection (CAP) is an optional vehicle asset protection and debt relief warranty product offered through the dealership and underwritten separately. 
+            Manitoba Public Insurance (MPI) Autopac rates, deductible buy-downs, Driver Safety Rating (DSR) discounts, and potential premium savings illustrated on this presentation are provided for educational and comparison purposes only, based on current publicly available MPI rating schedules. 
+            Individual vehicle insurance requirements, discounts, and premiums may vary based on your driving history, territory, vehicle classification, and coverage selections. 
+            Customers are advised to speak directly with their licensed Manitoba Autopac insurance broker or an authorized MPI representative to review their individual policy details, verify exact premiums, and bind their vehicle insurance coverage.
+          </p>
         </div>
 
       </div>
