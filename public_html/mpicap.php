@@ -1259,6 +1259,10 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
               <span id="disp-top-ded-text">MPI Deductible: $200 (+$19.83/mo)</span>
             </div>
+            <div id="disp-top-mpi-badge" class="dsr-pill" style="background: #f0fdf4; color: #065f46; border-color: #a7f3d0;" title="Estimated Monthly Autopac Insurance">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+              <span id="disp-top-mpi-monthly">Autopac: $369.75/mo</span>
+            </div>
           </div>
 
           <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
@@ -1377,9 +1381,20 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
                   </thead>
                   <tbody>
                     <tr>
-                      <td>Basic Insurance Premium</td>
-                      <td><input type="number" class="form-control-sm mpi-input" data-col="2026" id="mpi-26-basic" value="3294"></td>
-                      <td><input type="number" class="form-control-sm mpi-input" data-col="2025" id="mpi-25-basic" value="2824"></td>
+                      <td>
+                        <div style="font-weight: 700;">Basic Insurance Premium (Base Rate)</div>
+                        <div id="disp-dsr-discount-label" style="font-size: 0.75rem; color: #64748b; margin-top: 2px;">
+                          Level 0 Base (0% Discount)
+                        </div>
+                      </td>
+                      <td>
+                        <input type="number" class="form-control-sm mpi-input" data-col="2026" id="mpi-26-basic" value="3294" placeholder="Base Premium">
+                        <div id="disp-26-basic-net" style="font-size: 0.78rem; font-weight: 700; color: #059669; margin-top: 3px;"></div>
+                      </td>
+                      <td>
+                        <input type="number" class="form-control-sm mpi-input" data-col="2025" id="mpi-25-basic" value="2824" placeholder="Base Premium">
+                        <div id="disp-25-basic-net" style="font-size: 0.78rem; font-weight: 700; color: #059669; margin-top: 3px;"></div>
+                      </td>
                     </tr>
                     <tr style="background: #f1f5f9;">
                       <td colspan="3" style="padding: 0.5rem 0.75rem; font-weight: 700; font-size: 0.8rem; color: #334155; text-transform: uppercase; letter-spacing: 0.04em;">
@@ -1467,6 +1482,14 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
                       <td>TOTAL ESTIMATE (Annual)</td>
                       <td><strong id="sum-26-total" style="color: #0f172a;">$4,437</strong></td>
                       <td><strong id="sum-25-total" style="color: #0f172a;">$3,855</strong></td>
+                    </tr>
+                    <tr style="background: #f0fdf4; border-top: 2px solid #bbf7d0;">
+                      <td>
+                        <strong style="color: #065f46; font-size: 0.88rem;">Estimated Monthly Payment (MPI Autopac)</strong><br>
+                        <span style="font-size: 0.75rem; color: #047857;" id="disp-dsr-monthly-note">Billed monthly by MPI (includes DSR discount)</span>
+                      </td>
+                      <td><strong id="sum-26-monthly" style="color: #059669; font-size: 1.1rem;">$369.75 / mo</strong></td>
+                      <td><strong id="sum-25-monthly" style="color: #047857; font-size: 1.1rem;">$321.25 / mo</strong></td>
                     </tr>
                   </tbody>
                 </table>
@@ -2599,8 +2622,44 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
           }
         }
 
+        // Base Basic Premiums entered in manager setup
+        const baseBasic26 = parseFloat(document.getElementById('mpi-26-basic').value) || 0;
+        const baseBasic25 = parseFloat(document.getElementById('mpi-25-basic').value) || 0;
+
+        // Apply DSR Safe Driver Discount to Basic Insurance Premium
+        const dsrDiscPct = dsrObj.discount || 0;
+        const basic26 = baseBasic26 * (1 - (dsrDiscPct / 100));
+        const basic25 = baseBasic25 * (1 - (dsrDiscPct / 100));
+        const dsrSavings26 = baseBasic26 - basic26;
+        const dsrSavings25 = baseBasic25 - basic25;
+
+        // Update Basic Premium row dynamic display
+        const elDsrDiscountLabel = document.getElementById('disp-dsr-discount-label');
+        if (elDsrDiscountLabel) {
+          elDsrDiscountLabel.textContent = dsrDiscPct > 0 
+            ? `Level ${dsrSign} (${dsrDiscPct}% discount applied below)`
+            : 'Level 0 Base (0% Discount)';
+          elDsrDiscountLabel.style.color = dsrDiscPct > 0 ? '#059669' : '#64748b';
+          elDsrDiscountLabel.style.fontWeight = dsrDiscPct > 0 ? '700' : 'normal';
+        }
+
+        const elBasic26Net = document.getElementById('disp-26-basic-net');
+        if (elBasic26Net) {
+          elBasic26Net.textContent = dsrDiscPct > 0 
+            ? `Net: ${fmt(basic26)} (-${fmt(dsrSavings26)}/yr)` 
+            : 'Base Rate ($0 discount)';
+          elBasic26Net.style.color = dsrDiscPct > 0 ? '#059669' : '#64748b';
+        }
+
+        const elBasic25Net = document.getElementById('disp-25-basic-net');
+        if (elBasic25Net) {
+          elBasic25Net.textContent = dsrDiscPct > 0 
+            ? `Net: ${fmt(basic25)} (-${fmt(dsrSavings25)}/yr)` 
+            : 'Base Rate ($0 discount)';
+          elBasic25Net.style.color = dsrDiscPct > 0 ? '#059669' : '#64748b';
+        }
+
         // Sum MPI 2026 Lines
-        const basic26 = parseFloat(document.getElementById('mpi-26-basic').value) || 0;
         const tpl26 = parseFloat(document.getElementById('mpi-26-tpl').value) || 0;
         const loss26 = parseFloat(document.getElementById('mpi-26-lossuse').value) || 0;
         const newveh26 = effectiveNewveh26;
@@ -2618,7 +2677,6 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
         document.getElementById('sum-26-total').textContent = fmt(total26);
 
         // Sum MPI 2025 Lines
-        const basic25 = parseFloat(document.getElementById('mpi-25-basic').value) || 0;
         const tpl25 = parseFloat(document.getElementById('mpi-25-tpl').value) || 0;
         const loss25 = parseFloat(document.getElementById('mpi-25-lossuse').value) || 0;
         const newveh25 = effectiveNewveh25;
@@ -2634,6 +2692,29 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
         document.getElementById('sum-25-ins').textContent = fmt(sumIns25);
         document.getElementById('sum-25-reg').textContent = fmt(sumReg25);
         document.getElementById('sum-25-total').textContent = fmt(total25);
+
+        // Monthly Autopac payments
+        const mpiMonthly26 = total26 / 12;
+        const mpiMonthly25 = total25 / 12;
+        const elSum26Mo = document.getElementById('sum-26-monthly');
+        if (elSum26Mo) elSum26Mo.textContent = `${fmtDec(mpiMonthly26)} / mo`;
+        const elSum25Mo = document.getElementById('sum-25-monthly');
+        if (elSum25Mo) elSum25Mo.textContent = `${fmtDec(mpiMonthly25)} / mo`;
+
+        const elDsrMoNote = document.getElementById('disp-dsr-monthly-note');
+        if (elDsrMoNote) {
+          elDsrMoNote.textContent = dsrDiscPct > 0 
+            ? `Billed monthly by MPI (includes Level ${dsrSign} • ${dsrDiscPct}% discount)`
+            : 'Billed monthly by MPI (Level 0 Base)';
+        }
+
+        // Top bar Autopac Monthly chip
+        const elTopMpiMonthly = document.getElementById('disp-top-mpi-monthly');
+        if (elTopMpiMonthly) {
+          elTopMpiMonthly.textContent = dsrDiscPct > 0
+            ? `Autopac: ${fmtDec(mpiMonthly26)}/mo (${dsrDiscPct}% DSR)`
+            : `Autopac: ${fmtDec(mpiMonthly26)}/mo`;
+        }
 
         // Payment frequency parameters for Loan / Lease / CAP financing
         const loanFreqSuffix = paymentFrequency === 'biweekly' ? '/bi-wk' : '/mo';
