@@ -1877,7 +1877,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
               <button type="button" class="ded-pill-btn" data-ded="500">
                 <div class="ded-pill-top">
                   <span class="ded-pill-val">$500</span>
-                  <span class="ded-pill-badge">Buy-Down</span>
+                  <span class="ded-pill-badge">Smart Choice</span>
                 </div>
                 <div class="ded-pill-fee" id="pill-fee-500">+$125/yr</div>
                 <div class="ded-pill-mo" id="pill-mo-500">+$10.42/mo</div>
@@ -2578,12 +2578,27 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
           if (p.elMo) p.elMo.textContent = p.fee > 0 ? `+${fmtDec(p.fee / 12)}/mo` : '$0.00/mo';
         });
 
+        const DED_DEFAULT_LABELS = {
+          1000: 'Base Rate',
+          750: 'Buy-Down',
+          500: 'Smart Choice',
+          300: 'Buy-Down',
+          200: 'MPI Standard'
+        };
+
         document.querySelectorAll('.ded-pill-btn').forEach(btn => {
           const bDed = parseInt(btn.getAttribute('data-ded'), 10);
+          const badge = btn.querySelector('.ded-pill-badge');
           if (bDed === selectedDeductible) {
             btn.classList.add('active');
+            if (badge) {
+              badge.textContent = bDed === 200 ? 'Selected Quote' : 'Selected';
+            }
           } else {
             btn.classList.remove('active');
+            if (badge) {
+              badge.textContent = DED_DEFAULT_LABELS[bDed] || 'Buy-Down';
+            }
           }
         });
 
