@@ -926,6 +926,74 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
       border-bottom: none;
     }
 
+    .scen-hero-callout {
+      border-radius: var(--radius-md);
+      padding: 0.85rem 1rem;
+      margin: 0.75rem 0;
+      position: relative;
+    }
+
+    .scen-hero-callout.mpi {
+      background: rgba(220, 38, 38, 0.22);
+      border: 1.5px solid rgba(239, 68, 68, 0.5);
+    }
+
+    .scen-hero-callout.cap {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.25) 0%, rgba(5, 150, 105, 0.4) 100%);
+      border: 2px solid #34d399;
+      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.28);
+    }
+
+    .scen-hero-tag {
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .scen-hero-callout.mpi .scen-hero-tag {
+      color: #fca5a5;
+    }
+
+    .scen-hero-callout.cap .scen-hero-tag {
+      color: #a7f3d0;
+    }
+
+    .scen-hero-amount {
+      font-size: 1.55rem;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-bottom: 0.25rem;
+    }
+
+    .scen-hero-callout.mpi .scen-hero-amount {
+      color: #fee2e2;
+    }
+
+    .scen-hero-callout.cap .scen-hero-amount {
+      color: #ffffff;
+      text-shadow: 0 0 12px rgba(52, 211, 153, 0.45);
+    }
+
+    .scen-hero-sub {
+      font-size: 0.78rem;
+      line-height: 1.35;
+    }
+
+    .scen-hero-callout.mpi .scen-hero-sub {
+      color: rgba(254, 226, 226, 0.85);
+    }
+
+    .scen-hero-callout.cap .scen-hero-sub {
+      color: rgba(236, 253, 245, 0.95);
+      font-weight: 500;
+    }
+
     /* CAP Term Options Grid */
     .cap-terms-container {
       background: #ffffff;
@@ -1751,10 +1819,10 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
                 </div>
                 <div class="deprec-legend-item">
                   <span class="deprec-legend-box cap-zone"></span>
-                  <span><strong>CAP Protection Zone</strong> (Reimburses Equity Shortfall)</span>
+                  <span><strong>CAP Protection Zone</strong> (Direct Cash Credit Towards Next Vehicle)</span>
                 </div>
                 <div class="deprec-legend-item">
-                  <span class="deprec-cutoff-badge">⚠️ MPI 2-Year Cutoff</span>
+                  <span class="deprec-cutoff-badge" id="disp-deprec-cutoff-badge"><?= $isVehIneligibleMpiNew ? '⚠️ MPI Ineligible (Pre-Owned) • Day 1 ACV Only' : ($isVehOneYearMpiNew ? '⚠️ MPI 1-Year Limit' : '⚠️ MPI 2-Year Cutoff') ?></span>
                 </div>
               </div>
               <div class="deprec-svg-wrap">
@@ -1768,6 +1836,16 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
                   <span>MPI Base Alone (Without CAP)</span>
                 </div>
+
+                <div class="scen-hero-callout mpi">
+                  <div class="scen-hero-tag">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    <span>Direct Cash Credit from MPI</span>
+                  </div>
+                  <div class="scen-hero-amount">$0.00</div>
+                  <div class="scen-hero-sub">MPI pays only depreciated market value. Zero replacement top-up towards your next vehicle.</div>
+                </div>
+
                 <div class="scenario-row">
                   <span>MPI Payout (Depreciated ACV)</span>
                   <strong id="disp-scen-mpi-payout">~$<?= number_format($initialMpiPayout) ?></strong>
@@ -1777,15 +1855,11 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
                   <span style="color: #fca5a5;">-$500 out-of-pocket</span>
                 </div>
                 <div class="scenario-row">
-                  <span>Next Vehicle Top-Up</span>
-                  <span style="color: #fca5a5;">$0.00 from MPI</span>
-                </div>
-                <div class="scenario-row">
                   <span>Rental Car Coverage</span>
                   <span style="color: #fca5a5;">$0 (Not in Basic • Client Pays)</span>
                 </div>
                 <div class="scenario-row highlight" style="color: #fca5a5;">
-                  <span>Out-of-Pocket To Replace:</span>
+                  <span>Out-of-Pocket Replacement Shortfall:</span>
                   <span id="disp-scen-mpi-loss">-$<?= number_format($initialCapTopUp) ?> Deprec. Shortfall</span>
                 </div>
               </div>
@@ -1795,13 +1869,19 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
                   <svg width="18" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="9 11 12 14 22 4"/></svg>
                   <span>With Companion Asset Protection (CAP)</span>
                 </div>
-                <div class="scenario-row">
-                  <span>MPI Base Payout</span>
-                  <strong id="disp-scen-cap-mpi-payout">~$<?= number_format($initialMpiPayout) ?></strong>
+
+                <div class="scen-hero-callout cap">
+                  <div class="scen-hero-tag">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="9 11 12 14 22 4"/></svg>
+                    <span>Direct Cash Credit Towards Next Vehicle</span>
+                  </div>
+                  <div class="scen-hero-amount" id="disp-scen-cap-hero-amount">+$<?= number_format($initialCapTopUp) ?> Cash Credit</div>
+                  <div class="scen-hero-sub">Guaranteed cash / credit paid directly to your selling dealership towards purchasing your replacement vehicle.</div>
                 </div>
+
                 <div class="scenario-row">
-                  <span>CAP Replacement Credit Top-Up</span>
-                  <span style="color: #6ee7b7; font-weight: 700;" id="disp-scen-cap-topup">+$<?= number_format($initialCapTopUp) ?> Direct Credit</span>
+                  <span>MPI Base ACV Payout</span>
+                  <strong id="disp-scen-cap-mpi-payout">~$<?= number_format($initialMpiPayout) ?></strong>
                 </div>
                 <div class="scenario-row">
                   <span>Total Buying Power for Next Car</span>
@@ -1817,7 +1897,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
                 </div>
                 <div class="scenario-row highlight" style="color: #6ee7b7;">
                   <span>Out-of-Pocket To Replace:</span>
-                  <span>$0.00 (Like / Kind Replaced)</span>
+                  <span style="color: #6ee7b7;">$0.00 (Like / Kind Replaced)</span>
                 </div>
               </div>
             </div>
@@ -2626,16 +2706,16 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
         return { rectX: x, textX: x + width / 2 };
       }
 
-      function renderDepreciationGraph(vehPrice, selectedYear) {
+      function renderDepreciationGraph(vehPrice, selectedYear, isVehIneligible, isVehOneYear) {
         const svgEl = document.getElementById('deprec-svg');
         const capValEl = document.getElementById('disp-deprec-cap-val');
         if (capValEl) capValEl.textContent = fmt(vehPrice);
         if (!svgEl) return;
 
         const pts = [
-          { year: 0, pct: 1.00, label: 'Day 1', sub: '100% Value', x: 75.0, y: 36.0 },
-          { year: 1, pct: 0.80, label: 'Yr 1 (12m)', sub: '~80% ACV', x: 167.1, y: 67.8 },
-          { year: 2, pct: 0.70, label: 'Yr 2 (24m)', sub: 'MPI Cutoff', x: 259.3, y: 83.7 },
+          { year: 0, pct: 1.00, label: 'Day 1', sub: isVehIneligible ? 'ACV Only' : '100% Value', x: 75.0, y: 36.0 },
+          { year: 1, pct: 0.80, label: 'Yr 1 (12m)', sub: isVehOneYear ? 'MPI Cutoff' : '~80% ACV', x: 167.1, y: 67.8 },
+          { year: 2, pct: 0.70, label: 'Yr 2 (24m)', sub: (!isVehIneligible && !isVehOneYear) ? 'MPI Cutoff' : '~70% ACV', x: 259.3, y: 83.7 },
           { year: 3, pct: 0.61, label: 'Yr 3 (36m)', sub: '~61% ACV', x: 351.4, y: 98.0 },
           { year: 4, pct: 0.52, label: 'Yr 4 (48m)', sub: '~52% ACV', x: 443.6, y: 112.3 },
           { year: 5, pct: 0.44, label: 'Yr 5 (60m)', sub: '~44% ACV', x: 535.7, y: 125.0 },
@@ -2664,7 +2744,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
         const midY = (36 + targetPt.y) / 2;
 
         const topB = getBadgeCoords(targetPt.x, 140);
-        const midB = getBadgeCoords(targetPt.x, 156);
+        const midB = getBadgeCoords(targetPt.x, 236);
         const botB = getBadgeCoords(targetPt.x, 136);
 
         let svgHtml = `
@@ -2696,7 +2776,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
         // X-Axis Labels
         pts.forEach(p => {
           const isTarget = p.year === selectedYear;
-          const isCutoff = p.year === 2;
+          const isCutoff = (!isVehIneligible && !isVehOneYear && p.year === 2) || (isVehOneYear && p.year === 1);
           const labelColor = isTarget ? '#38bdf8' : (isCutoff ? '#fca5a5' : '#cbd5e1');
           const subColor = isCutoff ? '#ef4444' : (isTarget ? '#38bdf8' : '#64748b');
           const weight = isTarget || isCutoff ? '700' : '500';
@@ -2707,14 +2787,39 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
           `;
         });
 
+        // Dynamic Cutoff or Pre-owned Ineligible Marker
+        let cutoffHtml = '';
+        if (isVehIneligible) {
+          // Pre-owned / ineligible: MPI pays ACV only from Day 1
+          cutoffHtml = `
+            <!-- MPI Ineligible Pre-Owned Marker -->
+            <line x1="75.0" y1="36" x2="75.0" y2="195" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,3" opacity="0.8"/>
+            <rect x="76" y="172" width="144" height="18" rx="3" fill="rgba(185, 28, 28, 0.95)" stroke="#fca5a5" stroke-width="1" filter="url(#graphShadow)"/>
+            <text x="148" y="184.5" fill="#ffffff" font-size="8.5" font-weight="700" text-anchor="middle">⚠️ MPI INELIGIBLE • ACV ONLY</text>
+          `;
+        } else if (isVehOneYear) {
+          // 2025: 1-Year Cutoff Marker at Yr 1 (x=167.1)
+          cutoffHtml = `
+            <!-- MPI 1-Year Cutoff Marker -->
+            <line x1="167.1" y1="36" x2="167.1" y2="195" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,3" opacity="0.8"/>
+            <rect x="111" y="172" width="112" height="18" rx="3" fill="rgba(185, 28, 28, 0.95)" stroke="#fca5a5" stroke-width="1" filter="url(#graphShadow)"/>
+            <text x="167" y="184.5" fill="#ffffff" font-size="9" font-weight="700" text-anchor="middle">⚠️ MPI 1-YR CUTOFF</text>
+          `;
+        } else {
+          // 2026+: 2-Year Cutoff Marker at Yr 2 (x=259.3)
+          cutoffHtml = `
+            <!-- MPI 2-Year Cutoff Marker -->
+            <line x1="259.3" y1="36" x2="259.3" y2="195" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,3" opacity="0.8"/>
+            <rect x="204" y="172" width="112" height="18" rx="3" fill="rgba(185, 28, 28, 0.95)" stroke="#fca5a5" stroke-width="1" filter="url(#graphShadow)"/>
+            <text x="260" y="184.5" fill="#ffffff" font-size="9" font-weight="700" text-anchor="middle">⚠️ MPI 2-YR CUTOFF</text>
+          `;
+        }
+
         svgHtml += `
           <!-- CAP Protection Zone Fill -->
           <path d="${areaD}" fill="url(#capZoneGrad)" />
 
-          <!-- MPI 2-Year Cutoff Marker -->
-          <line x1="259.3" y1="36" x2="259.3" y2="195" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,3" opacity="0.8"/>
-          <rect x="204" y="172" width="112" height="18" rx="3" fill="rgba(185, 28, 28, 0.95)" stroke="#fca5a5" stroke-width="1" filter="url(#graphShadow)"/>
-          <text x="260" y="184.5" fill="#ffffff" font-size="9" font-weight="700" text-anchor="middle">⚠️ MPI 2-YR CUTOFF</text>
+          ${cutoffHtml}
 
           <!-- MPI ACV Curve -->
           <path d="${curveD}" fill="none" stroke="#f87171" stroke-width="3" stroke-linecap="round"/>
@@ -2733,9 +2838,9 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
           <rect x="${topB.rectX}" y="8" width="140" height="20" rx="4" fill="#065f46" stroke="#34d399" stroke-width="1.2" filter="url(#graphShadow)"/>
           <text x="${topB.textX}" y="22" fill="#ecfdf5" font-size="10" font-weight="700" text-anchor="middle">CAP Ceiling: ${fmt(vehPrice)}</text>
 
-          <!-- Target Mid GAP Shortfall Badge -->
-          <rect x="${midB.rectX}" y="${midY - 11}" width="156" height="22" rx="4" fill="#047857" stroke="#6ee7b7" stroke-width="1.5" filter="url(#graphShadow)"/>
-          <text x="${midB.textX}" y="${midY + 4}" fill="#ffffff" font-size="10.5" font-weight="800" text-anchor="middle">+${fmt(scenCapTopUp)} CAP Top-Up</text>
+          <!-- Target Mid Cash Credit For Next Car Badge -->
+          <rect x="${midB.rectX}" y="${midY - 12}" width="236" height="24" rx="5" fill="#047857" stroke="#6ee7b7" stroke-width="1.8" filter="url(#graphShadow)"/>
+          <text x="${midB.textX}" y="${midY + 4}" fill="#ffffff" font-size="10.5" font-weight="800" text-anchor="middle">+${fmt(scenCapTopUp)} Cash Credit For Next Car</text>
 
           <!-- Target Curve Node & Pulse Ring -->
           <circle cx="${targetPt.x}" cy="${targetPt.y}" r="8" fill="none" stroke="#38bdf8" stroke-width="2" opacity="0.9"/>
@@ -3246,14 +3351,38 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
         const elScenCapMpi = document.getElementById('disp-scen-cap-mpi-payout');
         if (elScenCapMpi) elScenCapMpi.textContent = `~${fmt(scenMpiPayout)}`;
 
+        const elScenCapHero = document.getElementById('disp-scen-cap-hero-amount');
+        if (elScenCapHero) elScenCapHero.textContent = `+${fmt(scenCapTopUp)} Cash Credit`;
+
         const elScenCapTopup = document.getElementById('disp-scen-cap-topup');
         if (elScenCapTopup) elScenCapTopup.textContent = `+${fmt(scenCapTopUp)} Direct Credit`;
 
         const elScenTotalPower = document.getElementById('disp-scen-total-power');
         if (elScenTotalPower) elScenTotalPower.textContent = `${fmt(scenVehPrice)} (100% Value)`;
 
+        // Update Depreciation Graph Legend Cutoff Badge
+        const elDeprecCutoffBadge = document.getElementById('disp-deprec-cutoff-badge');
+        if (elDeprecCutoffBadge) {
+          if (isVehIneligibleMpiNew) {
+            elDeprecCutoffBadge.textContent = '⚠️ MPI Ineligible (Pre-Owned) • Day 1 ACV Only';
+            elDeprecCutoffBadge.style.background = '#fef2f2';
+            elDeprecCutoffBadge.style.color = '#dc2626';
+            elDeprecCutoffBadge.style.borderColor = '#fecaca';
+          } else if (isVehOneYearMpiNew) {
+            elDeprecCutoffBadge.textContent = '⚠️ MPI 1-Year Limit';
+            elDeprecCutoffBadge.style.background = '#fffbeb';
+            elDeprecCutoffBadge.style.color = '#b45309';
+            elDeprecCutoffBadge.style.borderColor = '#fde68a';
+          } else {
+            elDeprecCutoffBadge.textContent = '⚠️ MPI 2-Year Cutoff';
+            elDeprecCutoffBadge.style.background = '#fee2e2';
+            elDeprecCutoffBadge.style.color = '#991b1b';
+            elDeprecCutoffBadge.style.borderColor = '#fca5a5';
+          }
+        }
+
         // Render Interactive Visual Depreciation & Equity Protection Graph
-        renderDepreciationGraph(scenVehPrice, selectedScenarioYear);
+        renderDepreciationGraph(scenVehPrice, selectedScenarioYear, isVehIneligibleMpiNew, isVehOneYearMpiNew);
 
         // Update Pillar 2
         const elPillarYearsTitle = document.getElementById('disp-pillar-years-title');
