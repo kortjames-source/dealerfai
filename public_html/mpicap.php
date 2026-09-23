@@ -1877,7 +1877,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
               <button type="button" class="ded-pill-btn" data-ded="500">
                 <div class="ded-pill-top">
                   <span class="ded-pill-val">$500</span>
-                  <span class="ded-pill-badge">Smart Choice</span>
+                  <span class="ded-pill-badge">Buy-Down</span>
                 </div>
                 <div class="ded-pill-fee" id="pill-fee-500">+$125/yr</div>
                 <div class="ded-pill-mo" id="pill-mo-500">+$10.42/mo</div>
@@ -2581,7 +2581,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
         const DED_DEFAULT_LABELS = {
           1000: 'Base Rate',
           750: 'Buy-Down',
-          500: 'Smart Choice',
+          500: 'Buy-Down',
           300: 'Buy-Down',
           200: 'Buy-Down'
         };
