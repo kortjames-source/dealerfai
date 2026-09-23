@@ -1853,7 +1853,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
         <!-- ========================================================================= -->
         <div class="comparison-grid">
           <!-- Card 1: MPI Add-On Costs (New Car + Loss of Use) -->
-          <div class="hero-card">
+          <div class="hero-card" id="card-mpi-addons" style="<?= $isVehIneligibleMpiNew ? 'display: none;' : '' ?>">
             <div class="hero-card-tag" style="color: var(--mpi-blue);" id="disp-mpi-addons-tag">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
               <span id="disp-mpi-addons-tag-text"><?= $isVehIneligibleMpiNew ? 'MPI Add-Ons (Rental Only • New Car Ineligible)' : 'MPI Add-Ons (New Car + Rental)' ?></span>
@@ -1886,33 +1886,39 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
               <span id="disp-card-cap-topup-text">Includes: <strong>Up to $60,000 Top-Up + 30 Days Rental</strong></span><br>
               Daily Cost: Just <strong id="disp-cap-per-day">$1.47/day</strong> for peace of mind.<br>
               <span id="disp-cap-loan-sub" style="font-size: 0.8rem; color: #475569;">Financed over your <strong><?= (int)$prefillTerm ?>-month</strong> vehicle loan.</span>
+              <div id="disp-preowned-cap-callout" style="display: <?= $isVehIneligibleMpiNew ? 'block' : 'none' ?>; font-size: 0.78rem; color: #065f46; background: #ecfdf5; border: 1px solid #a7f3d0; padding: 4px 8px; border-radius: 4px; margin-top: 0.45rem; font-weight: 600;">
+                ⚠️ MPI New Vehicle Protection is ineligible on pre-owned. CAP is your exclusive replacement protection.
+              </div>
             </div>
             <div class="fixed-badge">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-              <span id="disp-card-cap-badge"><?= $isVehIneligibleMpiNew ? "Up to {$initialMaxYears} Years Locked • Pre-Owned Covered" : "Up to {$initialMaxYears} Years Locked • Reimburses Deductible" ?></span>
+              <span id="disp-card-cap-badge"><?= $isVehIneligibleMpiNew ? "Exclusive Pre-Owned Coverage • $0 from MPI" : "Up to {$initialMaxYears} Years Locked • Reimburses Deductible" ?></span>
             </div>
           </div>
 
-          <!-- Card 3: Deductible Savings ($500 MPI Deductible + CAP) -->
+          <!-- Card 3: Deductible & Rental Savings -->
           <div class="hero-card combined">
             <div class="hero-card-tag" style="color: #059669;">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-              <span id="disp-card-strat-tag">Smart Deductible Savings</span>
+              <span id="disp-card-strat-tag">Smart Autopac Offset Strategy</span>
             </div>
             <div class="hero-amount" id="disp-net-cap-amount" style="color: #059669;">
-              Save $113<span class="period">/yr</span>
+              Save $21<span class="period">.34/mo</span>
             </div>
             <div id="disp-strat-period-line" style="font-size: 0.88rem; font-weight: 700; color: #047857; margin-top: -0.25rem; margin-bottom: 0.75rem;">
-              Save $9.42/mo on your MPI bill
+              -$256.00 / year total reduction on your MPI Autopac bill
             </div>
             <div class="hero-card-subtext" id="disp-card-strat-subtext">
-              Choose <strong>$500 MPI Deductible</strong> &amp; pocket <strong>$113/yr ($9.42/mo)</strong> in MPI savings.<br>
-              In a Total Loss: CAP pays $500 &rarr; <strong>$0 Out of Pocket</strong> ($200 saved)!<br>
-              In a Partial Loss (repairs &amp; windshields): CAP pays $250 &rarr; <strong>Only $250 Out of Pocket</strong>!
+              📉 <strong>Choose $500 Deductible:</strong> Pocket <strong>$9.42/mo</strong> ($113/yr) in deductible savings.<br>
+              🚗 <strong>Drop MPI Rental Car:</strong> Pocket <strong>$11.92/mo</strong> ($143/yr) since CAP includes 30 days of rental!<br>
+              🛡️ <strong>Write-Off Deductible:</strong> Still <strong>$0 Out of Pocket</strong> (CAP reimburses $500)!<br>
+              <div style="margin-top: 0.5rem; padding: 6px 8px; background: rgba(16, 185, 129, 0.12); border-radius: 4px; border: 1px solid rgba(16, 185, 129, 0.3); color: #065f46; font-size: 0.8rem; font-weight: 600;">
+                💡 <strong>True Net Cost:</strong> Your $21.34/mo MPI savings offsets CAP down to just <strong>+$23.56/mo</strong> ($0.77/day)!
+              </div>
             </div>
             <div class="fixed-badge" style="background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0;">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-              <span id="disp-strategy-badge-text">Save $113/yr on MPI + $0 Deductible on Write-off</span>
+              <span id="disp-strategy-badge-text">Save $21.34/mo on MPI + $0 Deductible on Write-off</span>
             </div>
           </div>
         </div>
@@ -1932,8 +1938,8 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
               </p>
             </div>
             <div style="text-align: right;">
-              <div style="font-size: 0.75rem; text-transform: uppercase; color: #64748b; font-weight: 700;" id="disp-ded-savings-label">Annual MPI Savings by Choosing $500 Buy-Down</div>
-              <div style="font-size: 1.5rem; font-weight: 800; color: #059669;" id="disp-ded-savings-headline">Save $113 / year</div>
+              <div style="font-size: 0.75rem; text-transform: uppercase; color: #64748b; font-weight: 700;" id="disp-ded-savings-label">Total Monthly Savings Off Your Autopac Bill</div>
+              <div style="font-size: 1.5rem; font-weight: 800; color: #059669;" id="disp-ded-savings-headline">Save $21.34 / mo ($256/yr)</div>
             </div>
           </div>
 
@@ -2018,6 +2024,38 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
                   </td>
                 </tr>
                 <tr>
+                  <td>
+                    <strong>Rental Car Coverage (Loss of Use)</strong><br>
+                    <span style="font-size: 0.8rem; color: #64748b;">Transportation while vehicle is repaired or replaced</span>
+                  </td>
+                  <td>
+                    <span style="font-weight: 700; color: #b91c1c;" id="table-mpi-rental-fee">+$143.00 / year</span><br>
+                    <span style="font-size: 0.8rem; color: #64748b;" id="table-mpi-rental-period">(+$11.92 / month on MPI)</span>
+                  </td>
+                  <td>
+                    <span style="font-weight: 700; color: #059669;" id="table-cap-rental-fee">$0.00 to MPI (Included in CAP)</span><br>
+                    <span style="font-size: 0.8rem; color: #059669;" id="table-cap-rental-sub">30 Full Days Included with CAP policy</span>
+                  </td>
+                  <td>
+                    <span class="badge-win" id="table-rental-savings-pill">Save $143 / yr ($11.92/mo)</span>
+                  </td>
+                </tr>
+                <tr style="background: rgba(16, 185, 129, 0.08); font-weight: 700;">
+                  <td style="color: #065f46;">
+                    <strong>Total Monthly Autopac Add-On Cost</strong><br>
+                    <span style="font-size: 0.8rem; color: #047857; font-weight: normal;">Combined Deductible + Rental Car Drop</span>
+                  </td>
+                  <td style="color: #b91c1c;" id="table-mpi-total-extra">
+                    +$381.00 / yr (+$31.75/mo)
+                  </td>
+                  <td style="color: #059669;" id="table-cap-total-extra">
+                    +$125.00 / yr (+$10.42/mo)
+                  </td>
+                  <td>
+                    <span class="badge-win" id="table-combined-savings-pill" style="font-size: 0.85rem; padding: 3px 9px;">Save $21.34 / month</span>
+                  </td>
+                </tr>
+                <tr>
                   <td><strong>Total Loss (Vehicle Written Off)</strong><br><span style="font-size: 0.8rem; color: #64748b;">Collision, Fire, Theft, Hail, or Flood</span></td>
                   <td>
                     <span style="font-weight: 700; color: #0f172a;" id="table-mpi-ded-loss-oop">Client Pays $200</span><br>
@@ -2060,23 +2098,6 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
                   </td>
                   <td>
                     <span class="badge-win" id="table-cap-repl-badge">Full Equity Top-Up</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <strong>Rental Car Coverage</strong><br>
-                    <span style="font-size: 0.8rem; color: #64748b;">Transportation while vehicle is repaired or replaced</span>
-                  </td>
-                  <td>
-                    <span style="font-weight: 700; color: #b91c1c;">$0 (Not in Basic MPI)</span><br>
-                    <span style="font-size: 0.8rem; color: #64748b;">Requires purchasing optional $143/yr Loss of Use; otherwise $0</span>
-                  </td>
-                  <td>
-                    <span style="font-weight: 700; color: #059669;">30 Full Days Included</span><br>
-                    <span style="font-size: 0.8rem; color: #64748b;">Keeps you on the road ($0 out of pocket)</span>
-                  </td>
-                  <td>
-                    <span class="badge-win">30 Days Included ($0 Extra)</span>
                   </td>
                 </tr>
                 <tr>
@@ -3098,6 +3119,11 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
         const mpiAllOptionalsMonthly26 = mpiAllOptionalsAnnual26 / mpiMonthlyDivisor;
 
         // Update Card 1: MPI Add-On Protection (New Car + Loss of Use) — ALWAYS Monthly
+        const elCardMpiAddons = document.getElementById('card-mpi-addons');
+        if (elCardMpiAddons) {
+          elCardMpiAddons.style.display = isVehIneligibleMpiNew ? 'none' : '';
+        }
+
         const elAddonsTagText = document.getElementById('disp-mpi-addons-tag-text');
         if (elAddonsTagText) {
           elAddonsTagText.textContent = isVehIneligibleMpiNew
@@ -3233,11 +3259,17 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
           elPillarYearsDesc.textContent = `Covers New or Pre-Owned vehicles for up to ${maxAllowedYears} years. Your protection is locked in and remains fully in effect regardless of claims or driving record.`;
         }
 
+        // Pre-owned callout on Card 2
+        const elPreownedCapCallout = document.getElementById('disp-preowned-cap-callout');
+        if (elPreownedCapCallout) {
+          elPreownedCapCallout.style.display = isVehIneligibleMpiNew ? 'block' : 'none';
+        }
+
         // Update Card 2 Badge
         const elCardCapBadge = document.getElementById('disp-card-cap-badge');
         if (elCardCapBadge) {
           elCardCapBadge.textContent = isVehIneligibleMpiNew
-            ? `Up to ${maxAllowedYears} Years Locked • Pre-Owned Covered • Reimburses Deductible`
+            ? `Exclusive Pre-Owned Coverage • $0 from MPI • ${maxYearsText} Locked`
             : `${maxYearsText} Locked • Reimburses Deductible`;
         }
 
@@ -3587,83 +3619,129 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
         const fee300 = dedRates26[300];
         const fee200 = dedRates26[200];
 
-        // Update Card 3: Deductible Savings
+        // Combined Autopac Savings: Deductible Buy-Down + Loss of Use (Rental Car) Elimination
+        let dedSavAnnual = 0;
+        if (selectedDeductible === 200) {
+          dedSavAnnual = Math.max(0, fee200 - fee500);
+        } else if (selectedDeductible === 300) {
+          dedSavAnnual = Math.max(0, fee300 - fee500);
+        } else {
+          dedSavAnnual = 0;
+        }
+
+        const lossSavAnnual = loss26; // $143 default
+        const totalSavAnnual = dedSavAnnual + lossSavAnnual;
+        const totalSavMonthly = totalSavAnnual / 12;
+        const totalSavPeriod = totalSavAnnual / loanPeriodDivisor;
+        const dedSavMonthly = dedSavAnnual / 12;
+        const lossSavMonthly = lossSavAnnual / 12;
+        const lossSavPeriod = lossSavAnnual / loanPeriodDivisor;
+
+        const netCapPmt = Math.max(0, capPmt - (selectedDeductible === 200 || selectedDeductible === 300 ? totalSavPeriod : lossSavPeriod));
+        const netCapPerDay = (netCapPmt * (paymentFrequency === 'biweekly' ? 26 : 12)) / 365;
+
+        // Update Card 3: Combined Autopac Monthly Savings
         const elNetCap = document.getElementById('disp-net-cap-amount');
         const elStratPeriodLine = document.getElementById('disp-strat-period-line');
         const elCardStratTag = document.getElementById('disp-card-strat-tag');
         const elCardStratSubtext = document.getElementById('disp-card-strat-subtext');
         const elStratBadge = document.getElementById('disp-strategy-badge-text');
 
-        if (selectedDeductible === 200 || selectedDeductible === 300) {
-          const dedSavAnnual = Math.max(0, curDedFee26 - fee500);
-          const dedSavLoanPeriod = dedSavAnnual / loanPeriodDivisor;
-          const netCapPmt = Math.max(0, capPmt - dedSavLoanPeriod);
-
-          if (elCardStratTag) elCardStratTag.textContent = 'Smart Deductible Savings';
-          if (elNetCap) elNetCap.innerHTML = `Save ${fmt(dedSavAnnual)}<span class="period">/yr</span>`;
+        if (selectedDeductible === 200) {
+          if (elCardStratTag) elCardStratTag.textContent = 'Smart Autopac Offset Strategy';
+          if (elNetCap) elNetCap.innerHTML = `Save ${fmtDec(totalSavPeriod)}<span class="period">${loanFreqSuffix}</span>`;
           if (elStratPeriodLine) {
-            elStratPeriodLine.textContent = `Save ${fmtDec(dedSavLoanPeriod)}${loanFreqSuffix} on your MPI bill`;
+            elStratPeriodLine.textContent = `-${fmt(totalSavAnnual)}/yr total reduction on your MPI Autopac bill`;
           }
           if (elCardStratSubtext) {
             elCardStratSubtext.innerHTML = `
-              Choose <strong>$500 MPI Deductible</strong> &amp; pocket <strong>${fmt(dedSavAnnual)}/yr (${fmtDec(dedSavLoanPeriod)}${loanFreqSuffix})</strong> in MPI savings.<br>
-              In a Total Loss: CAP pays $500 &rarr; <strong>$0 Out of Pocket</strong> ($${selectedDeductible} saved vs MPI)!<br>
-              In a Partial Loss (repairs &amp; windshields): CAP pays $250 &rarr; <strong>Only $250 Out of Pocket</strong>!<br>
-              <span style="display: inline-block; margin-top: 0.35rem; color: #047857; font-weight: 600;">
-                💡 Budget tip: Deductible savings offsets your CAP loan cost down to just <strong>${fmtDec(netCapPmt)}${loanFreqSuffix}</strong>!
-              </span>
+              📉 <strong>Choose $500 Deductible:</strong> Pocket <strong>${fmtDec(dedSavMonthly)}/mo</strong> (${fmt(dedSavAnnual)}/yr) in deductible savings.<br>
+              🚗 <strong>Drop MPI Rental Car:</strong> Pocket <strong>${fmtDec(lossSavMonthly)}/mo</strong> (${fmt(lossSavAnnual)}/yr) since CAP includes 30 days of rental!<br>
+              🛡️ <strong>Write-Off Deductible:</strong> Still <strong>$0 Out of Pocket</strong> (CAP reimburses $500)!<br>
+              <div style="margin-top: 0.5rem; padding: 6px 8px; background: rgba(16, 185, 129, 0.12); border-radius: 4px; border: 1px solid rgba(16, 185, 129, 0.3); color: #065f46; font-size: 0.8rem; font-weight: 600;">
+                💡 <strong>True Net Cost:</strong> Your ${fmtDec(totalSavPeriod)}${loanFreqSuffix} savings offsets CAP down to just <strong>+${fmtDec(netCapPmt)}${loanFreqSuffix}</strong> (${fmtDec(netCapPerDay)}/day)!
+              </div>
             `;
           }
           if (elStratBadge) {
-            elStratBadge.textContent = `Save ${fmt(dedSavAnnual)}/yr on MPI + $0 Deductible on Write-off`;
+            elStratBadge.textContent = `Save ${fmtDec(totalSavMonthly)}/mo ($${fmt(totalSavAnnual)}/yr) on MPI + $0 Deductible on Write-off`;
+          }
+        } else if (selectedDeductible === 300) {
+          if (elCardStratTag) elCardStratTag.textContent = 'Smart Autopac Offset Strategy';
+          if (elNetCap) elNetCap.innerHTML = `Save ${fmtDec(totalSavPeriod)}<span class="period">${loanFreqSuffix}</span>`;
+          if (elStratPeriodLine) {
+            elStratPeriodLine.textContent = `-${fmt(totalSavAnnual)}/yr total reduction on your MPI Autopac bill`;
+          }
+          if (elCardStratSubtext) {
+            elCardStratSubtext.innerHTML = `
+              📉 <strong>Choose $500 Deductible:</strong> Pocket <strong>${fmtDec(dedSavMonthly)}/mo</strong> (${fmt(dedSavAnnual)}/yr) in deductible savings.<br>
+              🚗 <strong>Drop MPI Rental Car:</strong> Pocket <strong>${fmtDec(lossSavMonthly)}/mo</strong> (${fmt(lossSavAnnual)}/yr) since CAP includes 30 days of rental!<br>
+              🛡️ <strong>Write-Off Deductible:</strong> Still <strong>$0 Out of Pocket</strong> (CAP reimburses $500)!<br>
+              <div style="margin-top: 0.5rem; padding: 6px 8px; background: rgba(16, 185, 129, 0.12); border-radius: 4px; border: 1px solid rgba(16, 185, 129, 0.3); color: #065f46; font-size: 0.8rem; font-weight: 600;">
+                💡 <strong>True Net Cost:</strong> Your ${fmtDec(totalSavPeriod)}${loanFreqSuffix} savings offsets CAP down to just <strong>+${fmtDec(netCapPmt)}${loanFreqSuffix}</strong> (${fmtDec(netCapPerDay)}/day)!
+              </div>
+            `;
+          }
+          if (elStratBadge) {
+            elStratBadge.textContent = `Save ${fmtDec(totalSavMonthly)}/mo ($${fmt(totalSavAnnual)}/yr) on MPI + $0 Deductible on Write-off`;
           }
         } else if (selectedDeductible === 500) {
-          if (elCardStratTag) elCardStratTag.textContent = 'Zero-Deductible Total Loss';
-          if (elNetCap) elNetCap.innerHTML = `Save $500<span class="period">on write-off</span>`;
+          if (elCardStratTag) elCardStratTag.textContent = 'Smart Autopac Offset Strategy';
+          if (elNetCap) elNetCap.innerHTML = `Save ${fmtDec(lossSavPeriod)}<span class="period">${loanFreqSuffix}</span>`;
           if (elStratPeriodLine) {
-            elStratPeriodLine.textContent = `$0.00 Out of Pocket on Total Loss`;
+            elStratPeriodLine.textContent = `-${fmt(lossSavAnnual)}/yr rental car savings on your Autopac bill`;
           }
           if (elCardStratSubtext) {
             elCardStratSubtext.innerHTML = `
-              Keep your <strong>$500 MPI Deductible</strong> (${fmt(fee500)}/yr) without paying for expensive $200 buy-downs:<br>
-              In a Total Loss: CAP pays $500 &rarr; <strong>$0 Out of Pocket</strong> ($500 saved)!<br>
-              In a Partial Loss (repairs &amp; windshields): CAP pays $250 &rarr; <strong>Cuts deductible in half to $250</strong>!
+              🚗 <strong>Drop MPI Rental Car:</strong> Pocket <strong>${fmtDec(lossSavMonthly)}/mo</strong> (${fmt(lossSavAnnual)}/yr) since CAP includes 30 days of rental!<br>
+              🛡️ <strong>Write-Off Deductible:</strong> <strong>$0 Out of Pocket</strong> (CAP reimburses your entire $500 deductible)!<br>
+              🔧 <strong>Repairs &amp; Windshields:</strong> CAP reimburses $250 &rarr; <strong>Cuts deductible in half to $250</strong>!<br>
+              <div style="margin-top: 0.5rem; padding: 6px 8px; background: rgba(16, 185, 129, 0.12); border-radius: 4px; border: 1px solid rgba(16, 185, 129, 0.3); color: #065f46; font-size: 0.8rem; font-weight: 600;">
+                💡 <strong>True Net Cost:</strong> Your rental car savings offsets CAP down to just <strong>+${fmtDec(netCapPmt)}${loanFreqSuffix}</strong> (${fmtDec(netCapPerDay)}/day)!
+              </div>
             `;
           }
           if (elStratBadge) {
-            elStratBadge.textContent = `CAP Pays $500 Deductible on Write-Off + $250 on Repairs`;
+            elStratBadge.textContent = `Save ${fmtDec(lossSavMonthly)}/mo on Rental + $0 Deductible on Write-Off`;
           }
         } else if (selectedDeductible === 750) {
-          if (elCardStratTag) elCardStratTag.textContent = 'Deductible Protection ($750)';
-          if (elNetCap) elNetCap.innerHTML = `Save $500<span class="period">on write-off</span>`;
+          if (elCardStratTag) elCardStratTag.textContent = 'Smart Autopac Offset Strategy';
+          if (elNetCap) elNetCap.innerHTML = `Save ${fmtDec(lossSavPeriod)}<span class="period">${loanFreqSuffix}</span>`;
           if (elStratPeriodLine) {
-            elStratPeriodLine.textContent = `Pay only $250 Out of Pocket on Write-Off`;
+            elStratPeriodLine.textContent = `-${fmt(lossSavAnnual)}/yr rental car savings on your Autopac bill`;
           }
           if (elCardStratSubtext) {
             elCardStratSubtext.innerHTML = `
-              Keep your <strong>$750 MPI Deductible</strong> (${fmt(fee750)}/yr) with CAP:<br>
-              In a Total Loss: CAP pays $500 &rarr; <strong>Pay only $250 out of pocket</strong> ($500 saved)!<br>
-              In a Partial Loss (repairs &amp; windshields): CAP pays $250 &rarr; <strong>Pay only $500 out of pocket</strong> ($250 saved)!
+              🚗 <strong>Drop MPI Rental Car:</strong> Pocket <strong>${fmtDec(lossSavMonthly)}/mo</strong> (${fmt(lossSavAnnual)}/yr) since CAP includes 30 days of rental!<br>
+              🛡️ <strong>Write-Off Deductible:</strong> CAP reimburses $500 &rarr; <strong>Pay only $250 Out of Pocket</strong> ($500 saved)!<br>
+              🔧 <strong>Repairs &amp; Windshields:</strong> CAP reimburses $250 &rarr; <strong>Pay only $500 Out of Pocket</strong> ($250 saved)!<br>
+              <div style="margin-top: 0.5rem; padding: 6px 8px; background: rgba(16, 185, 129, 0.12); border-radius: 4px; border: 1px solid rgba(16, 185, 129, 0.3); color: #065f46; font-size: 0.8rem; font-weight: 600;">
+                💡 <strong>True Net Cost:</strong> Your rental car savings offsets CAP down to just <strong>+${fmtDec(netCapPmt)}${loanFreqSuffix}</strong> (${fmtDec(netCapPerDay)}/day)!
+              </div>
             `;
           }
           if (elStratBadge) {
-            elStratBadge.textContent = `CAP Reimburses $500 on Total Loss & $250 on Repairs`;
+            elStratBadge.textContent = `Save ${fmtDec(lossSavMonthly)}/mo on Rental + $500 Write-Off Benefit`;
           }
         } else { // 1000
-          if (elCardStratTag) elCardStratTag.textContent = 'Base Deductible Protection';
-          if (elNetCap) elNetCap.innerHTML = `Save $500<span class="period">on write-off</span>`;
+          if (elCardStratTag) elCardStratTag.textContent = 'Base Rate & Deductible Protection';
+          if (elNetCap) elNetCap.innerHTML = `Save ${fmtDec(lossSavPeriod)}<span class="period">${loanFreqSuffix}</span>`;
           if (elStratPeriodLine) {
-            elStratPeriodLine.textContent = `Zero Buy-Down Fees • Reimburses $500 on Write-Off / $250 on Repairs`;
+            elStratPeriodLine.textContent = `-${fmt(lossSavAnnual)}/yr rental car savings + $0 buy-down fees`;
           }
           if (elCardStratSubtext) {
             elCardStratSubtext.innerHTML = `
-              Keep MPI's <strong>$1,000 Base Deductible</strong> ($0 buy-down fees) with CAP:<br>
-              In a Total Loss (Write-Off Only): CAP pays $500 &rarr; <strong>Slashes deductible by 50% to $500</strong>!<br>
-              In a Partial Loss (repairs &amp; windshields): CAP pays $250 &rarr; <strong>Reduces deductible to $750</strong> ($250 reimbursed)!
+              🚗 <strong>Drop MPI Rental Car:</strong> Pocket <strong>${fmtDec(lossSavMonthly)}/mo</strong> (${fmt(lossSavAnnual)}/yr) with CAP rental coverage included!<br>
+              💵 <strong>Zero Buy-Down Fees:</strong> Avoid paying MPI up to <strong>${fmt(fee200)}/yr</strong> (${fmtDec(fee200 / 12)}/mo) for lower deductibles.<br>
+              🛡️ <strong>Write-Off Protection:</strong> CAP reimburses $500 &rarr; <strong>Slashes deductible to $500</strong>!<br>
+              🔧 <strong>Repairs &amp; Windshields:</strong> CAP reimburses $250 &rarr; <strong>Reduces deductible to $750</strong>!<br>
+              <div style="margin-top: 0.5rem; padding: 6px 8px; background: rgba(16, 185, 129, 0.12); border-radius: 4px; border: 1px solid rgba(16, 185, 129, 0.3); color: #065f46; font-size: 0.8rem; font-weight: 600;">
+                💡 <strong>True Net Cost:</strong> Rental car savings offsets CAP down to just <strong>+${fmtDec(netCapPmt)}${loanFreqSuffix}</strong> (${fmtDec(netCapPerDay)}/day)!
+              </div>
             `;
           }
           if (elStratBadge) {
-            elStratBadge.textContent = `Zero MPI Fees • Reimburses $500 on Write-Off & $250 on Repairs`;
+            elStratBadge.textContent = `Save ${fmtDec(lossSavMonthly)}/mo on Rental + $500 Write-Off / $250 Repair Benefit`;
           }
         }
 
@@ -3696,28 +3774,30 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
         const elStratSub = document.getElementById('disp-ded-strategy-sub');
         if (elStratSub) {
           if (selectedDeductible === 200 || selectedDeductible === 300) {
-            elStratSub.textContent = `Why pay MPI extra every year for a $${selectedDeductible} deductible? Choosing the $500 buy-down saves you money on Autopac, while CAP eliminates your deductible on a write-off!`;
+            elStratSub.textContent = `Why pay MPI extra every year for a $${selectedDeductible} deductible? Choosing the $500 buy-down and dropping rental car saves you money on Autopac, while CAP eliminates your deductible on a write-off!`;
           } else if (selectedDeductible === 500) {
-            elStratSub.textContent = `You chose MPI's $500 deductible buy-down. With CAP, your write-off deductible drops to $0.00, and repair/windshield deductibles are cut in half to $250!`;
+            elStratSub.textContent = `With MPI's $500 deductible buy-down and CAP, your write-off deductible drops to $0.00, repair deductibles are cut in half to $250, and you save ${fmt(loss26)}/yr by dropping MPI rental car!`;
           } else if (selectedDeductible === 750) {
-            elStratSub.textContent = `With MPI's $750 deductible buy-down, CAP reimburses $500 on write-offs (reducing your cost to $250) and $250 on repairs/windshields!`;
+            elStratSub.textContent = `With MPI's $750 deductible buy-down, CAP reimburses $500 on write-offs and $250 on repairs, while saving you ${fmt(loss26)}/yr on rental car!`;
           } else {
-            elStratSub.textContent = `Avoid expensive MPI buy-down fees entirely: keep the $1,000 base rate ($0 extra fee) and let CAP reimburse your deductible!`;
+            elStratSub.textContent = `Avoid expensive MPI buy-down fees entirely: keep the $1,000 base rate ($0 extra fee), save ${fmt(loss26)}/yr on rental car, and let CAP reimburse your deductible!`;
           }
         }
 
         const elDedSavingsLabel = document.getElementById('disp-ded-savings-label');
         const elDedHead = document.getElementById('disp-ded-savings-headline');
         if (selectedDeductible === 200 || selectedDeductible === 300) {
-          const savFrom500 = Math.max(0, curDedFee26 - fee500);
-          if (elDedSavingsLabel) elDedSavingsLabel.textContent = 'Annual MPI Savings by Choosing $500 Buy-Down';
-          if (elDedHead) elDedHead.textContent = `Save ${fmt(savFrom500)} / year (${fmtDec(savFrom500 / 12)}/mo)`;
+          if (elDedSavingsLabel) elDedSavingsLabel.textContent = 'Total Monthly Savings Off Your Autopac Bill';
+          if (elDedHead) elDedHead.textContent = `Save ${fmtDec(totalSavMonthly)} / mo (${fmt(totalSavAnnual)}/yr)`;
         } else if (selectedDeductible === 500) {
-          if (elDedSavingsLabel) elDedSavingsLabel.textContent = 'Total Loss Deductible with CAP';
-          if (elDedHead) elDedHead.textContent = '$0.00 Out of Pocket on Total Loss';
+          if (elDedSavingsLabel) elDedSavingsLabel.textContent = 'Total Monthly Savings Off Your Autopac Bill';
+          if (elDedHead) elDedHead.textContent = `Save ${fmtDec(lossSavMonthly)} / mo (${fmt(lossSavAnnual)}/yr on Rental)`;
+        } else if (selectedDeductible === 750) {
+          if (elDedSavingsLabel) elDedSavingsLabel.textContent = 'Total Monthly Savings Off Your Autopac Bill';
+          if (elDedHead) elDedHead.textContent = `Save ${fmtDec(lossSavMonthly)} / mo (${fmt(lossSavAnnual)}/yr on Rental)`;
         } else {
-          if (elDedSavingsLabel) elDedSavingsLabel.textContent = 'CAP Deductible Reimbursement';
-          if (elDedHead) elDedHead.textContent = '$500 Write-Off / $250 Repair Benefit';
+          if (elDedSavingsLabel) elDedSavingsLabel.textContent = 'Total Monthly Savings Off Your Autopac Bill';
+          if (elDedHead) elDedHead.textContent = `Save ${fmtDec(lossSavMonthly)} / mo (${fmt(lossSavAnnual)}/yr on Rental)`;
         }
 
         const elThDedName = document.getElementById('th-mpi-ded-name');
@@ -3772,11 +3852,48 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
           } else if (selectedDeductible === 750) {
             elTableDedPill.textContent = `CAP Reimburses $500`;
           } else {
-            elTableDedPill.textContent = `Zero Buy-Down Fee • Reimburses $500 on Write-Off / $250 on Repairs`;
+            elTableDedPill.textContent = `Zero Buy-Down Fee • Reimburses $500`;
           }
         }
 
-        // Table Row 2: Total Loss (Vehicle Written Off)
+        // Table Row 2: Rental Car Coverage (Loss of Use)
+        const elTableMpiRentalFee = document.getElementById('table-mpi-rental-fee');
+        if (elTableMpiRentalFee) elTableMpiRentalFee.textContent = `+${fmt(loss26)} / year`;
+
+        const elTableMpiRentalPeriod = document.getElementById('table-mpi-rental-period');
+        if (elTableMpiRentalPeriod) elTableMpiRentalPeriod.textContent = `(+${fmtDec(loss26 / 12)} / month on MPI)`;
+
+        const elTableCapRentalFee = document.getElementById('table-cap-rental-fee');
+        if (elTableCapRentalFee) elTableCapRentalFee.textContent = '$0.00 to MPI (Included in CAP)';
+
+        const elTableCapRentalSub = document.getElementById('table-cap-rental-sub');
+        if (elTableCapRentalSub) elTableCapRentalSub.textContent = '30 Full Days Included with CAP policy';
+
+        const elTableRentalPill = document.getElementById('table-rental-savings-pill');
+        if (elTableRentalPill) elTableRentalPill.textContent = `Save ${fmt(loss26)} / yr (${fmtDec(loss26 / 12)}/mo)`;
+
+        // Table Row 3: Total Monthly Autopac Add-On Cost
+        const mpiAddonsTotalAnnual = curDedFee26 + loss26;
+        const mpiAddonsTotalMonthly = mpiAddonsTotalAnnual / 12;
+        const capAddonsTotalAnnual = (selectedDeductible === 750 ? fee750 : (selectedDeductible === 1000 ? 0 : fee500));
+        const capAddonsTotalMonthly = capAddonsTotalAnnual / 12;
+        const combinedSavingsAnnual = Math.max(0, mpiAddonsTotalAnnual - capAddonsTotalAnnual);
+        const combinedSavingsMonthly = combinedSavingsAnnual / 12;
+
+        const elTableMpiTotalExtra = document.getElementById('table-mpi-total-extra');
+        if (elTableMpiTotalExtra) elTableMpiTotalExtra.textContent = `+${fmt(mpiAddonsTotalAnnual)} / yr (+${fmtDec(mpiAddonsTotalMonthly)}/mo)`;
+
+        const elTableCapTotalExtra = document.getElementById('table-cap-total-extra');
+        if (elTableCapTotalExtra) elTableCapTotalExtra.textContent = `+${fmt(capAddonsTotalAnnual)} / yr (+${fmtDec(capAddonsTotalMonthly)}/mo)`;
+
+        const elTableCombinedPill = document.getElementById('table-combined-savings-pill');
+        if (elTableCombinedPill) {
+          elTableCombinedPill.textContent = combinedSavingsAnnual > 0
+            ? `Save ${fmtDec(combinedSavingsMonthly)} / month`
+            : `Save ${fmtDec(loss26 / 12)} / month (Rental Drop)`;
+        }
+
+        // Table Row 4: Total Loss (Vehicle Written Off)
         const elTableMpiLossOop = document.getElementById('table-mpi-ded-loss-oop');
         if (elTableMpiLossOop) elTableMpiLossOop.textContent = `Client Pays $${selectedDeductible.toLocaleString()}`;
 
@@ -3794,7 +3911,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
           if (elTableCapLossWin) elTableCapLossWin.textContent = `CAP Saves You $500!`;
         }
 
-        // Table Row 3: Partial Loss (Repairable Claims & Windshields)
+        // Table Row 5: Partial Loss (Repairable Claims & Windshields)
         const elTableMpiPartOop = document.getElementById('table-mpi-ded-part-oop');
         if (elTableMpiPartOop) elTableMpiPartOop.textContent = `Client Pays $${selectedDeductible.toLocaleString()}`;
 
@@ -3806,20 +3923,20 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
           const sav200 = Math.max(0, fee200 - fee500);
           if (elTableCapPartOop) elTableCapPartOop.textContent = `Client Pays $250`;
           if (elTableCapPartSub) elTableCapPartSub.textContent = `$500 MPI minus $250 CAP reimbursement (includes windshield claims)`;
-          if (elTableCapPartWin) elTableCapPartWin.innerHTML = `<strong>Only $50 difference</strong>, while saving <strong>${fmt(sav200)}/yr</strong> on MPI!`;
+          if (elTableCapPartWin) elTableCapPartWin.innerHTML = `<strong>Only $50 difference</strong>, while saving <strong>${fmt(totalSavAnnual)}/yr (${fmtDec(totalSavMonthly)}/mo)</strong> on your MPI bill!`;
         } else if (selectedDeductible === 300) {
           const sav300 = Math.max(0, fee300 - fee500);
           if (elTableCapPartOop) elTableCapPartOop.textContent = `Client Pays $250`;
           if (elTableCapPartSub) elTableCapPartSub.textContent = `$500 MPI minus $250 CAP reimbursement (includes windshield claims)`;
-          if (elTableCapPartWin) elTableCapPartWin.innerHTML = `<strong>CAP is $50 cheaper out-of-pocket</strong> ($250 vs $300), AND you save <strong>${fmt(sav300)}/yr</strong> on MPI!`;
+          if (elTableCapPartWin) elTableCapPartWin.innerHTML = `<strong>CAP is $50 cheaper out-of-pocket</strong> ($250 vs $300), AND you save <strong>${fmt(totalSavAnnual)}/yr (${fmtDec(totalSavMonthly)}/mo)</strong> on MPI!`;
         } else if (selectedDeductible === 500) {
           if (elTableCapPartOop) elTableCapPartOop.textContent = `Client Pays $250`;
           if (elTableCapPartSub) elTableCapPartSub.textContent = `$500 MPI minus $250 CAP reimbursement (includes windshield claims)`;
-          if (elTableCapPartWin) elTableCapPartWin.innerHTML = `<strong>Cuts deductible in half</strong> ($250 saved on every repair/windshield claim)`;
+          if (elTableCapPartWin) elTableCapPartWin.innerHTML = `<strong>Cuts deductible in half</strong> ($250 saved on every repair/windshield claim), plus save <strong>${fmt(loss26)}/yr</strong> on rental car!`;
         } else if (selectedDeductible === 750) {
           if (elTableCapPartOop) elTableCapPartOop.textContent = `Client Pays $500`;
           if (elTableCapPartSub) elTableCapPartSub.textContent = `$750 MPI minus $250 CAP reimbursement (includes windshield claims)`;
-          if (elTableCapPartWin) elTableCapPartWin.innerHTML = `<strong>Saves $250 out-of-pocket</strong> on every partial loss or windshield claim`;
+          if (elTableCapPartWin) elTableCapPartWin.innerHTML = `<strong>Saves $250 out-of-pocket</strong> on every partial loss or windshield claim!`;
         } else { // 1000
           if (elTableCapPartOop) elTableCapPartOop.textContent = `Client Pays $750`;
           if (elTableCapPartSub) elTableCapPartSub.textContent = `$1,000 base MPI minus $250 CAP reimbursement (includes windshield claims)`;
@@ -3831,37 +3948,39 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
         if (elStratSummary) {
           if (selectedDeductible === 200) {
             const sav200 = Math.max(0, fee200 - fee500);
+            const totalSav = sav200 + loss26;
             elStratSummary.innerHTML = `
-              If you pay MPI for a $200 deductible, you are paying <strong>${fmt(fee200)} extra every single year</strong> (${fmtDec(fee200 / 12)}/month) to buy down from MPI's $1,000 base deductible. 
-              By choosing MPI's $500 deductible buy-down (${fmt(fee500)}/yr) and adding Companion Asset Protection (CAP), you save <strong>${fmt(sav200)}/year (${fmtDec(sav200 / 12)}/mo)</strong> on your insurance bill. 
-              In the event of a total loss write-off, CAP reimburses your entire $500 deductible—leaving you with <strong>$0 out of pocket</strong> (which is $200 cheaper than paying MPI for a $200 deductible). 
-              Even on a partial loss or windshield claim, you only pay $250 out of pocket (a tiny $50 difference from $200), which is paid for many times over by your <strong>${fmt(sav200)}</strong> annual premium savings! 
-              <em>(Alternatively, you can choose MPI's $1,000 base deductible to pocket the full ${fmt(fee200)}/yr while CAP reimburses $500 on a write-off).</em>
+              If you choose MPI's $200 deductible and add Loss of Use rental car coverage, you are paying MPI <strong>${fmt(fee200 + loss26)} extra every year (${fmtDec((fee200 + loss26) / 12)}/month)</strong> in optional add-on fees. 
+              By choosing MPI's $500 deductible buy-down (${fmt(fee500)}/yr) and adding Companion Asset Protection (CAP), you can safely <strong>drop MPI's $143/yr rental car fee</strong> (CAP already includes 30 days of rental car at $0) AND pocket <strong>${fmt(sav200)}/yr</strong> in deductible savings. 
+              That puts <strong>${fmt(totalSav)}/year (${fmtDec(totalSav / 12)}/month or ${fmtDec(totalSav / loanPeriodDivisor)}${loanFreqSuffix})</strong> in total savings right back in your pocket! 
+              In a total loss write-off, CAP reimburses your entire $500 deductible—leaving you with <strong>$0 out of pocket</strong> ($200 cheaper than MPI's $200 option). 
+              On partial losses and windshield repairs, you pay just $250 out of pocket (a tiny $50 difference), which is paid for over and over by your <strong>${fmt(totalSav)}/yr</strong> Autopac savings!
             `;
           } else if (selectedDeductible === 300) {
             const sav300 = Math.max(0, fee300 - fee500);
+            const totalSav = sav300 + loss26;
             elStratSummary.innerHTML = `
-              If you pay MPI for a $300 deductible, you are paying <strong>${fmt(fee300)} extra every year</strong> (${fmtDec(fee300 / 12)}/month) to buy down from MPI's $1,000 base deductible. 
-              By choosing MPI's $500 deductible buy-down (${fmt(fee500)}/yr) with Companion Asset Protection (CAP), you save <strong>${fmt(sav300)}/year (${fmtDec(sav300 / 12)}/mo)</strong> on insurance. 
+              If you choose MPI's $300 deductible and add Loss of Use rental car coverage, you are paying MPI <strong>${fmt(fee300 + loss26)} extra every year (${fmtDec((fee300 + loss26) / 12)}/month)</strong>. 
+              By choosing MPI's $500 deductible buy-down (${fmt(fee500)}/yr) and adding Companion Asset Protection (CAP), you drop MPI's rental car fee and pocket <strong>${fmt(totalSav)}/year (${fmtDec(totalSav / 12)}/mo or ${fmtDec(totalSav / loanPeriodDivisor)}${loanFreqSuffix})</strong> in total Autopac savings! 
               On a total loss, CAP reimburses your entire $500 deductible—leaving you with <strong>$0 out of pocket</strong> (saving $300). 
-              On a partial loss or windshield claim, you pay only $250 out of pocket—which is actually <strong>$50 cheaper</strong> than MPI's $300 deductible, on top of saving <strong>${fmt(sav300)}/year</strong> in premiums!
+              On a partial loss or windshield claim, you pay only $250 out of pocket—which is actually <strong>$50 cheaper</strong> than MPI's $300 deductible, on top of saving <strong>${fmt(totalSav)}/year</strong> in premiums!
             `;
           } else if (selectedDeductible === 500) {
             elStratSummary.innerHTML = `
-              With MPI's $500 deductible buy-down (${fmt(fee500)}/yr), you normally face a $500 bill on any write-off or repair. 
-              With Companion Asset Protection (CAP), a total loss triggers a full <strong>$500 deductible reimbursement—reducing your out-of-pocket to $0.00</strong> (saving you $500). 
-              On partial loss claims (including body shop repairs and windshield replacements), CAP reimburses $250, cutting your out-of-pocket deductible in half to just <strong>$250</strong>! 
-              <em>(Tip: You can also choose MPI's Base $1,000 deductible with CAP to pocket ${fmt(fee500)}/year in insurance savings while CAP pays $500 on total loss).</em>
+              With MPI's $500 deductible buy-down (${fmt(fee500)}/yr) and Companion Asset Protection (CAP), you can safely <strong>drop MPI's $143/yr rental car fee</strong> to save <strong>${fmt(loss26)}/year (${fmtDec(loss26 / 12)}/mo or ${fmtDec(loss26 / loanPeriodDivisor)}${loanFreqSuffix})</strong>. 
+              In a total loss write-off, CAP reimburses your full <strong>$500 deductible—reducing your out-of-pocket to $0.00</strong> (saving you $500). 
+              On partial losses and windshield replacements, CAP reimburses $250, cutting your out-of-pocket deductible in half to just <strong>$250</strong>!
             `;
           } else if (selectedDeductible === 750) {
             elStratSummary.innerHTML = `
-              With MPI's $750 deductible buy-down (${fmt(fee750)}/yr), an accident claim costs you $750. 
+              With MPI's $750 deductible buy-down (${fmt(fee750)}/yr) and CAP, you save <strong>${fmt(loss26)}/year (${fmtDec(loss26 / 12)}/mo)</strong> by dropping MPI's duplicate rental car fee. 
               Companion Asset Protection (CAP) reimburses <strong>$500 on a total loss</strong> (bringing your cost down to just $250), and reimburses <strong>$250 on partial losses and windshield replacements</strong> (reducing your out-of-pocket to $500)!
             `;
           } else { // 1000
             elStratSummary.innerHTML = `
               MPI's standard base deductible is $1,000 (included in basic Autopac at $0 extra fee). By keeping the $1,000 base deductible, you pay <strong>$0 in buy-down fees to MPI</strong>. 
-              Adding Companion Asset Protection (CAP) provides built-in deductible protection: CAP reimburses <strong>$500 on a total loss</strong> (slashing your out-of-pocket to $500) and reimburses <strong>$250 on partial losses and windshield replacements</strong>!
+              Dropping MPI's duplicate rental car coverage saves you <strong>${fmt(loss26)}/year (${fmtDec(loss26 / 12)}/mo)</strong>. 
+              Adding Companion Asset Protection (CAP) reimburses <strong>$500 on a total loss</strong> (slashing your out-of-pocket to $500) and reimburses <strong>$250 on partial losses and windshield replacements</strong>!
             `;
           }
         }
