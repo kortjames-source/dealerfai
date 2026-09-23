@@ -2186,6 +2186,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
                     <li><strong>100% fixed payment</strong> locked for your full term (up to 7 years)</li>
                     <li>Accidents &amp; total loss claims <strong>never</strong> increase your CAP rate</li>
                     <li>Speeding tickets or merit drops <strong>never</strong> alter your coverage</li>
+                    <li>Reimburses $500 on write-offs &amp; $250 on repairs/windshields</li>
                     <li>Financed into vehicle payments with zero surprise annual bills</li>
                   </ul>
                 </div>
@@ -2197,6 +2198,7 @@ $initialMpiNewCoverageYears = $isVehIneligibleMpiNew ? 0 : ($isVehOneYearMpiNew 
             <span class="rate-lock-pill"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Accidents &amp; Tickets Never Increase Rate</span>
             <span class="rate-lock-pill"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Up to $60,000 Equity Protected</span>
             <span class="rate-lock-pill"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> $500 Write-Off Deductible Reimbursed</span>
+            <span class="rate-lock-pill"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> $250 Partial Loss &amp; Windshield Refund</span>
             <span class="rate-lock-pill"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> 30-Day Rental Vehicle Included</span>
           </div>
         </div>
