@@ -85,6 +85,19 @@ if ($dealId && $dealId > 0 && isset($db) && ($db instanceof PDO)) {
     }
 }
 
+// Allow URL query parameters to override prefill values when testing or linking directly
+if (isset($_GET['year']) && (int)$_GET['year'] >= 1980) {
+    $prefillVehYear = (int)$_GET['year'];
+    if (strpos($prefillVehicle, '2026') === 0) {
+        $prefillVehicle = $prefillVehYear . substr($prefillVehicle, 4);
+    }
+} elseif (isset($_GET['vehicle_year']) && (int)$_GET['vehicle_year'] >= 1980) {
+    $prefillVehYear = (int)$_GET['vehicle_year'];
+    if (strpos($prefillVehicle, '2026') === 0) {
+        $prefillVehicle = $prefillVehYear . substr($prefillVehicle, 4);
+    }
+}
+
 // Fallback year extraction from vehicle name string if deal year was not set
 if ($prefillVehYear === 2026 && preg_match('/\b(19\d\d|20\d\d)\b/', $prefillVehicle, $m)) {
     $prefillVehYear = (int)$m[1];
